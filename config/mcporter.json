@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "command": "npx @playwright/mcp@latest"
+    },
+    "filesystem": {
+      "command": "node",
+      "args": ["/opt/homebrew/lib/node_modules/@modelcontextprotocol/server-filesystem/dist/index.js", "/Users/KS", "/Users/KS/.openclaw/workspace"]
+    },
+    "github": {
+      "command": "npx @modelcontextprotocol/server-github@latest",
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+    "memory": {
+      "command": "npx @modelcontextprotocol/server-memory@latest"
+    },
+    "puppeteer": {
+      "command": "npx @modelcontextprotocol/server-puppeteer@latest"
+    }
+  },
+  "imports": []
+}
