@@ -136,7 +136,20 @@
 - 詳細：`goplaces details <place_id> --reviews`
 - API Key：`GOOGLE_PLACES_API_KEY=[API_KEY_REDACTED]`
 
-### google-places（自建完整地點查詢 skill）
+### google-places（自建完整地點查詢 skill）—— 2026-03-21 重大修正
+
+**核心原則：所有判斷以 goplaces API 回傳資料為主，嚴禁自作聰明。**
+
+goplaces 的 `open_now` 欄位是 Google API 根據**即時系統時間**計算的結果，代表「此刻是否營業中」，準確度遠高於我自行用 `datetime.now()` + hours 解析的邏輯。
+
+**正確流程：**
+1. goplaces details/full 回傳 `open_now: True/False/None`
+2. `open_now === true` → 直接顯示「✅ 營業中」，附加今日時段與距離關門
+3. `open_now === false` → 直接顯示「❌ 休息中」，附加今日時段（若週日公休則不顯示時段）與下一個開門日
+4. `open_now === null` → 才用系統時間 + hours 自己算（備援邏輯）
+5. **嚴禁**：在 `open_now` 有值（True/False）時，用系統時間覆蓋 API 結果
+
+**實例：** `open_now: no` + 週六時段 5:30 PM – 2:00 AM → 直接顯示「休息中」而不是自己算「已過關門時間」或「營業中」。
 - 位置：`~/.openclaw/skills/google-places/`
 - 架構（2026-03-20 更新，移除 Playwright）：
   1. `goplaces` CLI → 基本資料（名/址/電話/評分、評論原文、發布時間）
