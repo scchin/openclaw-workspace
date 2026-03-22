@@ -54,7 +54,6 @@ rsync -a \
     --exclude='__pycache__' \
     --exclude='node_modules' \
     --exclude='.git' \
-    --exclude='skills-backup*' \
     "$OPENCLAW_SKILLS/" "$BACKUP_DIR/openclaw-skills/"
 
 echo "[OK] Sync done"
