@@ -11,7 +11,7 @@ import subprocess, json, sys, os, re, asyncio, urllib.request, time, websockets
 from datetime import datetime, timezone, timedelta
 
 GOOGLE_PLACES_API_KEY = os.environ.get(
-    "GOOGLE_PLACES_API_KEY", "AIzaSyBHXbe-9_jDT6WREBg8czfpt2iGqqtPtG8")
+    "GOOGLE_PLACES_API_KEY", "[API_KEY_REDACTED]")
 HOST = "127.0.0.1"
 PORT = 18800
 

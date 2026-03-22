@@ -399,7 +399,7 @@ def query_place_api_only(place_id: str) -> Optional[dict]:
     """只透過 goplaces details + priceRange API 取結構化資料"""
     env = os.environ.copy()
     env["GOOGLE_PLACES_API_KEY"] = os.environ.get(
-        "GOOGLE_PLACES_API_KEY", "AIzaSyBHXbe-9_jDT6WREBg8czfpt2iGqqtPtG8")
+        "GOOGLE_PLACES_API_KEY", "[API_KEY_REDACTED]")
 
     args = ["goplaces", "details", place_id, "--reviews", "--json"]
     try:
