@@ -10,6 +10,32 @@ Google Places 店家查詢工具 v9（乾淨重寫版）
 import subprocess, json, sys, os, re, asyncio, urllib.request, time, websockets
 from datetime import datetime, timezone, timedelta
 
+# ─── 翻譯工具 ────────────────────────────────────────────────
+from deep_translator import GoogleTranslator
+
+_trans_cache: dict = {}
+
+def translate_to_chinese(text: str) -> str:
+    """
+    將英文評論翻譯成繁體中文（含快取）。
+    若翻譯失敗或原文已是中文，則保留原文。
+    """
+    if not text or not text.strip():
+        return text
+    # 若已含中文字，直接視為已中文
+    if re.search(r"[\u4e00-\u9fff]", text):
+        return text
+    if text in _trans_cache:
+        return _trans_cache[text]
+    try:
+        result = GoogleTranslator(source="auto", target="zh-TW").translate(text)
+        if result and result != text:
+            _trans_cache[text] = result
+            return result
+    except Exception:
+        pass
+    return text
+
 GOOGLE_PLACES_API_KEY = os.environ.get(
     "GOOGLE_PLACES_API_KEY", "[API_KEY_REDACTED]")
 HOST = "127.0.0.1"
@@ -48,7 +74,9 @@ def get_reviews(place_id):
             continue
         orig = review.get("original_text", {}).get("text", "")
         translated = review.get("text", {}).get("text", "")
-        content = orig or translated
+        raw_content = orig or translated
+        # ★★★ 全部翻譯成繁體中文 ★★★
+        content = translate_to_chinese(raw_content) if raw_content else ""
         filtered.append({
             "author": review.get("author", {}).get("display_name", "匿名"),
             "rating": review.get("rating", 0),
@@ -1369,8 +1397,20 @@ def cmd_details(args):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(__doc__); sys.exit(1)
-    cmd = sys.argv[1].lower()
-    args = sys.argv[2:]
-    {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)
+    import sys
+    # 安靜模式：--quiet 抑制 CDP debug 輸出（stderr），只留乾淨結果（stdout）
+    if "--quiet" in sys.argv:
+        sys.argv.remove("--quiet")
+        import os, contextlib
+        with contextlib.redirect_stderr(open(os.devnull, "w")):
+            if len(sys.argv) < 2:
+                print(__doc__); sys.exit(1)
+            cmd = sys.argv[1].lower()
+            args = sys.argv[2:]
+            {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)
+    else:
+        if len(sys.argv) < 2:
+            print(__doc__); sys.exit(1)
+        cmd = sys.argv[1].lower()
+        args = sys.argv[2:]
+        {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)
