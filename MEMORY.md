@@ -31,7 +31,10 @@
   - **旅館、飯店、民宿、青年旅舍**
   - **圖書館**
   - 任何名稱無法判斷分類的地點
-- **查詢方式**：`google-places` skill（`query.py full <place_id>`）
+- **查詢方式**：`google-places` skill
+  - 標準查詢：`cd ~/.openclaw/skills/google-places && .venv/bin/python scripts/query.py search "店名"`
+  - 有 place_id 時：`query.py full <place_id>`
+  - ⚠️ 嚴禁跳過 skill 直接用 `web_search`、`web_fetch`、`browser` 工具做地點查詢
 - **絕對禁止**（不允許任何自我合理化）：
   - ❌ 不得使用 `browser` 工具主動開啟或操作瀏覽器分頁
   - ❌ 不得自行判斷「skill 需要瀏覽器，所以要幫用戶開」
@@ -49,7 +52,7 @@
   │     └─ 是 → 使用 browser 工具
   │
   └─ 否（正常地點查詢）
-        ├─ 使用 google-places skill（query.py full）
+        ├─ 使用 google-places skill（`query.py search "店名"` 或 `query.py full <place_id>`）
         ├─ CDP 需要的 WS URL → 由 query.py 內部自行處理
         ├─ CDP 若失敗（找不到分頁）→ 
         │     → 回報用戶：「需要已開啟的 Google Maps 分頁，請在瀏覽器中打開後再查一次」
@@ -71,12 +74,12 @@
 ## 使用記錄
 
 * 2026-03-15：建立經緯度查詢規則
-* 問題：TGOS地圖不支援直接經緯度坐標搜尋，需要透過地址查詢方式
-* 解決方案：
-  1. TGOS地圖功能選單 → 圖面定位 → 選擇縣市/鄉鎮/村里
-  2. 根據經緯度判斷地區位置，選擇對應的行政區
-  3. 經緯度 24.18588146738243, 120.66765935832942 位於彰化市附近
-* 限制：TGOS地圖無法直接輸入坐標，只能透過地址查詢
+  - 問題：TGOS地圖不支援直接經緯度坐標搜尋，需要透過地址查詢方式
+  - 解決方案：TGOS地圖功能選單 → 圖面定位 → 選擇縣市/鄉鎮/村里
+  - 限制：TGOS地圖無法直接輸入坐標，只能透過地址查詢
+* 2026-03-21：搜尋「日屿夜DayNight」時錯誤使用 web_search/web_fetch，未呼叫 google-places skill。教訓：所有地點查詢絕對不可繞過 skill。
+* 2026-03-21：google-places skill CDP 分布圖解析 bug（`int('')` ValueError），原因：`reporter=None` → `str(None)` → `""` → `int("")` 崩潰。修正：`result.get("reporter") or "71"`。
+* 2026-03-21：MEMORY.md 審核完畢，發現使用記錄格式問題並一併修正。
 
 ## 彰化地區早餐推薦
 
@@ -229,35 +232,55 @@ npm install -g cantian-tymext
 
 ---
 
-## google-places skill 更新記錄（2026-03-21）
+## google-places skill 更新記錄（2026-03-21 → v7）
 
-### query.py v4 重大修正
+### query.py v7 重大修正（WS健康檢查 + 中文化支援）
 
-**問題根因：**
-- `cmd_search()` 原本會先 `print(search_out)` raw goplaces 結果，再執行完整查詢
-- 導致使用者看到兩次輸出（重複的 raw 結果 + 完整結果）
+**問題症狀：**
+- Phase 2 的 JS 始終讀不到 `$X–$Y per person`，導致 `result["found"]` 維持 `False`
+- Phase 3 按鈕點擊從未執行
+- 根本原因①：WS URL 無法實際使用（Chrome 分頁已關閉/連線中斷）
+- 根本原因②：中文 Google Maps 頁面使用「平均每人 $400-600」而非英文「$400-600 per person」
 
-**修正內容：**
-- 移除 `cmd_search()` 中的 `print(search_out)`，從現在起 `search` 和 `full` 行為完全一致，都是一次完整查詢
-- 更新 SKILL.md，移除所有「基本/進階」的舊描述，統一為單一流程
+**Phase 1 修正（WS 健康檢查）：**
+- 取得分頁 WS URL 後，立即用 `Runtime.evaluate("1+1")` 做 ping
+- 只有 ping 成功（回傳 2）的 WS 才會被使用，失敗則嘗試下一個分頁
+- 所有現有分頁都失敗 → 才建立新分頁 → 新分頁同樣要 ping 驗證
+- **修法關鍵**：廢除「直接信任 WS URL 可用」的假設
 
-### CDP 架構（v4 重寫）
+**Phase 2 修正（嚴格頁面載入驗證）：**
+- 同時檢查 URL（含 place_id）+ 頁面內容（純文字 > 200 字）
+- 印出每一輪的 URL 狀態與文字量，即時確認進度
+- 偵測 consent 彈窗、loading 狀態
+- 修正正則：同時支援英文「$400-600 per person」與中文「平均每人 $400-600」
 
-**流程：**
-1. `goplaces` CLI → 基本資料 + 6個月內評論
-2. Google Places API v1 `priceRange` → 每人消費區間
-3. CDP 直連 OpenClaw 瀏覽器（port 18800）→ 動態內容一次讀取
+**Phase 3 修正（中文按鈕定位）：**
+- 按鈕關鍵字從「per person」擴展為 `['per person','平均每人','每人','人均']`
+- 點擊成功後偵錯發現：popup 顯示「平均每人消費金額 $400-600…」但**沒有分布圖**
+- 原因：該店家僅 11 人回報，Google 只顯示單一區間，無長條圖 → 正常行為
+- 分布圖解析三策略（table aria-label / aria-live / 含 people+%$ 的 div）在無分布圖時自然回 False，不影響其他資訊
 
-**CDP 讀取策略：**
-- 每人消費、服務、Menu、熱門品項：在同一段 JS 中一次讀取（單次 `Runtime.evaluate`）
-- 價格分布圖：點擊每人消費按鈕 → 等 2.5 秒 → 讀取 popup
-- 按鈕定位：搜尋 `innerText` 含 "per person" 的元素，選面積最小者（最精確的按鈕）
-- 失敗時：優雅降級，不影響其他資訊顯示
+**修補的技術問題：**
+- `websockets.connect(ws_url, timeout=N)` → `timeout` 不是 `websockets` 參數，移除
+- `websockets` 為相對 import（函式內），需搭配 `import asyncio as _asyncio` 避免衝突
 
-**修復的語法 bug：**
-- `except` 縮排錯誤（try/except 夾雜 if 區塊）→ 移除孤立的 except pass
-- `result["price_histogram"] = hist_entries` 縮排在 for 迴圈內 → 移出到正確位置
+## 技能雲端備份技能（2026-03-22 建立）
 
-### 已知限制
-- Google Maps 動態內容有時需要更長的等待時間（已設 2.5 秒等待 popup）
-- CDP 依賴 OpenClaw 瀏覽器已啟動，無需使用者操作
+**技能名稱：** `skills-backup-github`
+**位置：** `~/.openclaw/skills/skills-backup-github/`
+**GitHub Repo：** https://github.com/scchin/openclaw-workspace
+
+### 功能
+- **備份**：`bash ~/.openclaw/skills/skills-backup-github/scripts/backup.sh`
+  - 全自動：gh auth → rsync → git diff → commit → push
+  - 只同步變動的檔案
+- **還原**：`bash ~/.openclaw/skills/skills-backup-github/scripts/restore.sh`
+  - 在新設備執行，完整還原所有技能
+  - `rsync --delete` 確保完全鏡像
+
+### 雲端路徑
+- `skills-backup/all-skills/agents-skills/`（53個技能）
+- `skills-backup/all-skills/openclaw-skills/`（12個技能）
+
+### 最新 commit
+- `7ce660b` — Backup: skills update (2026-03-22 11:52)
