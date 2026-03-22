@@ -1,70 +1,83 @@
 ---
 name: skills-backup-github
-description: Backup all installed OpenClaw skills to a GitHub repository, automatically syncing only changed or new files. Use when user asks to backup skills, sync skills to GitHub, or update skill backups. Handles the full flow: gh auth check, rsync with .venv excluded, git diff detection, commit, and push.
+description: Backup and restore all OpenClaw skills to/from GitHub. Use when user asks to backup skills, sync skills to GitHub, or restore skills on a new device. Handles the full flow: gh auth check, rsync with .venv excluded, git diff detection, commit, and push.
 ---
 
 # Skills Backup GitHub
 
-## Overview
+Backup all OpenClaw skills to GitHub, or restore them on a new device.
 
-Automatically backup all OpenClaw skills (from `~/.agents/skills/` and `~/.openclaw/skills/`) to the GitHub repo `scchin/openclaw-workspace`. Skips `.venv`, `__pycache__`, and `node_modules` to keep the backup lean.
+## Backup (on any device)
 
-## Usage
-
-When user says "backup skills", "sync skills to GitHub", "update skill backup", or requests a full/incremental backup of installed skills, run:
+When user says "backup skills", "sync skills to GitHub", or requests a full/incremental skill backup:
 
 ```bash
 bash /Users/KS/.openclaw/skills/skills-backup-github/scripts/backup.sh
 ```
 
-## Workflow
-
-The backup script runs these steps automatically:
-
+**Flow:**
 ```
-1. Check gh auth → If not logged in, launch "gh auth login" (interactive)
-2. Check git remote → If missing, add origin remote
-3. rsync skills → Copy to workspace/skills-backup/, excluding .venv/node_modules
-4. Git diff check → Only commit if there are actual changes
-5. Git push → Push to github.com/scchin/openclaw-workspace
+1. gh auth check → If not logged in, launch interactive login
+2. git remote check → Auto-configure if missing
+3. rsync → Copy only changed/new files (excludes .venv/node_modules)
+4. git diff → Only commit if there are actual changes
+5. git push → Push to github.com/scchin/openclaw-workspace
+```
+
+## Restore (on a new device)
+
+When user says "restore skills", "download skills", or "還原技能":
+
+```bash
+bash /Users/KS/.openclaw/skills/skills-backup-github/scripts/restore.sh
+```
+
+**Flow:**
+```
+1. gh auth check → If not logged in, launch interactive login
+2. Clone or pull the repo (github.com/scchin/openclaw-workspace)
+3. rsync --delete → Mirror agents-skills/ into ~/.agents/skills/
+4. rsync --delete → Mirror openclaw-skills/ into ~/.openclaw/skills/
+5. Done! Restart OpenClaw to load new skills.
 ```
 
 ## GitHub Authorization Flow
 
 If `gh auth status` fails, the script launches an interactive login:
 
-1. **Protocol**: Choose HTTPS (default) → Enter
+1. **Protocol**: HTTPS (default) → Enter
 2. **Authenticate Git?**: Y → Enter
 3. **Auth method**: "Login with a web browser" → Enter
 4. **One-time code**: User visits https://github.com/login/device and enters the displayed code (e.g. `E604-15A0`)
-5. **Browser auth**: Complete in the browser → Done
+5. **Browser auth**: Complete in browser → Done
 
-After first login, credentials are cached — subsequent backups are fully automatic with no interaction.
+After first login, credentials are cached — subsequent backups/restores are fully automatic.
 
-## What Gets Backed Up
+## What Gets Backed Up / Restored
 
-| Source | Destination in workspace | Notes |
-|--------|--------------------------|-------|
-| `~/.agents/skills/` | `skills-backup/agents-skills/` | 53 skills |
-| `~/.openclaw/skills/` | `skills-backup/openclaw-skills/` | 11 skills |
+| Source | Backup location in repo |
+|--------|-------------------------|
+| `~/.agents/skills/` | `skills-backup/all-skills/agents-skills/` |
+| `~/.openclaw/skills/` | `skills-backup/all-skills/openclaw-skills/` |
 
-**Excluded**: `.venv/`, `__pycache__/`, `node_modules/`, `.git/`, `skills-backup*` (prevents self-referential copy)
+**Excluded**: `.venv/`, `__pycache__/`, `node_modules/`, `.git/`
 
 ## GitHub Repo
 
 - **URL**: https://github.com/scchin/openclaw-workspace
-- **Backup location in repo**: `skills-backup/agents-skills/` and `skills-backup/openclaw-skills/`
-- **Automation**: Fully automatic after first setup — no manual intervention needed on subsequent runs
+- **Skills backup**: `skills-backup/all-skills/agents-skills/` and `skills-backup/all-skills/openclaw-skills/`
 
-## Manual Run
+## Prerequisites (on new device)
 
-```bash
-# Full manual run
-bash /Users/KS/.openclaw/skills/skills-backup-github/scripts/backup.sh
+1. `gh` CLI installed: `brew install gh`
+2. GitHub authentication: `gh auth login`
+3. Run restore:
+   ```bash
+   bash /Users/KS/.openclaw/skills/skills-backup-github/scripts/restore.sh
+   ```
 
-# Dry-run (check what would change, without committing)
-cd /Users/KS/.openclaw/workspace
-rsync -a --exclude='.venv' --exclude='__pycache__' --exclude='node_modules' ~/.agents/skills/ skills-backup/agents-skills/
-rsync -a --exclude='.venv' --exclude='__pycache__' --exclude='node_modules' --exclude='skills-backup*' ~/.openclaw/skills/ skills-backup/openclaw-skills/
-git diff skills-backup/ --stat
-```
+Alternatively, if the skill itself hasn't been restored yet, clone the repo directly:
+   ```bash
+   git clone https://github.com/scchin/openclaw-workspace.git ~/.openclaw/workspace
+   bash ~/.openclaw/workspace/skills-backup/all-skills/openclaw-skills/skills-backup-github/scripts/restore.sh
+   ```
