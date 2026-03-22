@@ -29,13 +29,18 @@ _prepare_github_safe_backup() {
         --exclude='node_modules' \
         --exclude='.git' \
         "$src/" "$tmp/"
-    # 對 google-places/query.py 進行脫敏處理（只保留結構成份，移除 Key）
-    if [ -f "$tmp/google-places/scripts/query.py" ]; then
-        sed -i '' \
-            -e 's/AIzaSy[AAAA-Za-z0-9_-]*/[API_KEY_REDACTED]/g' \
-            -e 's/GOOGLE_PLACES_API_KEY[^\"]*/GOOGLE_PLACES_API_KEY/g' \
-            "$tmp/google-places/scripts/query.py"
-    fi
+    # 對 google-places/query.py 和 where-to-go/run.py 進行脫敏處理
+    for py_file in \
+        "$tmp/google-places/scripts/query.py" \
+        "$tmp/where-to-go/scripts/run.py" \
+        "$tmp/google-places-backup-2026-03-22/scripts/query.py"; do
+        if [ -f "$py_file" ]; then
+            sed -i '' \
+                -e 's/AIzaSy[AAAA-Za-z0-9_-]*/[API_KEY_REDACTED]/g' \
+                -e 's/GOOGLE_PLACES_API_KEY[^\"]*/GOOGLE_PLACES_API_KEY/g' \
+                "$py_file"
+        fi
+    done
 }
 
 echo "=== Skills Backup to GitHub ==="

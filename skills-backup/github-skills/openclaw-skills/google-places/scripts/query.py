@@ -869,6 +869,7 @@ def extract_prices(content):
 
 # ─── 特色菜色 ────────────────────────────────────────────────
 DISH_ITEMS = [
+    # 原有
     ("蝦滷飯",   "蝦滷飯"),
     ("澎湖小卷", "小卷"),
     ("煎干貝",   "干貝"),
@@ -878,6 +879,37 @@ DISH_ITEMS = [
     ("海鮮粥",   "海鮮粥"),
     ("油蔥蝦仁飯","油蔥蝦仁飯"),
     ("川燙花枝", "花枝"),
+    # 港式點心（2026-03-22 新增）
+    ("燒賣",     "燒賣"),
+    ("蝦餃",     "蝦餃"),
+    ("蝦餃皇",   "蝦餃皇"),
+    ("叉燒包",   "叉燒包"),
+    ("叉燒",     "叉燒"),
+    ("流沙包",   "流沙包"),
+    ("奶黃包",   "奶黃包"),
+    ("蛋撻",     "蛋撻"),
+    ("菠蘿包",   "菠蘿包"),
+    ("鮮蝦腸粉", "腸粉"),
+    ("牛肉丸",   "牛肉丸"),
+    ("蒸餃",     "蒸餃"),
+    ("小籠包",   "小籠包"),
+    ("腐皮捲",   "腐皮捲"),
+    ("炸兩",     "炸兩"),
+    ("臘味蘿蔔糕","蘿蔔糕"),
+    ("XO醬炒蘿蔔糕","蘿蔔糕"),
+    ("煲仔飯",   "煲仔飯"),
+    ("咖哩魚蛋", "魚蛋"),
+    ("雲吞",     "雲吞"),
+    ("餛飩",     "餛飩"),
+    ("鹹水角",   "鹹水角"),
+    ("春捲",     "春捲"),
+    ("天扶良",   "天扶良"),
+    ("叉燒飯",   "叉燒飯"),
+    ("燒臘",     "燒臘"),
+    ("烤鴨",     "烤鴨"),
+    ("脆皮烤鴨", "烤鴨"),
+    ("豆花",     "豆花"),
+    ("燒仙草",   "燒仙草"),
 ]
 
 def extract_dish_highlights(reviews):
@@ -1315,6 +1347,8 @@ def format_output(data, maps_price, reviews, price_range_api=None):
         lines.append("🔥 特色菜色：")
         for dish_name, snippet in dish_hl:
             lines.append(f"   {dish_name}：{snippet}")
+    else:
+        lines.append("🔥 特色菜色：無（評論中未抓獲特定菜色）")
 
     rev_hl = extract_review_highlights(reviews)
     if rev_hl:
@@ -1322,6 +1356,8 @@ def format_output(data, maps_price, reviews, price_range_api=None):
         for author, note in rev_hl:
             note2 = note if len(note) <= 150 else note[:150]+"…"
             lines.append(f"   {author}：{note2}")
+    else:
+        lines.append("📝 網友心得：無（近期無評論）")
 
     price_lines = format_reviews_price(reviews)
     if price_lines:

@@ -355,27 +355,38 @@ def query_place_full(place_id: str) -> Tuple[Optional[dict], str]:
     回傳 (structured_data, raw_text_output)
     """
     script = os.path.expanduser("~/.openclaw/skills/google-places/scripts/query.py")
+    venv_python = os.path.expanduser("~/.openclaw/skills/google-places/.venv/bin/python")
+    python_bin = venv_python if os.path.exists(venv_python) else "python3"
     try:
         r = subprocess.run(
-            ["python3", script, "full", place_id],
+            [python_bin, script, "full", place_id],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
             env=os.environ.copy(), timeout=90
         )
         raw = r.stdout
-        # query.py full 輸出結果，去掉 [CDP] debug lines
+        if not raw and r.stderr:
+            # script 可能 stderr 有錯誤，但 stdout 起碼會有內容
+            raw = r.stderr
+        # 只保留明確的實質內容行（嚴格不刪減）
         clean_lines = []
         for line in raw.split("\n"):
             stripped = line.strip()
-            # 跳過 CDP debug 行、空行、Phase 行
-            if stripped.startswith("[CDP]") or stripped.startswith("Phase ") \
-               or stripped.startswith("state:") or stripped.startswith("stable ") \
-               or stripped.startswith("[Phase") or stripped.startswith("done") \
-               or stripped.startswith("result.") or stripped.startswith("hist=") \
-               or stripped.startswith("Click ") or stripped.startswith("WS ") \
-               or stripped.startswith("WS OK") or stripped.startswith("WS connected") \
-               or stripped.startswith("Tab ") or stripped.startswith("Tab clicked") \
-               or stripped == "" or "polling" in stripped:
+            # 跳過純 CDP debug 識別字首（每行第一個 token）
+            skip_prefixes = (
+                "[CDP]", "Phase", "stable ", "state:",
+                "done", "result.", "hist=", "Click ",
+                "WS OK", "WS connected", "Tab clicked",
+                "WS ", "[Phase",
+            )
+            if any(stripped.startswith(p) for p in skip_prefixes):
                 continue
+            # 跳過包含 "polling" 的純狀態行（非內容行）
+            if "polling" in stripped and len(stripped) < 80:
+                continue
+            # 跳過純空行
+            if not stripped:
+                continue
+            # 其餘全部保留（address/phone/rating/status/評論等）
             clean_lines.append(line)
         clean_raw = "\n".join(clean_lines)
         # 嘗試解析結構成 dict（供食物過濾用）
@@ -400,6 +411,8 @@ def query_place_api_only(place_id: str) -> Optional[dict]:
     env = os.environ.copy()
     env["GOOGLE_PLACES_API_KEY"] = os.environ.get(
         "GOOGLE_PLACES_API_KEY", "[API_KEY_REDACTED]")
+    venv_python = os.path.expanduser("~/.openclaw/skills/google-places/.venv/bin/python")
+    python_bin = venv_python if os.path.exists(venv_python) else sys.executable
 
     args = ["goplaces", "details", place_id, "--reviews", "--json"]
     try:
@@ -474,55 +487,413 @@ def _filter_reviews_6m(reviews: list) -> list:
 # 格式化輸出（query.py full 原始結果 + 摘要）
 # ─────────────────────────────────────────────────────────────
 
-def format_full_output(raw: str, place_data: dict, food_kw: Optional[str],
-                       dist_m: float, index: int) -> str:
+def _parse_maps_price_from_raw(raw: str) -> dict:
     """
-    輸出 query.py full 的完整文字，並在頂部加上本系統的摘要列。
-    店家分隔線使用雙線（══）提高辨識度。
+    從 query.py full 的 raw 文字輸出中，
+    解析出 CDP maps_price 結構（price_range / service / popular_items / price_histogram）。
     """
+    mp = {"found": False, "price_range": None, "reporter": None,
+          "price_histogram": [], "service": [], "popular_items": [], "menu_url": None}
+
+    # ── price_range：找 💵 每人消費：$X–$Y 那行 ──────────────
+    m = re.search(r"💵\s*每人消費：([^\n]+)", raw)
+    if m:
+        line = m.group(1).strip()
+        # 去除 distribution bar 部分（如 "   ▓▓▓░░  $100–$200  約71人（50%）"）
+        bar_m = re.search(r"^([^\n]+?)(?:\s{2,}|$)", line)
+        if bar_m:
+            price_part = bar_m.group(1).strip()
+            # 去掉結尾的 "（N人回報）"
+            price_part = re.sub(r"（[^）]*人回報[^）]*）$", "", price_part)
+            if price_part and price_part not in ("店家未提供", "無法讀取"):
+                mp["found"] = True
+                mp["price_range"] = price_part
+
+    # ── reporter：從 "（71人回報）" 這類格式抓 ──────────────
+    rm = re.search(r"（(\d+)\s*人回報）", raw)
+    if rm:
+        mp["reporter"] = f"{rm.group(1)}人回報"
+
+    # ── price_histogram：找 ▓▓░ 分布那幾行 ─────────────────
+    for line in raw.split("\n"):
+        hm = re.search(r"\s*([▓░])\s+(\$[^\s]+)\s+(約\d+人)\s+（(\d+)%）", line)
+        if hm:
+            mp["price_histogram"].append([hm.group(2), hm.group(3), int(hm.group(4))])
+
+    # ── service：找 📌 服務：那一行 ─────────────────────────
+    sm = re.search(r"📌\s*服務：([^\n]+)", raw)
+    if sm:
+        svcs = [s.strip() for s in re.split(r"[、，]", sm.group(1)) if s.strip()]
+        mp["service"] = svcs
+
+    # ── popular_items：找 🍜 熱門品項：那一行 ────────────────
+    pm = re.search(r"🍜\s*熱門品項：([^\n]+)", raw)
+    if pm:
+        items = [it.strip() for it in re.split(r"[｜\n]", pm.group(1)) if it.strip()]
+        mp["popular_items"] = items
+
+    # ── menu_url：找 🍽️ Menu：那一行 ────────────────────────
+    mm = re.search(r"🍽️\s*Menu：([^\n]+)", raw)
+    if mm:
+        mp["menu_url"] = mm.group(1).strip()
+
+    return mp
+
+
+def _get_reviews_from_api_data(api_data: dict) -> list:
+    """從 api_data 中取出 6 個月內的評論（供格式化用）"""
+    reviews = api_data.get("_filtered_reviews", [])
+    if not reviews:
+        reviews = api_data.get("reviews", [])
+    return reviews
+
+
+def format_full_output(raw: str, place_data: dict, maps_price: dict,
+                       food_kw: Optional[str], dist_m: float,
+                       index: int, reviews: list = None) -> str:
+    """
+    ★ 確保輸出完整的 12 項欄位（確定性格式化）★
+    欄位：
+      1. 店名  2. 地址  3. 經緯度  4. 電話  5. 評分
+      6. 每人消費  7. 服務  8. 特色菜色  9. 網友心得
+     10. 營業狀態  11. 網站  12. Google Maps
+    """
+    from datetime import datetime, timedelta
+
     medal = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
 
-    name = place_data.get("name", "未知店家") if place_data else "未知店家"
-    pid = place_data.get("place_id", "") if place_data else ""
-    rating = place_data.get("rating", 0) if place_data else 0
+    # ── 基本欄位取值 ────────────────────────────────────────
+    name       = place_data.get("name", "未知店家") if place_data else "未知店家"
+    pid        = place_data.get("place_id", place_data.get("id", "")) if place_data else ""
+    rating     = place_data.get("rating", 0) if place_data else 0
+    rcount     = place_data.get("user_rating_count", 0) if place_data else 0
+    address    = (place_data.get("formattedAddress")
+                 or place_data.get("address", "無地址")) if place_data else "無地址"
+    lat        = (place_data.get("location", {}).get("lat", "")
+                 if place_data else "")
+    lng        = (place_data.get("location", {}).get("lng", "")
+                 if place_data else "")
+    phone      = place_data.get("phone", "無") if place_data else "無"
+    website    = place_data.get("website", "無") if place_data else "無"
+    open_now   = place_data.get("open_now") if place_data else None
+    raw_hours  = place_data.get("regularHours", []) if place_data else []
+    if isinstance(raw_hours, list):
+        hours = [h for h in raw_hours if h]
+    elif isinstance(raw_hours, str) and raw_hours:
+        hours = [raw_hours]
+    else:
+        hours = place_data.get("hours", []) if place_data else []
+    price_rng_api = place_data.get("_price_range") if place_data else None
+
     maps_url = f"https://www.google.com/maps/place/?q=place_id:{pid}" if pid else ""
 
-    # 距離估算
+    # ── 距離估算 ──────────────────────────────────────────
     drv = estimate_time(dist_m, "driving")
     wal = estimate_time(dist_m, "walking")
     dist_str = f"📏 直線距離：{dist_m:.0f}m（🚗 {drv}分 🚶 {wal}分）"
 
-    # 食物關鍵字標記
-    food_tag = ""
-    if food_kw:
-        food_tag = f"｜🍴 符合：{food_kw}"
+    # ── 食物關鍵字標記 ─────────────────────────────────────
+    food_tag = f"｜🍴 符合：{food_kw}" if food_kw else ""
 
-    header = [
-        f"{medal[index]} {'═'*52}",
-        f"🏪 {name}｜⭐ {rating}{food_tag}",
-        f"{dist_str}",
-        f"🔗 {maps_url}",
-        "",
-    ]
+    lines = []
 
-    # 如果有 query.py full 原始輸出，直接附加
-    if raw and len(raw) > 50:
-        return "\n".join(header) + "\n" + raw
+    # ══ 1. 店名 + 評分 ════════════════════════════════════════
+    lines.append(f"{medal[index]} {'═'*52}")
+    lines.append(f"🏪 店名：{name}｜⭐ 評分：{rating}（{rcount}則）{food_tag}")
+    lines.append(f"{dist_str}")
+
+    # ══ 2. 地址 ═══════════════════════════════════════════════
+    lines.append(f"📍 地址：{_fmt_addr(address)}")
+
+    # ══ 3. 經緯度 ══════════════════════════════════════════
+    if lat and lng:
+        lines.append(f"📍 經緯度：{round(float(lat), 6)}, {round(float(lng), 6)}")
+
+    # ══ 4. 電話 ══════════════════════════════════════════════
+    lines.append(f"📞 電話：{phone}")
+
+    # ══ 5. 每人消費 ══════════════════════════════════════════
+    price_hist = (maps_price or {}).get("price_histogram", [])
+    rep_label  = (maps_price or {}).get("reporter", "") or ""
+    if price_rng_api:
+        rep_str = f"（{rep_label}）" if rep_label else ""
+        lines.append(f"💵 每人消費：{price_rng_api}{rep_str}")
+    elif maps_price and maps_price.get("found"):
+        pr = maps_price.get("price_range", "店家未提供")
+        rep_str = f"（{rep_label}）" if rep_label else ""
+        lines.append(f"💵 每人消費：{pr}{rep_str}")
     else:
-        # 沒有 raw 時，用 place_data 勉強湊一個
-        lines = header
-        if place_data:
-            lines.append(f"📍 {place_data.get('address', '無地址')}")
-            phone = place_data.get("phone", "")
-            if phone:
-                lines.append(f"📞 {phone}")
-            open_now = place_data.get("open_now", False)
-            status = "✅ 營業中" if open_now else "❌ 休息中"
-            lines.append(f"🚦 狀態：{status}")
-            pr = place_data.get("_price_range", "")
-            if pr:
-                lines.append(f"💵 每人消費：{pr}")
-        return "\n".join(lines)
+        lines.append(f"💵 每人消費：店家未提供")
+    for lbl, cnt, pct in price_hist:
+        bar = "▓" * max(1, int(pct / 10)) + "░" * (10 - max(1, int(pct / 10)))
+        lines.append(f"   {bar}  {lbl}  {cnt}（{pct}%）")
+
+    # ══ 6. 服務 ══════════════════════════════════════════════
+    svcs = (maps_price or {}).get("service", [])
+    if svcs:
+        lines.append(f"📌 服務：{'、'.join(svcs)}")
+
+    # ══ 7. 特色菜色 ════════════════════════════════════════
+    dish_list = _dish_from_reviews(reviews or [])
+    if dish_list:
+        lines.append("🔥 特色菜色：")
+        for dname, snippet in dish_list:
+            s2 = snippet if len(snippet) <= 80 else snippet[:80] + "…"
+            lines.append(f"   {dname}：{s2}")
+    else:
+        lines.append("🔥 特色菜色：無（評論中未抓獲特定菜色）")
+
+    # ══ 8. 網友心得 ════════════════════════════════════════
+    rev_list = _rev_from_list(reviews or [])
+    if rev_list:
+        lines.append("📝 網友心得：")
+        for author, note in rev_list:
+            n2 = note if len(note) <= 150 else note[:150] + "…"
+            lines.append(f"   {author}：{n2}")
+    else:
+        lines.append("📝 網友心得：無（近期無評論）")
+
+    # ══ 9. 營業狀態 ════════════════════════════════════════
+    now = datetime.now()
+    days_en = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+    days_zh = ["週一","週二","週三","週四","週五","週六","週日"]
+    today_en = days_en[now.weekday()]
+
+    today_hr = None
+    for h in (hours or []):
+        if not h: continue
+        parts = h.split(": ", 1)
+        if len(parts) == 2 and parts[0].strip() == today_en:
+            tp = parts[1].strip()
+            today_hr = None if tp.lower() == "closed" else tp
+
+    status_str = _fmt_status(open_now, today_hr, hours, now, days_en, days_zh)
+    lines.append(f"🚦 狀態：{status_str}")
+
+    # ══ 10. 網站 ═══════════════════════════════════════════
+    lines.append(f"🌐 網站：{website}")
+
+    # ══ 11. Google Maps ════════════════════════════════════
+    lines.append(f"🔗 Google Maps：{maps_url}")
+
+    return "\n".join(lines)
+
+def _fmt_addr(addr_en: str) -> str:
+    """地址中文化（對應 query.py format_address）"""
+    a = addr_en.strip()
+    if not a: return a
+
+    # 1. 抽郵遞區號（結尾 3-5 位數）
+    zipcode = ""
+    zm = re.search(r"\b(\d{3,5})\s*$", a)
+    if zm:
+        zipcode = zm.group(1)
+        a = a[:zm.start()].strip().rstrip(",").rstrip()
+
+    # 2. 抽門牌號（No. 251號 / 251號兩種格式）
+    house_num = ""
+    hm = re.search(r"No\.?\s*(\d+)\s*號?", a)
+    if hm:
+        house_num = hm.group(1) + "號"
+        rest = a[hm.end():].lstrip()
+        if rest.startswith(","): rest = rest[1:].lstrip()
+        a = rest.strip().rstrip(",").rstrip()
+    else:
+        hm2 = re.search(r"^(\d+)號\s*,", a)
+        if hm2:
+            house_num = hm2.group(1) + "號"
+            a = a[hm2.end():].strip()
+
+    # 3. 抽段
+    section_num = ""
+    sm = re.search(r"[Ss]ection\s*(\d+)", a)
+    if sm:
+        section_num = sm.group(1) + "段"
+        a = re.sub(r"[Ss]ection\s*\d+\s*,?\s*", "", a).strip().rstrip(",").rstrip()
+
+    # 4. 中英對照置換（用 \b word boundary，防止部分匹配）
+    #    順序：長的先換（New Taipei > Taipei），並避開 "Taiwan" 單置
+    rep = {
+        "New Taipei City":"新北市","Taichung City":"台中市","Changhua City":"彰化市",
+        "Taipei City":"台北市","Hsinchu City":"新竹市",
+        "Beitun District":"北屯區","Xitun District":"西屯區","Nantun District":"南屯區",
+        "Dali District":"大里區","Wuri District":"梧棲區","Dajia District":"大甲區",
+        "Fengyuan District":"豐原區","Shalu District":"沙鹿區","Longjing District":"龍井區",
+        "Qingshui District":"清水區","Dadu District":"大肚區","Wanhua District":"萬華區",
+        "Da'an District":"大安區","Songshan District":"松山區","Neihu District":"內湖區",
+        "Nangang District":"南港區","Zhonghe District":"中和區","Yonghe District":"永和區",
+        "Zhongzheng District":"中正區","Datong District":"大同區","Banqiao District":"板橋區",
+        "North District":"北區","South District":"南區","East District":"東區",
+        "West District":"西區","Central District":"中區",
+        "Hankou Rd":"漢口路","Dunhua Rd":"敦化路","Fuxing Rd":"復興路",
+        "Zhongshan Rd":"中山路","Rd":"路","Road":"路","St":"街","Street":"街",
+    }
+    # 依 key 長度降冪，確保 "New Taipei City" 先於 "Taipei City"
+    for en, zh in sorted(rep.items(), key=lambda x: -len(x[0])):
+        # 使用 \b 邊界，確保不匹配 "Taichung City" in "Taichung CityHall"
+        pattern = r"\b" + re.escape(en) + r"\b"
+        a = re.sub(pattern, zh, a)
+
+    # 5. 清理多餘符號
+    a = re.sub(r",+", "，", a); a = re.sub(r"，+", "，", a)
+    a = a.strip("，").strip()
+    a = re.sub(r"^No\.?\s*", "", a).strip()
+    # 移除結尾的「台灣」或「Taiwan」（country part）
+    a = re.sub(r"，?\s*台灣\s*$", "", a).strip()
+    a = re.sub(r"，?\s*Taiwan\s*$", "", a, flags=re.IGNORECASE).strip()
+
+    # 6. 以「，」分段，重組地址
+    road_kws = ["路","街","巷","弄","大道"]
+    tokens = [t.strip() for t in re.split(r"[，,]+", a) if t.strip()]
+    city = ""; district = ""; road = ""; others = []
+    for tok in tokens:
+        if any(tok.endswith(k) for k in road_kws):
+            road = tok
+        elif tok in ["台中市","彰化市","台北市","新北市","新竹市"]:
+            city = tok
+        elif "區" in tok:
+            district = tok
+        elif re.match(r"^\d{3,5}$", tok):
+            pass  # 郵遞區號殘留，跳過
+        else:
+            others.append(tok)
+
+    zip_lbl = f"（{zipcode}）" if zipcode else ""
+    return city + district + "".join(others) + road + section_num + house_num + zip_lbl
+
+def _fmt_status(open_now, today_hr, hours, now, days_en, days_zh) -> str:
+    """營業狀態格式化（對應 query.py 狀態邏輯）"""
+    from datetime import timedelta
+    import re
+    if open_now is True:
+        if today_hr:
+            fm = re.search(
+                r"(\d{1,2}):(\d{2})\s*(AM|PM)\s*[\u2013\u002d-]\s*(\d{1,2}):(\d{2})\s*(AM|PM)",
+                today_hr, re.IGNORECASE)
+            if fm:
+                oh=int(fm[1]); om=int(fm[2]); oampm=fm[3].upper()
+                ch=int(fm[4]); cm=int(fm[5]); campm=fm[6].upper()
+                oh24=oh%12+(12 if oampm=='PM' else 0)
+                ch24=ch%12+(12 if campm=='PM' else 0)
+                cl_dt=now.replace(hour=ch24,minute=cm,second=0,microsecond=0)
+                op_dt=now.replace(hour=oh24, minute=om, second=0, microsecond=0)
+                # 跨日： closing < opening 或 closing=12AM 表示隔日凌晨打烊
+                if ch24 <= oh24 or ch24 < 12:
+                    cl_dt += timedelta(days=1)
+                diff=int((cl_dt-now).total_seconds())
+                if diff>0:
+                    hl=diff//3600; ml=(diff%3600)//60
+                    tl = f"距離關門 {hl} 小時 {ml} 分鐘" if hl>0 else f"距離關門 {ml} 分鐘"
+                else:
+                    tl = "已超過關門時間"
+                return f"✅ 營業中（今日 {today_hr}，{tl}）"
+        return "✅ 營業中"
+    elif open_now is False:
+        if today_hr:
+            fm = re.search(
+                r"(\d{1,2}):(\d{2})\s*(AM|PM)\s*[\u2013\u002d-]\s*(\d{1,2}):(\d{2})\s*(AM|PM)",
+                today_hr, re.IGNORECASE)
+            if fm:
+                oh=int(fm[1]); om=int(fm[2]); oampm=fm[3].upper()
+                ch=int(fm[4]); cm=int(fm[5]); campm=fm[6].upper()
+                oh24=oh%12+(12 if oampm=='PM' else 0)
+                ch24=ch%12+(12 if campm=='PM' else 0)
+                op_dt=now.replace(hour=oh24, minute=om, second=0, microsecond=0)
+                cl_dt=now.replace(hour=ch24,minute=cm,second=0,microsecond=0)
+                if ch24<oh24 or ch24<12: cl_dt += timedelta(days=1)
+                secs_op=int((op_dt-now).total_seconds())
+                secs_cl=int((cl_dt-now).total_seconds())
+                if secs_op>0:
+                    hl=secs_op//3600; ml=(secs_op%3600)//60
+                    ws = f"距離開門 {hl} 小時 {ml} 分鐘" if hl>0 else f"距離開門 {ml} 分鐘"
+                    return f"❌ 休息中（今日 {today_hr}，{ws}）"
+                elif secs_cl>0:
+                    hl=secs_cl//3600; ml=(secs_cl%3600)//60
+                    tl = f"距離關門 {hl} 小時 {ml} 分鐘" if hl>0 else f"距離關門 {ml} 分鐘"
+                    return f"✅ 營業中（今日 {today_hr}，{tl}）"
+            return f"❌ 休息中（今日 {today_hr}）"
+        cur_idx=now.weekday()
+        for offset in range(1,8):
+            nidx=(cur_idx+offset)%7
+            for h in hours:
+                parts=h.split(": ",1)
+                if len(parts)!=2 or parts[0].strip()!=days_en[nidx]: continue
+                tp=parts[1].strip()
+                if tp.lower()!="closed":
+                    return f"❌ 休息中（今日公休，{days_zh[nidx]} {tp} 開門）"
+        return "❌ 休息中"
+    else:
+        if today_hr:
+            return f"✅ 營業中（今日 {today_hr}）"
+        return "❌ 休息中"
+
+
+# ── 特色菜色 ══════════════════════════════════════════════════
+_DISH_PATTERNS = [
+    ("蝦滷飯","蝦滷飯"),("澎湖小卷","小卷"),("煎干貝","干貝"),("脆皮燒肉","燒肉"),
+    ("辣椒","辣椒"),("海鮮炒麵","炒麵"),("海鮮粥","海鮮粥"),("油蔥蝦仁飯","油蔥蝦仁飯"),
+    ("川燙花枝","花枝"),
+    ("燒賣","燒賣"),("蝦餃","蝦餃"),("蝦餃皇","蝦餃皇"),("叉燒包","叉燒包"),
+    ("叉燒","叉燒"),("流沙包","流沙包"),("奶黃包","奶黃包"),("蛋撻","蛋撻"),
+    ("菠蘿包","菠蘿包"),("鮮蝦腸粉","腸粉"),("牛肉丸","牛肉丸"),("蒸餃","蒸餃"),
+    ("小籠包","小籠包"),("腐皮捲","腐皮捲"),("炸兩","炸兩"),("臘味蘿蔔糕","蘿蔔糕"),
+    ("XO醬炒蘿蔔糕","蘿蔔糕"),("煲仔飯","煲仔飯"),("咖喱魚蛋","魚蛋"),("雲吞","雲吞"),
+    ("餛飩","餛飩"),("鹹水角","鹹水角"),("春捲","春捲"),("天扶良","天扶良"),
+    ("叉燒飯","叉燒飯"),("燒臘","燒臘"),("烤鴨","烤鴨"),("脆皮烤鴨","烤鴨"),
+    ("豆花","豆花"),("燒仙草","燒仙草"),
+]
+
+def _dish_from_reviews(reviews):
+    found = {}
+    for review in reviews:
+        content = review.get("content","")
+        for pattern, canonical in _DISH_PATTERNS:
+            if canonical in found: continue
+            key = pattern.split("，")[0].split("（")[0]
+            idx = content.find(key)
+            if idx < 0: continue
+            snippet = content[idx+len(key): idx+60].strip()
+            snippet = re.sub(r"[\n\r]+", "，", snippet)
+            snippet = re.sub(r"，+，", "，", snippet)
+            snippet = re.sub(r"\s+", " ", snippet).strip()
+            m = re.search(r"[。！？?！]", snippet)
+            if m: snippet = snippet[:m.end()]
+            snippet = snippet.strip("。，、：：「」\"''()（）　 ")
+            if len(snippet) < 4: continue
+            found[canonical] = (pattern, snippet)
+        if len(found) >= 5: break
+    result = []
+    for pattern, canonical in _DISH_PATTERNS:
+        if canonical in found:
+            result.append((found[canonical][0], found[canonical][1]))
+    return result[:5]
+
+
+def _rev_from_list(reviews):
+    results = []; seen = set()
+    for review in reviews:
+        author  = review.get("author","")
+        content = review.get("content","")
+        if not content or author == "LISON": continue
+        for sent in re.split(r"[。\n]", content):
+            sent = sent.strip()
+            if len(sent) < 10 or len(sent) > 80: continue
+            if re.search(r"\$\d+", sent): continue
+            if sent in seen: continue
+            seen.add(sent); results.append((author, sent)); break
+        if len(results) >= 3: break
+    if len(results) < 3:
+        for review in reviews:
+            content = review.get("content","")
+            if not content or review.get("author") == "LISON": continue
+            for sent in re.split(r"[。\n]", content):
+                sent = sent.strip()
+                if len(sent) < 10 or len(sent) > 60: continue
+                if re.search(r"\$\d+", sent): continue
+                if sent in seen: continue
+                seen.add(sent); results.append((review.get("author",""), sent)); break
+            if len(results) >= 3: break
+    return [(a,n) for a,n in results if len(n) >= 10][:3]
 
 
 # ─────────────────────────────────────────────────────────────
@@ -750,11 +1121,16 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
             api_data = query_place_api_only(pid)
 
         # 呼叫 query.py full（完整查詢，包含 CDP 每人消費 + 分布圖）
-        raw_output = ""
+        maps_price: dict = {"found": False}
+        reviews_list: list = []
         if pid:
             _, raw_output = query_place_full(pid)
+            maps_price = _parse_maps_price_from_raw(raw_output)
+            reviews_list = _get_reviews_from_api_data(api_data)
 
-        detail_text = format_full_output(raw_output, api_data, food_kw, dist, i)
+        detail_text = format_full_output(
+            "", api_data, maps_price, food_kw, dist, i, reviews_list
+        )
         lines.append(detail_text)
         lines.append("")
 
