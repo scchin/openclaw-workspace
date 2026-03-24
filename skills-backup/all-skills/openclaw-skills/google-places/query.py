@@ -938,6 +938,8 @@ def extract_review_highlights(reviews):
 
 
 # ─── 用戶反饋價格 ────────────────────────────────────────────────
+# 資料來源：goplaces 6個月內評論文字解析，正規表達式搜尋 $數字 格式
+# 呼叫：format_reviews_price(reviews)  ← reviews 來自 get_reviews(place_id)
 def format_reviews_price(reviews):
     lines = []
     for rev in reviews:
@@ -1237,6 +1239,9 @@ def format_output(data, maps_price, reviews, price_range_api=None):
     lines.append(f"🌐 網站：{website}")
     lines.append(f"🔗 Google Maps：{maps_url}")
 
+    # 💵 每人消費優先級：① Google Places API priceRange  ② CDP 分布圖  ③ 錯誤/未提供
+    #    → ① Google Places API v1（get_price_range_api）：Google 官方 priceRange，非爬蟲
+    #    → ② CDP 直讀分布圖（scrape_price_from_browser Phase 3）：Google Maps 用戶回報統計
     price_hist = (maps_price.get("price_histogram",[]) if maps_price else [])
     rep_label  = (maps_price.get("reporter","") if maps_price else "")
 
