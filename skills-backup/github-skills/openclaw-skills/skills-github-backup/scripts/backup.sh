@@ -15,7 +15,7 @@ OPENCLAW_SKILLS="/Users/KS/.openclaw/skills"
 
 # ★★★ 敏感資料關鍵字（這些檔案內容不上 GitHub）★★★
 # 格式：路徑正規表達式（相對於技能目錄）
-EXCLUDE_BY_PATH="query\\.py|\.env|SECRET|TOKEN|API_KEY|\.pem|credentials"
+EXCLUDE_BY_PATH="query\\.py|\\.env|SECRET|TOKEN|API_KEY|\\.pem|credentials"
 
 # 備份前，先把含 API Key 的檔案置換成啞巴版本（僅備份到 GitHub 用）
 # 策略：針對 google-places/query.py 備份時替換關鍵內容
@@ -118,5 +118,35 @@ echo "[5/6] Pushing to GitHub..."
 git push origin main
 echo "[OK] Backup complete!"
 
-# Step 6: 本地完整備份完成通知
-echo "[6/6] Local full backup (with API keys): $BACKUP_DIR/all-skills/"
+# Step 6: 生成彙總報告 (Summary Report)
+echo -e "\n============================================================"
+echo "📊 GitHub Skills Backup Summary Report"
+echo "============================================================"
+echo "Timestamp: $(date)"
+echo "Repo: https://github.com/$GITHUB_REPO"
+echo "------------------------------------------------------------"
+
+# 統計 Agents Skills
+echo "📂 Agents Skills (github-skills/agents-skills/):"
+AGENT_COUNT=$(find "$BACKUP_DIR/github-skills/agents-skills" -name "SKILL.md" | wc -l)
+find "$BACKUP_DIR/github-skills/agents-skills" -name "SKILL.md" | while read -r file; do
+    echo "  • $(basename $(dirname "$file"))"
+done
+echo "Total Agents Skills: $AGENT_COUNT"
+echo "------------------------------------------------------------"
+
+# 統計 OpenClaw Skills
+echo "📂 OpenClaw Skills (github-skills/openclaw-skills/):"
+OC_COUNT=$(find "$BACKUP_DIR/github-skills/openclaw-skills" -name "SKILL.md" | wc -l)
+find "$BACKUP_DIR/github-skills/openclaw-skills" -name "SKILL.md" | while read -r file; do
+    echo "  • $(basename $(dirname "$file"))"
+done
+echo "Total OpenClaw Skills: $OC_COUNT"
+echo "------------------------------------------------------------"
+
+echo "🌟 Grand Total Skills: $((AGENT_COUNT + OC_COUNT))"
+echo "✅ All skills have been safely pushed to GitHub."
+echo "============================================================"
+
+# 輸出本地備份路徑
+echo -e "\nLocal full backup (with API keys): $BACKUP_DIR/all-skills/"
