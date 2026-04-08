@@ -91,11 +91,16 @@ git push origin main
 echo "[OK] Backup complete!"
 
 # ============================================================
-# Step 6: 生成結構化彙總報告 (Structured Summary Report)
+# Step 6: 生成結構化彙總報告 (Fixed Bash Syntax)
 # ============================================================
 echo -e "\n📊 GitHub 技能備份彙總報告"
-echo "總計發現技能數：$(find "$BACKUP_DIR/github-skills" -name "SKILL.md" | wc -l) 個 (包含所有路徑)"
-echo "唯一技能數：$(find "$BACKUP_DIR/github-skills" -name "SKILL.md" | xargs -I {} basename \$(dirname {}) | sort -u | wc -l) 個"
+
+# 統計數量
+TOTAL_COUNT=$(find "$BACKUP_DIR/github-skills" -name "SKILL.md" | wc -l | xargs)
+UNIQUE_COUNT=$(find "$BACKUP_DIR/github-skills" -name "SKILL.md" | xargs -I {} dirname {} | xargs -I {} basename {} | sort -u | wc -l | xargs)
+
+echo "總計發現技能數：$TOTAL_COUNT 個 (包含所有路徑)"
+echo "唯一技能數：約 $UNIQUE_COUNT 個 (排除重複項)"
 echo ""
 
 echo "📂 分類清單"
@@ -103,70 +108,65 @@ echo "1. Agent 專業技能 (agents-skills)"
 echo "這類技能主要集中在專業任務自動化、研究與內容創作："
 echo ""
 
-# 定義 Agent 技能類別映射
-# 格式: "類別名稱|關鍵字1,關鍵字2..."
-AGENT_CATEGORIES=(
-    "AI 自動化|autoglm,websearch,browser,deepresearch,generate-image,search-image,open-link"
-    "內容與行銷|copywriting,content-strategy,seo,blog,social-content,social-media"
-    "開發與設計|code,architecture,frontend,ui-ux,git-essentials,opencode"
-    "研究與分析|research-paper,market-research,aminer,backtest,stock-analysis"
-    "管理與效率|executing-plans,writing-plans,automation,skill-creator,skill-vetter"
-    "個人化工具|memory,obsidian,tmux,1password"
-    "專業診斷|security-auditor,clawdefender,debug-pro"
-)
+# 分類定義 (使用-u 避免 bash 數組在某些 shell 版本的兼容問題)
+# 格式: "類別名稱:關鍵字,關鍵字"
+AGENT_CATS="AI 自動化:autoglm,websearch,browser,deepresearch,generate-image,search-image,open-link|內容與行銷:copywriting,content-strategy,seo,blog,social-content,social-media|開發與設計:code,architecture,frontend,ui-ux,git-essentials,opencode|研究與分析:research-paper,market-research,aminer,backtest,stock-analysis|管理與效率:executing-plans,writing-plans,automation,skill-creator,skill-vetter|個人化工具:memory,obsidian,tmux,1password|專業診斷:security-auditor,clawdefender,debug-pro"
 
-for cat_info in "${AGENT_CATEGORIES[@]}"; do
-    IFS="|" read -r cat_name keywords <<< "$cat_info"
-    SKILLS_IN_CAT=""
+IFS='|'
+for cat_entry in $AGENT_CATS; do
+    CAT_NAME=$(echo "$cat_entry" | cut -d':' -f1)
+    KWS=$(echo "$cat_entry" | cut -d':' -f2)
+    SKILLS_LIST=""
     
-    # 掃描所有 agent skills
     while read -r skill_dir; do
         skill_name=$(basename "$skill_dir")
-        for kw in ${keywords//,/ }; do
+        IFS=','
+        for kw in $KWS; do
             if [[ "$skill_name" == *"$kw"* ]]; then
-                SKILLS_IN_CAT+="$skill_name, "
+                SKILLS_LIST+="$skill_name, "
                 break
             fi
         done
+        unset IFS
     done < <(find "$BACKUP_DIR/github-skills/agents-skills" -type d -maxdepth 1 -mindepth 1)
     
-    if [ -n "$SKILLS_IN_CAT" ]; then
-        echo "$cat_name：${SKILLS_IN_CAT%, }"
+    if [ -n "$SKILLS_LIST" ]; then
+        echo "$CAT_NAME：${SKILLS_LIST%, }"
         echo ""
     fi
 done
+unset IFS
 
 echo "2. OpenClaw 核心/工具技能 (openclaw-skills)"
 echo "這類技能主要負責系統維護與生活機能查詢："
 echo ""
 
-# 定義 OpenClaw 技能類別映射
-OC_CATEGORIES=(
-    "系統維護|skills-github-backup,skill-installation,token-optimizer"
-    "飛書整合|feishu-calendar,feishu-doc,feishu-drive,feishu-wiki,feishu-perm"
-    "生活工具|where-to-go,google-places,chinese-date"
-    "文件處理|pptx-maker,prompt-guard"
-)
+OC_CATS="系統維護:skills-github-backup,skill-installation,token-optimizer|飛書整合:feishu-calendar,feishu-doc,feishu-drive,feishu-wiki,feishu-perm|生活工具:where-to-go,google-places,chinese-date|文件處理:pptx-maker,prompt-guard"
 
-for cat_info in "${OC_CATEGORIES[@]}"; do
-    IFS="|" read -r cat_name keywords <<< "$cat_info"
-    SKILLS_IN_CAT=""
+IFS='|'
+for cat_entry in $OC_CATS; do
+    CAT_NAME=$(echo "$cat_entry" | cut -d':' -f1)
+    KWS=$(echo "$cat_entry" | cut -d':' -f2)
+    SKILLS_LIST=""
     
     while read -r skill_dir; do
         skill_name=$(basename "$skill_dir")
-        for kw in ${keywords//,/ }; do
+        IFS=','
+        for kw in $KWS; do
             if [[ "$skill_name" == *"$kw"* ]]; then
-                SKILLS_IN_CAT+="$skill_name, "
+                SKILLS_LIST+="$skill_name, "
                 break
             fi
         done
+        unset IFS
     done < <(find "$BACKUP_DIR/github-skills/openclaw-skills" -type d -maxdepth 1 -mindepth 1)
     
-    if [ -n "$SKILLS_IN_CAT" ]; then
-        echo "$cat_name：${SKILLS_IN_CAT%, }"
+    if [ -n "$SKILLS_LIST" ]; then
+        echo "$CAT_NAME：${SKILLS_LIST%, }"
         echo ""
     fi
 done
+unset IFS
 
 echo "📈 統計概覽"
 echo "最新同步：$(date '+%Y-%m-%d %H:%M')"
