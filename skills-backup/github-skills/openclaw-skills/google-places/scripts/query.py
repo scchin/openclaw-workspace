@@ -7,34 +7,8 @@ Google Places 店家查詢工具 v9（乾淨重寫版）
 3. extract_dish_highlights 以句號截斷 snippet，防止跨品項污染
 4. 移除多餘的頂層重複定義（cdp_send_recv, cdp_eval 與內部函式衝突）
 """
-import subprocess, json, sys, os, re, asyncio, urllib.request, time, websockets
+import subprocess, json, sys, os, re, asyncio, urllib.request, time, websockets, shutil
 from datetime import datetime, timezone, timedelta
-
-# ─── 翻譯工具 ────────────────────────────────────────────────
-from deep_translator import GoogleTranslator
-
-_trans_cache: dict = {}
-
-def translate_to_chinese(text: str) -> str:
-    """
-    將英文評論翻譯成繁體中文（含快取）。
-    若翻譯失敗或原文已是中文，則保留原文。
-    """
-    if not text or not text.strip():
-        return text
-    # 若已含中文字，直接視為已中文
-    if re.search(r"[\u4e00-\u9fff]", text):
-        return text
-    if text in _trans_cache:
-        return _trans_cache[text]
-    try:
-        result = GoogleTranslator(source="auto", target="zh-TW").translate(text)
-        if result and result != text:
-            _trans_cache[text] = result
-            return result
-    except Exception:
-        pass
-    return text
 
 GOOGLE_PLACES_API_KEY
     "GOOGLE_PLACES_API_KEY", "[API_KEY_REDACTED]")
@@ -56,11 +30,17 @@ def get_details_json(place_id):
     except json.JSONDecodeError:
         return None
 
-def get_reviews(place_id):
+def get_reviews(place_id, months=None):
+    """
+    抓取評論。months=None 表示不回溯時間限制，回傳全部評論；
+    months=6（預設）為向後相容，只留6個月內的評論。
+    """
     data = get_details_json(place_id)
     if not data:
         return [], data
-    six_months_ago = datetime.now(timezone.utc) - timedelta(days=180)
+    cutoff = None
+    if months is not None:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=months * 30)
     filtered = []
     for review in data.get("reviews", []):
         pub_str = review.get("publish_time", "")
@@ -70,13 +50,11 @@ def get_reviews(place_id):
             pub_time = datetime.fromisoformat(pub_str.replace("Z", "+00:00")).astimezone(timezone.utc)
         except ValueError:
             continue
-        if pub_time < six_months_ago:
+        if cutoff and pub_time < cutoff:
             continue
         orig = review.get("original_text", {}).get("text", "")
         translated = review.get("text", {}).get("text", "")
-        raw_content = orig or translated
-        # ★★★ 全部翻譯成繁體中文 ★★★
-        content = translate_to_chinese(raw_content) if raw_content else ""
+        content = orig or translated
         filtered.append({
             "author": review.get("author", {}).get("display_name", "匿名"),
             "rating": review.get("rating", 0),
@@ -101,6 +79,20 @@ def get_price_range_api(place_id):
     except Exception:
         pass
     return None
+
+def get_localized_name_addr(place_id):
+    """用 Google Places Details API 抓中文店名 + 格式化地址（繁體）"""
+    url = ("https://maps.googleapis.com/maps/api/place/details/json"
+           f"?place_id={place_id}&fields=name,formatted_address&language=zh-TW"
+           f"&key={GOOGLE_PLACES_API_KEY")
+    try:
+        req = urllib.request.Request(url)
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read())
+        result = data.get("result", {})
+        return result.get("name"), result.get("formatted_address", "")
+    except Exception:
+        return None, None
 
 # ─── CDP 通訊 ────────────────────────────────────────────────
 async def cdp_send_recv(ws, mid, method, params=None, timeout=10.0):
@@ -200,46 +192,81 @@ async def scrape_price_from_browser(place_id, maps_url=None):
             except Exception:
                 return False
 
-        if port_used(PORT):
-            # port 已被佔用不代表 CDP 可達，先視為已啟動
-            print("[CDP] Port %d already in use, assuming Edge already running" % PORT)
-            return True
+        # ── 每次啟動前都重新複製已登入的 Chrome/Edge profile ──
+        # 這樣 CDP 可以繼承 Google 登入狀態，讀到「每人平均」等會員限定資訊
+        # 無論 port 是否已被佔用，都要確保使用正確的 profile
+        CDP_PROFILE = "/tmp/openclaw-chrome-cdp"
 
-        print("[CDP] Starting Edge (background + CDP port %d)..." % PORT)
-        executable = "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+        def _copy_login_profile():
+            try:
+                shutil.rmtree(CDP_PROFILE, ignore_errors=True)
+                os.makedirs(CDP_PROFILE, exist_ok=True)
+                copied = False
+                for browser_name, base_path in [
+                    ("Chrome", os.path.expanduser("~/Library/Application Support/Google/Chrome")),
+                    ("Edge",   os.path.expanduser("~/Library/Application Support/Microsoft Edge")),
+                ]:
+                    default_path = os.path.join(base_path, "Default")
+                    if os.path.isdir(default_path):
+                        print("[CDP] Copying %s profile ..." % browser_name)
+                        shutil.copytree(default_path, os.path.join(CDP_PROFILE, "Default"),
+                                       dirs_exist_ok=True)
+                        for item in ["Extensions", "Extension State", "Local App Settings",
+                                     "Local Storage", "Session Storage", "Sync Data"]:
+                            src = os.path.join(base_path, item)
+                            dst = os.path.join(CDP_PROFILE, item)
+                            if os.path.isdir(src):
+                                shutil.copytree(src, dst, dirs_exist_ok=True)
+                        print("[CDP] Profile copied from %s" % browser_name)
+                        copied = True
+                        break
+                if not copied:
+                    print("[CDP] No Chrome/Edge profile found, starting with fresh profile")
+                return copied
+            except Exception as e:
+                print("[CDP] Profile copy error: %s" % e)
+                return False
+
+        _copy_login_profile()
+
+        if port_used(PORT):
+            print("[CDP] Port %d in use, killing old browser ..." % PORT)
+            os.system("lsof -ti :%d 2>/dev/null | xargs kill -9 2>/dev/null; sleep 2" % PORT)
+
+        print("[CDP] Starting Chrome (CDP port %d)..." % PORT)
+        executable = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
         try:
             subprocess.Popen(
                 [executable,
                  "--headless=no",
                  "--no-default-browser-check",
                  "--remote-debugging-port=%d" % PORT,
-                 "--user-data-dir=/tmp/openclaw-edge-cdp"],
+                 "--user-data-dir=%s" % CDP_PROFILE],
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.DEVNULL,
             )
         except FileNotFoundError:
-            # Edge not found, try Chrome
+            print("[CDP] Chrome not found at %s, trying Edge ..." % executable)
             try:
                 subprocess.Popen(
-                    ["/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+                    ["/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
                      "--headless=no",
                      "--no-default-browser-check",
                      "--remote-debugging-port=%d" % PORT,
-                     "--user-data-dir=/tmp/openclaw-edge-cdp"],
+                     "--user-data-dir=%s" % CDP_PROFILE],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL,
                 )
             except FileNotFoundError:
-                print("[CDP] No supported browser found (Edge/Chrome)")
+                print("[CDP] No supported browser found")
                 return False
 
-        # 等候 CDP 上線（最長 20 秒）
         for attempt in range(20):
             time.sleep(1)
             if cdp_reachable():
-                print("[CDP] Edge started and CDP ready after %ds" % (attempt + 1))
+                print("[CDP] Edge ready after %ds" % (attempt + 1))
                 return True
-        print("[CDP] Edge started but CDP did not become reachable in 20s")
+        print("[CDP] Edge failed to become ready")
         return False
 
     async def ws_ping(ws_url_str, timeout=5.0):
@@ -337,15 +364,11 @@ async def scrape_price_from_browser(place_id, maps_url=None):
         return True
 
     # ── Phase 1: get CDP connection ─────────────────────────
-    if not cdp_reachable():
-        print("[CDP] Browser not reachable, attempting to start Edge...")
-        if not start_edge_background():
-            print("[CDP] Could not start browser automatically")
-            return {"found": False, "error": "browser not started"}
-        # 再次檢查，確保 CDP 已就緒
-        if not cdp_reachable():
-            print("[CDP] Browser started but CDP still not reachable")
-            return {"found": False, "error": "browser not ready"}
+    # 每次都強制重啟 Edge（並複製已登入的 Chrome/Edge profile），
+    # 確保 CDP session 繼承 Google 登入狀態，能讀到「每人平均」等會員限定資訊
+    if not start_edge_background():
+        print("[CDP] Could not start browser automatically")
+        return {"found": False, "error": "browser not started"}
     tabs = get_all_tabs(max_wait=30)
     if not tabs:
         print("[CDP] No tabs found")
@@ -656,7 +679,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                 "yes" if result["menu_url"] else "no"))
 
             # ── Phase 3 ───────────────────────────────────
-            if result["found"]:
+            if True:  # Phase 3 always runs (average price may be on page even if Phase 2 missed it)
                 print("[Phase 3] Looking for price arrow button...")
                 await cdp_eval(ws, "window.scrollTo({top:700,behavior:'instant'});null", timeout=6)
                 await asyncio.sleep(1.0)
@@ -666,49 +689,24 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                     "  var allEls = document.querySelectorAll('*');"
                     "  for(var i=0;i<allEls.length;i++){"
                     "    var t=(allEls[i].innerText||'').trim();"
-                    "    if(t.match(/^平均每人/)||(t.match(/per person/i)&&t.match(/\\$/))){"
-                    "      perEl=allEls[i]; break;"
-                    "    }"
+                    "    if(t.indexOf('平均每人')!==-1){perEl=allEls[i]; break;}"
+                    "    if(t.match(/per person/i)&&t.match(/\\$/)){perEl=allEls[i]; break;}"
                     "  }"
-                    "  if(!perEl) return JSON.stringify({ok:false,reason:'no_perEl'});"
-                    "  var container = (perEl.closest ? perEl.closest('div') : perEl.parentElement) || perEl.parentElement;"
-                    "  var arrowEl = null;"
-                    "  var candidates = container ? Array.from(container.querySelectorAll('button,svg,[aria-label],span')) : [];"
-                    "  for(var i=0;i<candidates.length;i++){"
-                    "    var ct=(candidates[i].innerText||'').trim();"
-                    "    var ca=candidates[i].getAttribute('aria-label')||'';"
-                    "    if(ca.match(/expand|dropdown|chevron|arrow|more/i)||"
-                    "       ct==='\\u25bc'||ct==='\\u25b6'||"
-                    "       candidates[i].querySelector('svg')){"
-                    "      arrowEl=candidates[i]; break;"
-                    "    }"
-                    "  }"
-                    "  if(!arrowEl && perEl.nextElementSibling &&"
-                    "     (perEl.nextElementSibling.tagName==='BUTTON'||"
-                    "      perEl.nextElementSibling.querySelector('svg'))){"
-                    "    arrowEl=perEl.nextElementSibling;"
-                    "  }"
-                    "  if(!arrowEl){"
-                    "    var siblings = Array.from(document.querySelectorAll('button'));"
-                    "    var perRect = perEl.getBoundingClientRect();"
-                    "    for(var i=0;i<siblings.length;i++){"
-                    "      var r2=siblings[i].getBoundingClientRect();"
-                    "      var diffY=Math.abs(r2.top-perRect.top);"
-                    "      if(r2.width<80&&r2.height<60&&diffY<150&&"
-                    "         (siblings[i].querySelector('svg')||(siblings[i].innerText||'').trim().length<=2)){"
-                    "        arrowEl=siblings[i]; break;"
+                    "  if(!perEl){"
+                    "    for(var i=0;i<allEls.length;i++){"
+                    "      var t=(allEls[i].innerText||'').trim();"
+                    "      if(t.match(/^\\$/)||t.match(/\\$\\d/)){"
+                    "        var par=allEls[i].parentElement;"
+                    "        while(par&&par!==document.body){"
+                    "          var pt=(par.innerText||'').trim();"
+                    "          if(pt.indexOf('平均每人')!==-1){perEl=allEls[i]; break;}"
+                    "          par=par.parentElement;"
+                    "        }"
+                    "        if(perEl) break;"
                     "      }"
                     "    }"
                     "  }"
-                    "  if(arrowEl){"
-                    "    var r2=arrowEl.getBoundingClientRect();"
-                    "    return JSON.stringify({ok:true,"
-                    "      x:Math.round(r2.left+r2.width/2),"
-                    "      y:Math.round(r2.top+r2.height/2),"
-                    "      method:'arrow',"
-                    "      text:(arrowEl.innerText||'').trim().substring(0,40),"
-                    "      aria:(arrowEl.getAttribute('aria-label')||'')});"
-                    "  }"
+                    "  if(!perEl) return JSON.stringify({ok:false,reason:'no_perEl'});"
                     "  var r2=perEl.getBoundingClientRect();"
                     "  return JSON.stringify({ok:true,"
                     "    x:Math.round(r2.left+r2.width/2),"
@@ -717,7 +715,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                     "    text:(perEl.innerText||'').trim().substring(0,60)});"
                     "})()"
                 ), timeout=15)
-                print("[Phase 3] btn: %s" % (btn_raw[:120] if btn_raw else "None"))
+                print("[Phase 3] btn: %s" % (btn_raw[:200] if btn_raw else "None"))
                 if btn_raw:
                     try:
                         btn_info = json.loads(btn_raw) if isinstance(btn_raw, str) else btn_raw
@@ -828,8 +826,6 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                                         print("[Phase 3] Histogram found but not parsed: " + str(hd)[:200])
                                 else:
                                     print("[Phase 3] hd.found is False")
-                else:
-                    print("[Phase 3] No btn_raw")
             else:
                 print("[Phase 3] result.found=False, skipping")
     except Exception as e:
@@ -869,7 +865,6 @@ def extract_prices(content):
 
 # ─── 特色菜色 ────────────────────────────────────────────────
 DISH_ITEMS = [
-    # 原有
     ("蝦滷飯",   "蝦滷飯"),
     ("澎湖小卷", "小卷"),
     ("煎干貝",   "干貝"),
@@ -879,37 +874,6 @@ DISH_ITEMS = [
     ("海鮮粥",   "海鮮粥"),
     ("油蔥蝦仁飯","油蔥蝦仁飯"),
     ("川燙花枝", "花枝"),
-    # 港式點心（2026-03-22 新增）
-    ("燒賣",     "燒賣"),
-    ("蝦餃",     "蝦餃"),
-    ("蝦餃皇",   "蝦餃皇"),
-    ("叉燒包",   "叉燒包"),
-    ("叉燒",     "叉燒"),
-    ("流沙包",   "流沙包"),
-    ("奶黃包",   "奶黃包"),
-    ("蛋撻",     "蛋撻"),
-    ("菠蘿包",   "菠蘿包"),
-    ("鮮蝦腸粉", "腸粉"),
-    ("牛肉丸",   "牛肉丸"),
-    ("蒸餃",     "蒸餃"),
-    ("小籠包",   "小籠包"),
-    ("腐皮捲",   "腐皮捲"),
-    ("炸兩",     "炸兩"),
-    ("臘味蘿蔔糕","蘿蔔糕"),
-    ("XO醬炒蘿蔔糕","蘿蔔糕"),
-    ("煲仔飯",   "煲仔飯"),
-    ("咖哩魚蛋", "魚蛋"),
-    ("雲吞",     "雲吞"),
-    ("餛飩",     "餛飩"),
-    ("鹹水角",   "鹹水角"),
-    ("春捲",     "春捲"),
-    ("天扶良",   "天扶良"),
-    ("叉燒飯",   "叉燒飯"),
-    ("燒臘",     "燒臘"),
-    ("烤鴨",     "烤鴨"),
-    ("脆皮烤鴨", "烤鴨"),
-    ("豆花",     "豆花"),
-    ("燒仙草",   "燒仙草"),
 ]
 
 def extract_dish_highlights(reviews):
@@ -950,14 +914,26 @@ def extract_dish_highlights(reviews):
     return result
 
 
+def _days_friendly(days):
+    """將天數轉為友好時間字串（「3天前」「2個月前」）"""
+    if days <= 0:
+        return "今天"
+    if days < 30:
+        return f"{days}天前"
+    months = days // 30
+    return f"{months}個月前"
+
 # ─── 網友心得 ────────────────────────────────────────────────
 def extract_review_highlights(reviews):
+    """回傳：(作者, 心得摘要, 發布時間友好字串)，最多10則"""
     results = []; seen = set()
     for review in reviews:
         author = review.get("author", "")
         content = review.get("content", "")
         if not content or author == "LISON":
             continue
+        days_ago = review.get("days_ago", 0)
+        time_str = _days_friendly(days_ago)
         for sent in re.split(r"[。\n]", content):
             sent = sent.strip()
             if len(sent) < 10 or len(sent) > 80:
@@ -967,15 +943,17 @@ def extract_review_highlights(reviews):
             if sent in seen:
                 continue
             seen.add(sent)
-            results.append((author, sent))
+            results.append((author, sent, time_str))
             break
-        if len(results) >= 3:
+        if len(results) >= 10:
             break
-    if len(results) < 3:
+    if len(results) < 10:
         for review in reviews:
             content = review.get("content", "")
             if not content or review.get("author") == "LISON":
                 continue
+            days_ago = review.get("days_ago", 0)
+            time_str = _days_friendly(days_ago)
             for sent in re.split(r"[。\n]", content):
                 sent = sent.strip()
                 if len(sent) < 10 or len(sent) > 60:
@@ -985,21 +963,23 @@ def extract_review_highlights(reviews):
                 if sent in seen:
                     continue
                 seen.add(sent)
-                results.append((review.get("author",""), sent))
+                results.append((review.get("author",""), sent, time_str))
                 break
-            if len(results) >= 3:
+            if len(results) >= 10:
                 break
     unique = []
-    for author, note in results:
+    for author, note, time_str in results:
         if len(note) < 10:
             continue
         if len(note) > 80:
             note = note[:80] + "…"
-        unique.append((author, note))
-    return unique[:3]
+        unique.append((author, note, time_str))
+    return unique[:10]
 
 
 # ─── 用戶反饋價格 ────────────────────────────────────────────────
+# 資料來源：goplaces 6個月內評論文字解析，正規表達式搜尋 $數字 格式
+# 呼叫：format_reviews_price(reviews)  ← reviews 來自 get_reviews(place_id)
 def format_reviews_price(reviews):
     lines = []
     for rev in reviews:
@@ -1007,10 +987,8 @@ def format_reviews_price(reviews):
         prices  = extract_prices(content)
         if not prices:
             continue
-        days   = rev["days_ago"]
-        rating = rev.get("rating", "")
-        author = rev.get("author", "匿名")
-        lines.append(f"· {author}（{rating}⭐，{days}天前）提及：{', '.join(prices)}")
+        time_str = _days_friendly(days)
+        lines.append(f"· {author}（{rating}⭐，{time_str}）提及：{', '.join(prices)}")
         snippet = _smart_truncate(content, prices)
         lines.append(f"  「{snippet}」")
     return lines
@@ -1085,7 +1063,14 @@ def format_address(addr_en):
         "Taichung City":"台中市","Changhua City":"彰化市",
         "Taipei City":"台北市","New Taipei City":"新北市","Hsinchu City":"新竹市",
         "Hankou Rd":"漢口路","Dunhua Rd":"敦化路","Fuxing Rd":"復興路",
-        "Zhongshan Rd":"中山路","Rd":"路","Road":"路","St":"街","Street":"街",
+        "Zhongshan Rd":"中山路","Zhongqing Rd":"重慶路","Zhongqing Road":"重慶路",
+        "Zhongqing":"重慶",
+        "Shunping Rd":"順平路","Shunping":"順平",
+        "Chang'an Rd":"長安路","Changan Rd":"長安路","ChangAn":"長安",
+        "Shenyang Rd":"瀋陽路","Shenyang":"瀋陽",
+        "Leizhong Rd":"累中 路","Leizhong":"累中",
+        "Rd":"路","Road":"路","St":"街","Street":"街",
+        "Lane":"巷","Alley":"巷","Ave":"路","Avenue":"路",
     }
     for en, zh in sorted(rep_map.items(), key=lambda x: -len(x[0])):
         a = a.replace(en, zh)
@@ -1095,16 +1080,46 @@ def format_address(addr_en):
     a = a.strip("，").strip()
     a = re.sub(r"^No\.?\s*", "", a).strip()
 
-    # 移除「台灣」（最後殘留的國家名）
+    # 移除「台灣」前，先翻譯殘留的 Taiwan → 台灣
+    a = re.sub(r"Taiwan", "台灣", a, flags=re.IGNORECASE)
+    # 移除末尾殘留的國家名
     a = re.sub(r"，?\s*台灣\s*$", "", a).strip()
-    # 再次清理可能的殘留
     a = re.sub(r"，?\s*Taiwan\s*$", "", a, flags=re.IGNORECASE).strip()
+    # 清除摻在中間的「台灣」
+    a = re.sub(r"台灣\s*", "", a)
+
+    # 清除殘留的郵遞區號干擾（如 "406043累中 街" → 先殺郵遞區號）
+    a = re.sub(r"\b\d{5,6}(?=\S)", "", a)
 
     # 以「，」分段，重新組裝 city / 區 / 路 / 門牌
     road_kws = ["路","街","巷","弄","大道"]
     tokens = [t.strip() for t in re.split(r"[，,]+", a) if t.strip()]
     city = ""; district = ""; road = ""; others = []
-    for tok in tokens:
+    # 二次處理：把被 space 截斷的「XX 路」「XX 街」重新拼合
+    merged_tokens = []
+    i = 0
+    while i < len(tokens):
+        tok = tokens[i]
+        # 湊對：形如 "XX路" + "N號" → 保留
+        # 形如 "XX" + "街N號" → 合併
+        if (i+1 < len(tokens) and
+            any(tok.endswith(k) for k in ["路","街"]) and
+            re.match(r"^\d+.*", tokens[i+1])):
+            # 跳過數字開頭的 tokens（門牌干擾），直接下一個
+            i += 1
+            continue
+        # 「累中 街2號」→ 把後面的數字結尾 token 合併到 road
+        if (i+1 < len(tokens) and
+            not any(tok.endswith(k) for k in ["路","街"]) and
+            re.match(r"^\d+", tokens[i+1]) and
+            any(k in tok or k in tokens[i+1] for k in ["路","街","巷","弄"])):
+            merged_tokens.append(tok + tokens[i+1])
+            i += 2
+            continue
+        merged_tokens.append(tok)
+        i += 1
+
+    for tok in merged_tokens:
         if any(tok.endswith(k) for k in road_kws):
             road = tok
         elif tok in ["台中市","彰化市","台北市","新北市","新竹市"]:
@@ -1127,7 +1142,11 @@ HOT_ITEM_TRANSLATE = {
     "noodles":"麵食","grilled":"烤肉","steamed":"蒸食","soup":"湯品",
 }
 
-def format_output(data, maps_price, reviews, price_range_api=None):
+def format_output(data, maps_price, reviews, price_range_api=None, all_reviews=None):
+    """
+    reviews: 6個月內評論（用於價格回饋，向後相容）
+    all_reviews: 全部評論（用於網友心得，months=None）
+    """
     raw_name = data.get("name","未知")
     # goplaces 的 name 有時含 pipe 分隔的多個標籤，只取第一段作為正式名稱
     name     = raw_name.split("|")[0].strip()
@@ -1142,6 +1161,13 @@ def format_output(data, maps_price, reviews, price_range_api=None):
     hours    = data.get("hours", [])
     place_id = data.get("place_id","")
     maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+
+    # 優先取 Google Places Details API 的中文名稱與完整地址
+    api_name, api_addr = get_localized_name_addr(place_id)
+    if api_name:
+        name = api_name
+    if api_addr:
+        addr = api_addr
 
     lines = []
     lines.append(f"🏪 店名：{name}")
@@ -1299,6 +1325,9 @@ def format_output(data, maps_price, reviews, price_range_api=None):
     lines.append(f"🌐 網站：{website}")
     lines.append(f"🔗 Google Maps：{maps_url}")
 
+    # 💵 每人消費優先級：① Google Places API priceRange  ② CDP 分布圖  ③ 錯誤/未提供
+    #    → ① Google Places API v1（get_price_range_api）：Google 官方 priceRange，非爬蟲
+    #    → ② CDP 直讀分布圖（scrape_price_from_browser Phase 3）：Google Maps 用戶回報統計
     price_hist = (maps_price.get("price_histogram",[]) if maps_price else [])
     rep_label  = (maps_price.get("reporter","") if maps_price else "")
 
@@ -1347,17 +1376,13 @@ def format_output(data, maps_price, reviews, price_range_api=None):
         lines.append("🔥 特色菜色：")
         for dish_name, snippet in dish_hl:
             lines.append(f"   {dish_name}：{snippet}")
-    else:
-        lines.append("🔥 特色菜色：無（評論中未抓獲特定菜色）")
 
-    rev_hl = extract_review_highlights(reviews)
+    rev_hl = extract_review_highlights(all_reviews if all_reviews is not None else reviews)
     if rev_hl:
         lines.append("📝 網友心得：")
-        for author, note in rev_hl:
+        for author, note, time_str in rev_hl:
             note2 = note if len(note) <= 150 else note[:150]+"…"
-            lines.append(f"   {author}：{note2}")
-    else:
-        lines.append("📝 網友心得：無（近期無評論）")
+            lines.append(f"   {author}：{note2}（{time_str}）")
 
     price_lines = format_reviews_price(reviews)
     if price_lines:
@@ -1394,16 +1419,19 @@ def cmd_search(args):
     if not place_id:
         print("（未找到 place_id）\n"+out); return
     maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
-    reviews, data = get_reviews(place_id)
+    all_reviews, data = get_reviews(place_id)
     if not data:
-        print("（無法取得店家資料）"); return
+        print("（未找到 place_id）\n"+out); return
+    maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+    # 6個月內評論（用於價格回饋）
+    reviews_6m = [r for r in all_reviews if r.get("days_ago", 999) <= 180]
     price_range_api = get_price_range_api(place_id)
     maps_price = {"found": False}
     try:
         maps_price = asyncio.run(scrape_price_from_browser(place_id, maps_url))
     except Exception as e:
         maps_price = {"found": False, "error": str(e)}
-    print(format_output(data, maps_price, reviews, price_range_api))
+    print(format_output(data, maps_price, reviews_6m, price_range_api, all_reviews))
 
 
 def cmd_full(args):
@@ -1411,42 +1439,33 @@ def cmd_full(args):
     if not place_id:
         print("錯誤：缺少 place_id"); return
     maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
-    reviews, data = get_reviews(place_id)
+    all_reviews, data = get_reviews(place_id)
     if not data:
         print("錯誤：無法取得店家資料"); return
+    maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+    reviews_6m = [r for r in all_reviews if r.get("days_ago", 999) <= 180]
     price_range_api = get_price_range_api(place_id)
     maps_price = {"found": False}
     try:
         maps_price = asyncio.run(scrape_price_from_browser(place_id, maps_url))
     except Exception as e:
         maps_price = {"found": False, "error": str(e)}
-    print(format_output(data, maps_price, reviews, price_range_api))
+    print(format_output(data, maps_price, reviews_6m, price_range_api, all_reviews))
 
 
 def cmd_details(args):
     place_id = args[0]
-    reviews, data = get_reviews(place_id)
+    all_reviews, data = get_reviews(place_id)
     if not data:
         print("錯誤：無法取得店家資料"); return
+    reviews_6m = [r for r in all_reviews if r.get("days_ago", 999) <= 180]
     price_range_api = get_price_range_api(place_id)
-    print(format_output(data, {"found": False}, reviews, price_range_api))
+    print(format_output(data, {"found": False}, reviews_6m, price_range_api, all_reviews))
 
 
 if __name__ == "__main__":
-    import sys
-    # 安靜模式：--quiet 抑制 CDP debug 輸出（stderr），只留乾淨結果（stdout）
-    if "--quiet" in sys.argv:
-        sys.argv.remove("--quiet")
-        import os, contextlib
-        with contextlib.redirect_stderr(open(os.devnull, "w")):
-            if len(sys.argv) < 2:
-                print(__doc__); sys.exit(1)
-            cmd = sys.argv[1].lower()
-            args = sys.argv[2:]
-            {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)
-    else:
-        if len(sys.argv) < 2:
-            print(__doc__); sys.exit(1)
-        cmd = sys.argv[1].lower()
-        args = sys.argv[2:]
-        {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)
+    if len(sys.argv) < 2:
+        print(__doc__); sys.exit(1)
+    cmd = sys.argv[1].lower()
+    args = sys.argv[2:]
+    {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)

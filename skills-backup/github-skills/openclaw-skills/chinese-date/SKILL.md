@@ -61,10 +61,7 @@ bash /Users/KS/.openclaw/skills/chinese-date/scripts/install.sh
 # 1. 安裝命理引擎
 npm install -g cantian-tymext
 
-# 2. 安裝 Python 農曆庫（可選，提升部分資訊）
-uv pip install --system --break-system-packages lunarcalendar
-# 或
-/usr/local/bin/python3 -m pip install lunarcalendar
+# 2. 無需額外 Python 套件（v3 起已內建所有計算）
 ```
 
 ## 架構
@@ -75,21 +72,20 @@ chinese-date/
 ├── scripts/
 │   ├── install.sh        ← 懶人安裝腳本（首次設定用）
 │   ├── query.sh          ← 便捷 shell wrapper
-│   └── date_query.py     ← 主程式
+│   └── date_query.py     ← 主程式（v3，2026-03-31）
 ```
 
 ### 依賴
 
 | 套件 | 安裝方式 | 用途 |
 |------|---------|------|
-| `cantian-tymext` | `npm install -g cantian-tymext` | 四柱干支精確計算（基於 tyme4ts） |
-| Python 3 | 系統已有 | 日期處理、subprocess、輸出格式化 |
-| `lunarcalendar` | `pip install lunarcalendar` | 農曆月/日資訊（可選） |
+| `cantian-tymext` | `npm install -g cantian-tymext` | 四柱干支、二十四節氣、黃曆宜忌、二十八宿等（基於 tyme4ts） |
+| Python 3 | 系統已有 | subprocess 調用 Node.js、輸出格式化 |
 
 ### 為何用 Node.js + Python 混合？
 
-- `cantian-tymext` 基於 `tyme4ts`，是現今最精確的八字/干支排盤引擎，支援完整的四柱、月建、節氣月計算，但它是 Node.js 套件
-- Python 負責日期時間處理、subprocess 調用、輸出格式化
+- `cantian-tymext` 基於 `tyme4ts`，是現今最精確的八字/干支排盤引擎，支援完整的四柱、月建、節氣、黃曆宜忌、二十八宿等計算
+- Python 負責 subprocess 調用 Node.js、日期時間處理、輸出格式化
 
 ## 精確度驗證
 
