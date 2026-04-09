@@ -1261,11 +1261,11 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
                 open_ones.append(p)
             else:
                 closed_ones.append(p)
-            if len(open_ones) >= DEFAULT_MAX_RESULTS:
+            if len(open_ones) >= max_results:
                 break
-        # 若營業中不足5家，則用休息中的補足（使用者要求一定給5間）
-        if len(open_ones) < DEFAULT_MAX_RESULTS:
-            deficit = DEFAULT_MAX_RESULTS - len(open_ones)
+        # 若營業中不足要求數量，則用休息中的補足（使用者要求一定給 N 間）
+        if len(open_ones) < max_results:
+            deficit = max_results - len(open_ones)
             open_ones.extend(closed_ones[:deficit])
         top_results = open_ones
         filter_note = (filter_note + "（評分最高5家）").strip()
