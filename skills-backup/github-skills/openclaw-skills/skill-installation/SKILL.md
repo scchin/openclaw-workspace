@@ -1,6 +1,7 @@
 ---
 name: skill-installation
 description: 協助安裝、診斷與修復 OpenClaw 技能。當使用者提到「安裝技能」、「技能看不到」、「技能故障」或「更改技能名稱」時觸發。
+author: King Sean of KS
 ---
 
 # 技能安裝與診斷指南 (Skill Installation & Diagnostics)

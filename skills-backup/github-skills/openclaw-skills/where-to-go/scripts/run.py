@@ -4,6 +4,7 @@
 整合 Step 2→3→4→5：搜尋 → 過濾排序 → 詳細查詢 → 輸出完整結果
 
 更新：
+- 2026-04-09 v2.23：餐飲時段搜尋時，若候選不足，自動擴展至各餐飲類型（小吃、便當、合菜、義式、咖哩、燒肉、牛排…），以擴大候選池；排除 30 分鐘內即將打烊的店家（僅限餐飲時段）；餐飲時段排序改為距離由近到遠，早午餐店家 penalty +500m往後挪；_MEAT_DISPLAY 語法修復（dict→list of tuple）
 - 2026-04-01 v2.18：💵每人：6層 fallback（新增第⑥層 place_data.priceRange）；
   google-places SSL→ssl._create_unverified_context() 確保 priceRange API 可用；
   🗺️地圖連結修正；🍴特色去重 dict.fromkeys()；
@@ -20,7 +21,7 @@
 - 2026-03-24 v2.8：Phase 3 無條件執行（平均每人分布圖）、Chrome CDP profile 自動複製（已登入）
 - 2026-03-24 v2.7：🚗開車/🚶走路合併一行 + 💵每人消費欄位
 - 2026-03-24 v2.6：評論超過52字自動換行（textwrap.fill width=52）
-- 2026-03-23 v2.5：純文字模板輸出（符合 MEMORY.md v2.5 格式）
+- 2026-03-23 v2.5：純文字模板輸出（符合 MEMORY.md 規範）
 - 2026-03-23：冰品關鍵字擴張（冰品、冰店、雪花冰、芒果冰、豆花、仙草、芋圓、
               甜湯、甜品、燒仙草、愛玉、杏仁豆腐、楊枝甘露等）
 - 自動對每個候選地點呼叫『Google Places 地點查詢技能』（query.py full）
@@ -180,6 +181,32 @@ def _normalize_spaces(text: str) -> str:
     # 不做 strip()！行首/行尾縮排由呼叫端負責
     return text
 
+
+def _is_closing_soon(status_line: str) -> bool:
+    """檢查店家是否在 30 分鐘內打烊"""
+    if not status_line: return False
+    # 模式 1: "距離關門 X 小時 Y 分鐘"
+    m_full = re.search(r"距離關門\s*(\d+)\s*小時\s*(\d+)\s*分鐘", status_line)
+    if m_full:
+        return (int(m_full.group(1)) * 60 + int(m_full.group(2))) < 30
+    # 模式 2: "距離關門 X 分鐘"
+    m_min = re.search(r"距離關門\s*(\d+)\s*分鐘", status_line)
+    if m_min:
+        return int(m_min.group(1)) < 30
+    return False
+
+def _is_closing_soon(status_line: str) -> bool:
+    """檢查店家是否在 30 分鐘內打烊"""
+    if not status_line: return False
+    # 模式 1: "距離關門 X 小時 Y 分鐘"
+    m_full = re.search(r"距離關門\s*(\d+)\s*小時\s*(\d+)\s*分鐘", status_line)
+    if m_full:
+        return (int(m_full.group(1)) * 60 + int(m_full.group(2))) < 30
+    # 模式 2: "距離關門 X 分鐘"
+    m_min = re.search(r"距離關門\s*(\d+)\s*分鐘", status_line)
+    if m_min:
+        return int(m_min.group(1)) < 30
+    return False
 
 def haversine(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     R = 6371000
@@ -369,7 +396,6 @@ def _format_address_zh(addr_en: str) -> str:
     zip_label = f"（{zipcode}）" if zipcode else ""
 
     # SWAP 1：others[-1] 含 "1125號中清路迪卡儂正後方中平路"，road="中平路"
-    # （當 house_num 已在前面成功提取時，others[-1] 會是 "1125號中清路..."）
     if others and road and _re.search(r"\d+號", others[-1]) and road in others[-1]:
         m_hn = _re.match(r"(\d+號)(.*)", others[-1])
         if m_hn:
@@ -1197,25 +1223,46 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
                 seen_pids.add(pid)
                 candidates.append(place)
 
-        # 午餐時：根據非早午餐店家數量判斷是否繼續擴張
-        # （而非根據總候選數，總數可能在第一圈就滿足但過濾後不足）
-        def _is_brunchy(p):
-            types = p.get("types") or []
-            name  = p.get("name", "")
-            return ("brunch_restaurant" in types
-                    or "早午餐" in name
-                    or "brunch" in name.lower())
         non_brunch_count = sum(1 for p in candidates if not _is_brunchy(p))
         if non_brunch_count >= max_results:
-            break
             break
         if radius >= 50000:
             break
 
+    # ★★★ 2026-04-09 餐飲時段擴展搜尋：數量不足時補足，僅限「非早午餐/非只賣早餐」的店家 ★★★
+    if keyword in MEAL_KEYWORDS and len(candidates) < max_results * 2:
+        # 先擴 breakfast 類（可能混在 lunch 結果裡），再擴一般餐飲
+        extra_keywords = []
+        if keyword == "午餐":
+            extra_keywords = ["早餐", "早午餐", "小吃", "便當", "自助餐", "合菜", "快炒",
+                              "義式", "咖哩", "燒肉", "牛排", "日式", "韓式", "港式"]
+        elif keyword == "晚餐":
+            extra_keywords = ["小吃", "便當", "合菜", "快炒", "義式", "咖哩",
+                              "燒肉", "牛排", "火鍋", "日式", "韓式", "港式"]
+        elif keyword == "早餐":
+            extra_keywords = ["早午餐", "小吃", "蛋餅", "飯糰", "豆漿"]
+        elif keyword == "宵夜":
+            extra_keywords = ["小吃", "鹹酥雞", "滷味", "關東煮", "火鍋", "燒烤"]
+        elif keyword == "下午茶":
+            extra_keywords = ["咖啡", "甜點", "蛋糕", "冰品", "輕食", "義式"]
+        elif keyword == "點心":
+            extra_keywords = ["小吃", "鹹酥雞", "雞排", "水煎包", "蔥油餅", "蛋餅"]
+        else:
+            extra_keywords = ["小吃", "便當", "合菜", "義式", "咖哩", "燒肉", "牛排"]
+
+        for kw in extra_keywords:
+            broad_results = goplaces_search(kw, lat, lng, final_radius, min_rating)
+            if isinstance(broad_results, list):
+                for place in broad_results:
+                    pid = get_place_id(place)
+                    if pid and pid not in seen_pids:
+                        seen_pids.add(pid)
+                        candidates.append(place)
+
     # -- Step 3: 過濾 + 排序 --
     filtered = filter_and_sort(candidates, lat, lng, min_rating)
 
-    # -- 食物關鍵字過濾（★★★ 2026-03-26 修正：持續擴張半徑直到滿足 max_results）★★★ --
+    # -- 食物關鍵字過濾 --
     if food_kw and filtered:
         food_filtered: List[dict] = []
         skipped_count = 0
@@ -1224,86 +1271,51 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
             if not pid:
                 skipped_count += 1
                 continue
-            # 取結構化資料（API 評論），供食物比對
             api_data = query_place_api_only(pid)
             if api_data and place_mentions_food(api_data, food_kw):
-                place["_api_data"] = api_data   # 快取，避免重複呼叫
+                place["_api_data"] = api_data
                 food_filtered.append(place)
             else:
                 skipped_count += 1
-
-        # 若過濾後不夠5家，則放寬門檻（取原本過濾結果）
         if len(food_filtered) < max_results:
-            # 把被跳過的加回來補足數量
             for place in filtered:
                 if place not in food_filtered:
                     place["_api_data"] = place.get("_api_data")
                     food_filtered.append(place)
                     if len(food_filtered) >= max_results:
                         break
-
         filtered = food_filtered
         filter_note = f"（食物關鍵字「{food_kw}」過濾，跳過 {skipped_count} 家不符）"
     else:
         filter_note = ""
 
-    # -- Step 4: 取評分最高的5家（候選選擇） --
+    # -- Step 4: 決定最終結果（處理打烊時間 + 早午餐降序） --
+    # 餐飲時段：全部依距離由近到遠，早午餐店家排在同距離的末端
+    # 食物關鍵字：依評分高低
+    is_meal_kw = keyword in MEAL_KEYWORDS
     if is_food_keyword(params["keyword"]):
         filtered.sort(key=lambda x: get_rating(x), reverse=True)
-        all_top = filtered[:DEFAULT_MAX_CANDIDATES]  # 多取幾家作為遞補池
-        # ★★★ 確保全是營業中的（不足時從後面遞補）★★★
-        open_ones, closed_ones = [], []
-        for p in all_top:
-            pid = get_place_id(p)
-            api_d = p.get("_api_data") or (query_place_api_only(pid) if pid else None)
-            is_open_now = api_d.get("open_now") if api_d else False
-            if is_open_now:
-                open_ones.append(p)
-            else:
-                closed_ones.append(p)
-            if len(open_ones) >= max_results:
-                break
-        # 若營業中不足要求數量，則用休息中的補足（使用者要求一定給 N 間）
-        if len(open_ones) < max_results:
-            deficit = max_results - len(open_ones)
-            open_ones.extend(closed_ones[:deficit])
-        top_results = open_ones
-        filter_note = (filter_note + "（評分最高5家）").strip()
-        # -- Step 5: 重新按距離由近到遠排列 --
-        top_results.sort(key=lambda x: x.get("_distance_m", 999999))
+        pool = filtered[:DEFAULT_MAX_CANDIDATES * 2]
+    elif is_meal_kw:
+        # 餐飲時段：依距離，brunch/早餐店家附加 penalty 往後挪
+        def _meal_sort_key(p):
+            dist = p.get("_distance_m", 999999)
+            # penalty：早午餐店家 distance + 500m，避免完全排除但降低排序優
+            penalty = 500 if _is_brunchy(p) else 0
+            return dist + penalty
+        filtered.sort(key=_meal_sort_key)
+        pool = filtered[:DEFAULT_MAX_CANDIDATES * 3]   # 多取一些，30min內打烊會再過濾
     else:
-        top_results = filtered[offset : offset + max_results]
+        pool = filtered[offset : offset + max_results * 4]
 
-    # -- 輸出 Header --
-    r_display = f"{final_radius // 1000}km" if final_radius >= 1000 else f"{final_radius}m"
-    rh_display = f"（{radius_hint}）" if radius_hint else ""
-    food_display = f"｜食物過濾：{food_kw}" if food_kw else ""
-
-    lines: List[str] = []
-    lines.append(f"# 🍽️ {keyword} 選項（{lat:.4f}, {lng:.4f}）")
-    lines.append(f"📍 條件：{keyword}")
-    lines.append(f"📏 半徑：{r_display} {rh_display}")
-    lines.append(f"📊 評分 ≥ {min_rating}")
-    offset_note = f"（第 {offset+1}–{offset+max_results} 名）" if offset > 0 else ""
-    lines.append(f"🔍 共 {len(candidates)} 家候選{offset_note}")
-    lines.append("---")
-
-    medal = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣"]
-
-    # -- Step 4: 對每個地點呼叫『Google Places 地點查詢技能』-
-    # -- Step 4: 並行預先查詢所有候選店家詳細資料（加速，避免 CDP 循序 60 秒/間）--
-    top_pids = [(i, get_place_id(p), p.get("_distance_m", 0), p) for i, p in enumerate(top_results)]
+    # 並行查詢詳細資料以獲取 status_line
+    top_pids = [(i, get_place_id(p), p.get("_distance_m", 0), p) for i, p in enumerate(pool)]
     parallel_results: dict = {}
-    _cached_api: dict = {}
 
     def _fetch_place(pid_i):
         idx, pid = pid_i[0], pid_i[1]
-        if not pid:
-            return pid, None, None, None
-        # Use cached api_data if available
-        api_data = top_results[idx].get("_api_data")
-        if api_data is None:
-            api_data = query_place_api_only(pid) if pid else None
+        if not pid: return pid, None, None, None
+        api_data = pool[idx].get("_api_data") or query_place_api_only(pid)
         structured, _raw_out = query_place_full(pid) if pid else (None, "")
         maps_price = _parse_maps_price_from_raw(_raw_out) if _raw_out else {"found": False}
         return pid, (api_data or structured or {}), maps_price, _raw_out
@@ -1317,23 +1329,53 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
                 _pid, api_d, mp, raw_out = result
                 parallel_results[_pid] = (api_d, mp, raw_out)
 
-    for i, place in enumerate(top_results):
+    # 根據營業狀態篩選
+    final_results = []
+    for place in pool:
+        pid = get_place_id(place)
+        if pid not in parallel_results: continue
+        api_data, maps_price, raw_out = parallel_results[pid]
+        
+        # 檢查是否在 30 分鐘內打烊 (僅針對餐飲時段關鍵字)
+        if keyword in MEAL_KEYWORDS and _is_closing_soon(maps_price.get("status_line")):
+            continue
+            
+        # 儲存詳細資料供 format_full_output 使用
+        place["_final_api_data"] = api_data
+        place["_final_maps_price"] = maps_price
+        place["_final_raw_out"] = raw_out
+        
+        final_results.append(place)
+        if len(final_results) >= max_results:
+            break
+
+    # 重新按距離排序
+    final_results.sort(key=lambda x: x.get("_distance_m", 999999))
+
+    # -- 輸出 Header --
+    r_display = f"{final_radius // 1000}km" if final_radius >= 1000 else f"{final_radius}m"
+    rh_display = f"（{radius_hint}）" if radius_hint else ""
+    lines: List[str] = []
+    lines.append(f"# 🍽️ {keyword} 選項（{lat:.4f}, {lng:.4f}）")
+    lines.append(f"📍 條件：{keyword}")
+    lines.append(f"📏 半徑：{r_display} {rh_display}")
+    lines.append(f"📊 評分 ≥ {min_rating}")
+    offset_note = f"（第 {offset+1}–{offset+max_results} 名）" if offset > 0 else ""
+    lines.append(f"🔍 共 {len(candidates)} 家候選{offset_note}")
+    lines.append("---")
+
+    for i, place in enumerate(final_results):
         pid  = get_place_id(place)
         dist = place.get("_distance_m", 0)
-
-        # 從並行結果取用（若無則降級到 api_only）
-        if pid in parallel_results:
-            api_data, maps_price, _raw_out = parallel_results[pid]
-        else:
-            api_data = place.get("_api_data") or (query_place_api_only(pid) if pid else None)
-            maps_price = {"found": False}
+        api_data = place.get("_final_api_data")
+        maps_price = place.get("_final_maps_price")
+        raw_out = place.get("_final_raw_out")
         price_range_api = (api_data or {}).get("_price_range") or ""
         reviews = _get_reviews_from_api_data(api_data) if api_data else []
-        detail_text = format_full_output(api_data or {}, maps_price, food_kw, dist, i,
+        detail_text = format_full_output(api_data or {}, maps_price or {}, food_kw, dist, i,
                                          reviews, price_range_api=price_range_api,
-                                         rev_count=rev_count, raw_out=_raw_out or "")
+                                         rev_count=rev_count, raw_out=raw_out or "")
         lines.append(detail_text)
-
 
     return "\n".join(lines)
 
@@ -1373,7 +1415,7 @@ def _parse_maps_price_from_raw(raw: str) -> dict:
                 items = [s.strip() for s in re.split(r"[｜|]", parts) if s.strip()]
                 mp["popular_items"] = items
             break
-    # ── 解析 🚦 狀態行（query.py full 输出版） ──────────────────────
+    # ── 解析 🚦 狀態行（query.py full 输出版）──────────────────────
     # 格式示例：
     #   🚦 狀態：✅ 營業中（今日 10:30–21:30，約剩 1 小時 34 分）
     #   🚦 狀態：❌ 休息中（今日已打烊，明日 11:00 開門）
@@ -1425,6 +1467,7 @@ def _get_reviews_from_api_data(api_data: dict) -> list:
         })
     enriched.sort(key=lambda x: x["_pub_time"], reverse=True)
     for days_limit in WINDOWS:
+        days_limit = float(days_limit)
         if days_limit == float("inf"):
             candidates = enriched[:]
         else:
@@ -1446,155 +1489,8 @@ _MEAT_PROTEIN = [   # 蛋白質 / 肉類前綴（與形容詞搭配）
     "干貝", "蛤蜊", "生蠔", "牡蠣", "九孔", "淡菜",
     "海膽", "龍蝦", "花枝", "腿", "翅", "腩",
 ]
-_MEAT_DISPLAY = {
-    "牛": "牛肉", "牛肉": "牛肉", "豬": "豬肉", "豬肉": "豬肉",
-    "雞": "雞肉", "雞肉": "雞肉", "羊": "羊肉", "羊肉": "羊肉",
-    "鵝": "鵝肉", "鴨": "鴨肉", "蝦": "蝦", "蟹": "蟹",
-    "魚": "魚", "魷魚": "魷魚", "透抽": "透抽", "小卷": "小卷",
-    "干貝": "干貝", "蛤蜊": "蛤蜊", "生蠔": "生蠔", "牡蠣": "生蠔",
-    "九孔": "九孔", "淡菜": "淡菜", "海膽": "海膽", "龍蝦": "龍蝦",
-    "花枝": "花枝", "腿": "肉", "翅": "翅", "腩": "腩",
-}
-_ADJECTIVES = [   # 常見修飾詞
-    "香草", "香煎", "清炒", "紅燒", "白灼", "蒜蓉", "蒜味", "麻辣",
-    "咖喱", "咖哩", "胡麻", "芥末", "明太子", "起司", "焗烤", "炙燒",
-    "嫩煎", "炭烤", "碳烤", "鹽烤", "酒蒸", "醬燒", "照燒",
-    "蜜汁", "糖醋", "宮保", "豆瓣", "剝皮", "泡菜", "腐乳",
-    "沙茶", "沙律", "凱撒", "凱旋", "胡桃", "龍井", "烏龍",
-    "伯爵", "杏仁", "抹茶", "巧克力", "焦糖", "蜂蜜", "果香",
-    "酸辣", "酸甜", "檸檬", "蘋果", "肉桂", "草莓", "芒果",
-    "酪梨", "胡麻", "青醬", "青蔥", "蔥爆", "洋蔥", "番茄",
-    "南瓜", "咖南", "皮蛋", "鹹蛋", "玉子", "溏心",
-]
-_COMMON_PROTEIN = [
-    "牛", "豬", "雞", "羊", "鵝", "鴨", "魚", "蝦", "蟹",
-    "干貝", "生蠔", "花枝", "透抽", "小卷", "淡菜",
-    "蛋", "豆腐", "豆皮", "豆干", "茄子", "南瓜", "蓮藕",
-    "菇", "木耳", "筍", "玉米", "青江菜", "高麗菜", "白菜",
-    "菠菜", "花椰菜", "青椒", "甜椒", "洋蔥", "蔥", "蒜",
-    "薑", "辣椒", "九層塔", "羅勒", "迷迭香", "百里香",
-]
-# ── 擴充版 patterns：包含「形容詞+蛋白質」所有組合 ─────────────
-_EX_PATS = []
-# 直接命名（精確品項）
-_EX_PATS += [
-    ("蝦滷飯","蝦滷飯"),("蒜蓉蝦","蒜蓉蝦"),("胡椒蝦","胡椒蝦"),
-    ("鹽烤蝦","鹽烤蝦"),("檸檬蝦","檸檬蝦"),("川燙蝦","川燙蝦"),
-    ("花枝丸","花枝丸"),("醬燒魷魚","醬燒魷魚"),("烤魷魚","烤魷魚"),
-    ("透抽","透抽"),("小卷","小卷"),("中卷","中卷"),
-    ("蒜蓉生蠔","蒜蓉生蠔"),("烤生蠔","烤生蠔"),("生蠔","生蠔"),
-    ("干貝","干貝"),("煎干貝","煎干貝"),("炙燒干貝","炙燒干貝"),
-    ("龍蝦","龍蝦"),("海膽","海膽"),
-    ("剝皮辣椒","剝皮辣椒"),("剝皮辣椒雞","剝皮辣椒雞"),
-    ("胡麻雞","胡麻雞"),("胡麻豬","胡麻豬"),("胡麻牛肉","胡麻牛肉"),
-    ("香草雞","香草雞"),("香草雞肉","香草雞肉"),
-    ("嫩煎雞","嫩煎雞"),("嫩煎牛","嫩煎牛"),("嫩煎豬","嫩煎豬"),
-    ("碳烤牛","碳烤牛"),("碳烤羊","碳烤羊"),("炭烤牛","炭烤牛"),
-    ("鹽烤牛","鹽烤牛"),("鹽烤羊排","鹽烤羊排"),("鹽烤五花","鹽烤五花"),
-    ("香煎牛","香煎牛"),("香煎豬","香煎豬"),("香煎雞","香煎雞"),
-    ("紅燒牛","紅燒牛"),("紅燒豬","紅燒豬"),("紅燒豆腐","紅燒豆腐"),
-    ("咖喱牛","咖喱牛"),("咖哩牛","咖哩牛"),("咖喱雞","咖喱雞"),
-    ("咖哩雞","咖哩雞"),("咖喱豬","咖喱豬"),("咖哩豬","咖哩豬"),
-    ("沙茶牛肉","沙茶牛肉"),("沙茶羊肉","沙茶羊肉"),("沙茶炒牛肉","沙茶牛肉"),
-    ("蔥爆牛","蔥爆牛"),("蔥爆羊肉","蔥爆羊肉"),
-    ("豆瓣牛肉","豆瓣牛肉"),("豆瓣魚","豆瓣魚"),
-    ("糖醋排骨","糖醋排骨"),("糖醋里肌肉","糖醋里肌肉"),("糖醋蝦","糖醋蝦"),
-    ("宮保雞","宮保雞"),("宮保花生","宮保花生"),("宮保魷魚","宮保魷魚"),
-    ("青椒牛肉","青椒牛肉"),("青椒雞","青椒雞"),("青椒肉","青椒肉"),
-    ("薑母鴨","薑母鴨"),("麻油雞","麻油雞"),("藥膳排骨","藥膳排骨"),
-    ("酸辣湯","酸辣湯"),("酸菜白肉","酸菜白肉"),("酸菜魚","酸菜魚"),
-    ("剝皮魚","剝皮魚"),("剝皮牛肉麵","剝皮牛肉麵"),
-    ("泡菜豆腐","泡菜豆腐"),("泡菜鍋","泡菜鍋"),
-    ("沙律蝦","沙律蝦"),("凱撒沙拉","凱撒沙拉"),("凱撒雞","凱撒雞"),
-    ("明太子雞","明太子雞"),("明太子貝","明太子干貝"),
-    ("炙燒握壽司","炙燒壽司"),("炙燒鮭魚","炙燒鮭魚"),("炙燒干貝","炙燒干貝"),
-    ("味噌湯","味噌湯"),("味噌拉麵","味噌拉麵"),("味噌豆腐","味噌豆腐"),
-    ("豚骨拉麵","豚骨拉麵"),("醬油拉麵","醬油拉麵"),
-    ("鰻魚飯","鰻魚飯"),("牛井","牛井"),("咖哩飯","咖哩飯"),
-    ("鮭魚","鮭魚"),("鮪魚","鮪魚"),("旗魚","旗魚"),("鱈魚","鱈魚"),
-    ("一夜干","一夜干"),("一夜干雞","一夜干雞"),
-    ("烤飯糰","烤飯糰"),("烤麻糬","烤麻糬"),
-    ("法式吐司","法式吐司"),("法式鹹派","法式鹹派"),
-    ("蘋果派","蘋果派"),("蘋果塔","蘋果塔"),
-    ("肉桂卷","肉桂卷"),("肉桂香蕉","肉桂香蕉"),
-    ("蜂蜜蛋糕","蜂蜜蛋糕"),("蜂蜜奶油","蜂蜜奶油"),
-    ("焦糖布丁","焦糖布丁"),("焦糖蘋果","焦糖蘋果"),
-    ("提拉米蘇","提拉米蘇"),("慕斯","慕斯"),
-    ("伯爵奶茶","伯爵奶茶"),("伯爵紅茶","伯爵紅茶"),
-    ("杏仁豆腐","杏仁豆腐"),("杏仁瓦片","杏仁瓦片"),
-    ("抹茶蛋糕","抹茶蛋糕"),("抹茶冰淇淋","抹茶冰淇淋"),
-    ("巧克力蛋糕","巧克力蛋糕"),("巧克力冰淇淋","巧克力冰淇淋"),
-    ("香蕉巧克力","香蕉巧克力"),
-    ("酪梨沙拉","酪梨沙拉"),("酪梨吐司","酪梨吐司"),
-    ("玉米濃湯","玉米濃湯"),("南瓜濃湯","南瓜濃湯"),
-    ("蘑菇濃湯","蘑菇濃湯"),("洋蔥濃湯","洋蔥湯"),
-    ("青醬義大利","青醬義大利"),("青醬麵","青醬麵"),
-    ("白醬義大利","白醬義大利"),("白醬培根","白醬培根"),
-    ("番茄義大利","番茄義大利"),("番茄肉醬","番茄肉醬"),
-    ("明太子義大利","明太子義大利"),("明太子麵","明太子麵"),
-    ("檸檬雞","檸檬雞"),("檸檬魚","檸檬魚"),("檸檬蝦","檸檬蝦"),
-    ("橙汁排骨","橙汁排骨"),("橙香排骨","橙香排骨"),
-    ("蜜汁雞","蜜汁雞"),("蜜汁排骨","蜜汁排骨"),
-    ("BBQ","BBQ"),("烤肋排","烤肋排"),("美式烤肋排","烤肋排"),
-    ("漢堡排","漢堡排"),("牛肉漢堡","牛肉漢堡"),("雞肉漢堡","雞肉漢堡"),
-    ("炸雞塊","炸雞塊"),("炸雞柳","炸雞柳"),("炸薯條","炸薯條"),
-    ("炸洋蔥圈","炸洋蔥圈"),("炸魷魚","炸魷魚"),
-    ("酥皮濃湯","酥皮濃湯"),("烤布蕾","烤布蕾"),
-    ("義式咖啡","義式咖啡"),("拿鐵","拿鐵"),("卡布奇諾","卡布奇諾"),
-    ("美式咖啡","美式咖啡"),("摩卡","摩卡"),
-    ("珍珠奶茶","珍奶"),("波霸奶茶","波霸奶茶"),("泰式奶茶","泰式奶茶"),
-    ("芋泥奶茶","芋泥奶茶"),("芋頭牛奶","芋頭牛奶"),
-    ("芒果冰","芒果冰"),("草莓冰","草莓冰"),("雪花冰","雪花冰"),
-    ("豆花","豆花"),("豆花布丁","豆花"),("燒仙草","燒仙草"),
-    ("芋圓","芋圓"),("地瓜圓","地瓜圓"),("紫米粥","紫米粥"),
-    ("楊枝甘露","楊枝甘露"),("杏仁豆腐","杏仁豆腐"),
-    ("愛玉","愛玉"),("仙草凍","仙草"),("檸檬愛玉","檸檬愛玉"),
-    ("冬瓜茶","冬瓜茶"),("青茶","青茶"),("烏龍茶","烏龍茶"),
-    ("決明子茶","決明子茶"),("青草茶","青草茶"),
-]
-# 通用形容詞修飾品項（列舉常見組合）
-for adj in ["香草", "胡麻", "明太子", "青醬", "咖哩", "咖喱", "蒜味", "麻辣"]:
-    for prot in ["雞", "牛", "豬", "魚", "蝦", "貝"]:
-        key = f"{adj}{prot}"
-        disp = f"{adj}{_MEAT_DISPLAY.get(prot, prot)}"
-        _EX_PATS.append((key, disp))
-for prot in ["牛肉", "豬肉", "雞肉", "羊肉", "魚肉", "蝦仁"]:
-    for adj in ["嫩煎", "香煎", "碳烤", "鹽烤", "紅燒", "咖哩", "沙茶"]:
-        key = f"{adj}{prot}"
-        _EX_PATS.append((key, key))
-
-# 原始固定 patterns（精確品項優先）
-_DISH_PATTERNS = _EX_PATS + [
-    # 台式/傳統
-    ("蝦滷飯","蝦滷飯"),("澎湖小卷","小卷"),("煎干貝","干貝"),("脆皮燒肉","燒肉"),
-    ("辣椒","辣椒"),("海鮮炒麵","炒麵"),("海鮮粥","海鮮粥"),("油蔥蝦仁飯","油蔥蝦仁飯"),
-    ("川燙花枝","花枝"),
-    ("鐵板麵","鐵板麵"),("陽春麵","陽春麵"),("蛋餅","蛋餅"),("鍋貼","鍋貼"),
-    ("水煎包","水煎包"),("蔥油餅","蔥油餅"),("餡餅","餡餅"),
-    ("肉包","肉包"),("小籠包","小籠包"),
-    ("蘿蔔糕","蘿蔔糕"),("碗粿","碗粿"),("肉粽","肉粽"),("飯糰","飯糰"),
-    ("蚵仔麵線","蚵仔麵線"),("麵線","麵線"),
-    ("豆漿","豆漿"),("米漿","米漿"),("鹹豆漿","鹹豆漿"),("甜豆漿","甜豆漿"),
-    ("燒餅","燒餅"),("油條","油條"),("水餃","水餃"),("肉圓","肉圓"),
-    ("蚵仔煎","蚵仔煎"),("肉燥飯","肉燥飯"),("滷肉飯","滷肉飯"),("雞腿飯","雞腿飯"),
-    ("便當","便當"),("自助餐","自助餐"),("素食","素食"),
-    ("鹹酥雞","鹹酥雞"),("雞排","雞排"),("珍珠奶茶","珍奶"),("手搖飲","手搖飲"),
-    ("大腸蚵仔麵線","大腸麵線"),
-    # 港式
-    ("燒賣","燒賣"),("蝦餃","蝦餃"),("蝦餃皇","蝦餃皇"),("叉燒包","叉燒包"),
-    ("流沙包","流沙包"),("蛋撻","蛋撻"),("菠蘿包","菠蘿包"),("鮮蝦腸粉","腸粉"),
-    ("牛肉丸","牛肉丸"),("蒸餃","蒸餃"),("腐皮捲","腐皮捲"),
-    ("煲仔飯","煲仔飯"),("咖哩魚蛋","魚蛋"),("雲吞","雲吞"),("餛飩","餛飩"),
-    ("鹹水角","鹹水角"),("春捲","春捲"),("叉燒飯","叉燒飯"),("燒臘","燒臘"),
-    ("烤鴨","烤鴨"),("叉燒","叉燒"),
-    # 甜品/冰品
-    ("豆花","豆花"),("燒仙草","燒仙草"),("愛玉","愛玉"),("仙草","仙草"),
-    ("芋圓","芋圓"),("地瓜圓","地瓜圓"),("湯圓","湯圓"),("米苔目","米苔目"),
-    ("石花凍","石花凍"),("杏仁豆腐","杏仁豆腐"),("楊枝甘露","楊枝甘露"),
-    ("米糕粥","米糕粥"),("甜湯","甜湯"),("冰品","冰品"),("剉冰","剉冰"),
-    ("雪花冰","雪花冰"),("芒果冰","芒果冰"),("草莓冰","草莓冰"),
-    ("提拉米蘇","提拉米蘇"),("慕斯","慕斯"),("巧克力","巧克力"),
-    ("甜甜圈","甜甜圈"),("泡芙","泡芙"),("司康","司康"),("可頌","可頌"),
+# 合併所有菜色 pattern：dict（前綴映射）+ list of tuple（精確品項）
+_MEAT_DISPLAY = [
     # 火鍋/燒烤
     ("麻辣鍋","麻辣鍋"),("石頭火鍋","石頭火鍋"),("涮涮鍋","涮涮鍋"),
     ("羊肉爐","羊肉爐"),("薑母鴨","薑母鴨"),("汕頭火鍋","汕頭火鍋"),
@@ -1619,6 +1515,10 @@ _DISH_PATTERNS = _EX_PATS + [
     ("泰式奶茶","泰奶"),("檸檬愛玉","愛玉"),("冬瓜茶","冬瓜茶"),
     ("青茶","青茶"),("烏龍茶","烏龍茶"),("決明子茶","決明子"),
 ]
+
+_DISH_PATTERNS = _MEAT_DISPLAY
+
+
 
 def _dish_from_reviews(reviews):
     found = {}
@@ -1831,13 +1731,19 @@ def _parse_price_sentence(sent: str) -> Tuple[str, str, str]:
 # CLI 入口
 # -------------------------------------------------------------
 
+# -------------------------------------------------------------
+# CLI 入口（2026-04-10 v2.24）
+#批次輸出：count > 5 時自動分批，每批5間，間隔30秒，逐步輸出給使用者
+# -------------------------------------------------------------
+
+BATCH_SIZE = 5           # 每批處理上限
+BATCH_COOLDOWN = 30      # 每批間隔秒數（等待配額恢復）
+
 def main():
     if len(sys.argv) < 2:
         print("用法: python3 run.py <使用者文字> [--count N]")
         print("範例: python3 run.py 我想吃早餐")
         print("範例: python3 run.py 找停車場 24.1858,120.6677 開車5分")
-        print("範例: python3 run.py 火鍋 評分4.5以上")
-        print("範例: python3 run.py 素食 1km內 5家")
         print("範例: python3 run.py 午餐 --count 10")
         sys.exit(1)
 
@@ -1866,8 +1772,39 @@ def main():
         print(f"   請使用餐飲/設施/地點/食物關鍵字，如：{TRIGGER_KEYWORDS[:10]}")
         sys.exit(1)
 
-    result = search_and_detail(params)
-    print(f"\n```\n{result}\n```\n")
+    total_count = params.get("max_results", DEFAULT_MAX_RESULTS)
+
+    # ── 分批處理：count > 5 時，每批 BATCH_SIZE 間，逐步輸出 ──
+    if total_count > BATCH_SIZE:
+        offset = 0
+        batch_num = 1
+        while offset < total_count:
+            batch_max = min(BATCH_SIZE, total_count - offset)
+            params_batch = {**params, "max_results": batch_max, "offset": offset}
+
+            batch_label = f"（第 {offset+1}–{offset+batch_max} 名，共 {total_count} 名）"
+            result = search_and_detail(params_batch)
+            # 在抬頭註明這是第幾批
+            lines = result.split("\n")
+            for li, line in enumerate(lines):
+                if line.startswith("🔍 共"):
+                    lines[li] = f"🔍 {batch_label}"
+                    break
+
+            output = "\n".join(lines)
+            print(f"\n```\n{output}\n```\n")
+
+            offset += batch_max
+
+            if offset < total_count:
+                remaining = total_count - offset
+                print(f"⏳ 還有 {remaining} 間店家待查詢，正在等待配額恢復（{BATCH_COOLDOWN}s）...\n")
+                time.sleep(BATCH_COOLDOWN)
+            else:
+                print("✅ 全部店家已查詢完畢！\n")
+    else:
+        result = search_and_detail(params)
+        print(f"\n```\n{result}\n```\n")
 
 
 if __name__ == "__main__":

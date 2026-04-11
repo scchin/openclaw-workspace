@@ -1,6 +1,7 @@
 ---
 name: skills-github-backup
 description: 備份與還原所有 OpenClaw 技能至 GitHub。
+author: King Sean of KS
 category: System
 tags: [backup, github, sync]
 ---
