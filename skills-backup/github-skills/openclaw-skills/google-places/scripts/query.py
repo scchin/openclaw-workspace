@@ -170,7 +170,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
             except Exception:
                 return False
 
-        CDP_PROFILE = "/tmp/openclaw-chrome-cdp"
+        CDP_PROFILE = "/tmp/openclaw-chrome-cdp-warmup"
         def _copy_login_profile():
             try:
                 shutil.rmtree(CDP_PROFILE, ignore_errors=True)
@@ -245,14 +245,14 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                     if r and r.get("result", {}).get("targetId"):
                         new_id = r["result"]["targetId"]
                         new_url = f"ws://{HOST}:{PORT}/devtools/page/{new_id}"
-                        await asyncio.sleep(3)
+                        await asyncio.sleep(1)
                         if await ws_ping(new_url):
                             return new_url, {"webSocketDebuggerUrl": new_url, "url": maps_url}
                 except Exception:
                     continue
         return None, None
 
-    async def click_tab(ws, label, wait=3):
+    async def click_tab(ws, label, wait=1):
         js = (
             "(function() {"
             "  var els = document.querySelectorAll('button,div[role=tab],a');"
@@ -305,7 +305,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                     body = await cdp_eval(ws, "(document.body||{}).innerText||''")
                     if len(body or "") > 200 and "google.com/legal" not in (body or "").lower():
                         break
-            await asyncio.sleep(2)
+            await asyncio.sleep(1)
 
             # --- Phase 1: Overview Polling (Moved to Front) ---
             async def extract_services(ws):
@@ -374,7 +374,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                     stable = 0
                     prev_state = cur
                 await cdp_send_recv(ws, 300+rnd, "Input.synthesizeScrollGesture", {"x":0,"y":0,"xVelocity":0,"yVelocity":3000,"preventFling":True,"stopTargetX":0,"stopTargetY":3000}, timeout=8)
-                await asyncio.sleep(1.5)
+                await asyncio.sleep(0.8)
 
             # --- Phase 2: Tab Navigation (Only if Browser is still responsive) ---
             print("[Phase 2] Clicking '菜單' tab...")
@@ -387,7 +387,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
 
             print("[Phase 2] Clicking '評論' tab...")
             if await click_tab(ws, "評論"):
-                await asyncio.sleep(1.5)
+                await asyncio.sleep(0.8)
                 raw_pop = await cdp_eval(ws, "(function(){ var found = []; var radios = document.querySelectorAll('[role=radio]'); for(var i=0;i<radios.length;i++){ var aria = radios[i].getAttribute('aria-label')||''; var text = (radios[i].innerText||'').trim(); if(aria.includes('mentioned in')) found.push(aria); else if(text){ var parts=text.split(String.fromCharCode(10)); if(parts.length>=2) found.push(parts[0].trim()); } } return JSON.stringify({ok:true,items:found.slice(0,8)}); })()", timeout=12)
                 try:
                     pi = json.loads(raw_pop) if isinstance(raw_pop, str) else raw_pop
@@ -408,7 +408,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
                         cx, cy = btn_info.get("x", 0), btn_info.get("y", 0)
                         await cdp_send_recv(ws, 400, "Input.dispatchMouseEvent", {"type":"mousePressed","x":cx,"y":cy,"button":"left","clickCount":1}, timeout=6)
                         await cdp_send_recv(ws, 401, "Input.dispatchMouseEvent", {"type":"mouseReleased","x":cx,"y":cy,"button":"left","clickCount":1}, timeout=6)
-                        await asyncio.sleep(4.0)
+                        await asyncio.sleep(2.0)
                         hist_raw = await cdp_eval(ws, "(function(){ var tables=document.querySelectorAll('table[aria-label*=histogram i]'); if(tables.length){ var rows=tables[0].querySelectorAll('tr[data-item-id]'); var entries=[]; rows.forEach(function(row){ var ltd=row.querySelector('td:first-child'); var lbl=ltd?(ltd.innerText.trim()):''; var bar=row.querySelector('span[role=img]'); var aria=bar?(bar.getAttribute('aria-label')||''):''; var pct=parseInt((aria||'').replace('%',''),10); if(lbl&&!isNaN(pct)&&pct>0) entries.push({label:lbl,pct:pct}); }); if(entries.length) return JSON.stringify({found:true,entries:entries}); } return JSON.stringify({found:false}); })()", timeout=12)
                         if hist_raw:
                             hd = json.loads(hist_raw) if isinstance(hist_raw, str) else {}
@@ -795,8 +795,103 @@ def cmd_details(args):
 
 
 if __name__ == "__main__":
+    # ─── Chrome 預熱（避免冷啟動延遲）───────────────────────────────
+    _WARMED = False
+
+def warmup_chrome():
+    """預熱 Chrome CDP：啟動並建立一個空 tab，避免第一次查詢時冷啟動。"""
+    global _WARMED
+    if _WARMED:
+        return
+    import urllib.request, json, time, socket, shutil, os
+    HOST = "127.0.0.1"
+    PORT = 18800   # 與 scrape_price_from_browser() 一致
+
+    def port_used(port):
+        s = socket.socket(); s.settimeout(1)
+        try:
+            s.connect((HOST, port)); s.close(); return True
+        except Exception:
+            return False
+
+    def cdp_reachable():
+        try:
+            req = urllib.request.Request(f"http://{HOST}:{PORT}/json")
+            with urllib.request.urlopen(req, timeout=3) as r:
+                return bool(json.loads(r.read()))
+        except Exception:
+            return False
+
+    def start_edge_background():
+        CDP_PROFILE = "/tmp/openclaw-chrome-cdp-warmup"
+        def _copy_login_profile():
+            try:
+                shutil.rmtree(CDP_PROFILE, ignore_errors=True)
+                os.makedirs(CDP_PROFILE, exist_ok=True)
+                for browser_name, base_path in [
+                    ("Chrome", os.path.expanduser("~/Library/Application Support/Google/Chrome")),
+                    ("Edge",   os.path.expanduser("~/Library/Application Support/Microsoft Edge")),
+                ]:
+                    default_path = os.path.join(base_path, "Default")
+                    if os.path.isdir(default_path):
+                        shutil.copytree(default_path, os.path.join(CDP_PROFILE, "Default"), dirs_exist_ok=True)
+                        for item in ["Extensions", "Extension State", "Local App Settings", "Local Storage", "Session Storage", "Sync Data"]:
+                            src = os.path.join(base_path, item)
+                            dst = os.path.join(CDP_PROFILE, item)
+                            if os.isdir(src):
+                                shutil.copytree(src, dst, dirs_exist_ok=True)
+                        return True
+                return False
+            except Exception:
+                return False
+
+        _copy_login_profile()
+        if port_used(PORT):
+            os.system("lsof -ti :%d 2>/dev/null | xargs kill -9 2>/dev/null; sleep 2" % PORT)
+        import subprocess, sys
+        edge_path = "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+        chrome_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        browser = chrome_path if os.path.exists(chrome_path) else edge_path
+        user_data_dir = CDP_PROFILE
+        args = [
+            browser,
+            f"--headless=new",
+            f"--remote-debugging-port={PORT}",
+            f"--user-data-dir={user_data_dir}",
+            "--no-first-run",
+            "--no-default-browser-check",
+            "--single-process",
+            "about:blank",
+        ]
+        try:
+            subprocess.Popen(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except Exception:
+            pass
+
+    if not cdp_reachable():
+        start_edge_background()
+        for _ in range(15):
+            time.sleep(1)
+            if cdp_reachable():
+                break
+    if cdp_reachable():
+        try:
+            req = urllib.request.Request(f"http://{HOST}:{PORT}/json/new")
+            with urllib.request.urlopen(req, timeout=5) as r:
+                json.loads(r.read())
+        except Exception:
+            pass
+    _WARMED = True
+    print("[Chrome] 預熱完成")
+
+
     if len(sys.argv) < 2:
         print(__doc__); sys.exit(1)
     cmd = sys.argv[1].lower()
     args = sys.argv[2:]
+
+    # 第一次 full/details 指令時自動預熱
+    if cmd in ("full", "details") and not _WARMED:
+        warmup_chrome()
+
     {"search": cmd_search, "details": cmd_details, "full": cmd_full}.get(cmd, lambda _: print(f"未知指令：{cmd}"))(args)
