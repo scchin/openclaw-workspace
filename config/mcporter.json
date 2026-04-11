@@ -18,6 +18,10 @@
     },
     "puppeteer": {
       "command": "npx @modelcontextprotocol/server-puppeteer@latest"
+    },
+    "mempalace": {
+      "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+      "args": ["-m", "mempalace.mcp_server", "--palace", "/Users/KS/.mempalace"]
     }
   },
   "imports": []

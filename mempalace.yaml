@@ -1,0 +1,17 @@
+wing: openclaw-workspace
+rooms:
+  - name: memory
+    description: OpenClaw 長期記憶與每日日誌
+    keywords: [memory, 日記, 記錄]
+  - name: skills
+    description: 自建技能與系統設定
+    keywords: [skill, 技能, 自建]
+  - name: decisions
+    description: 重要技術決定與架構選擇
+    keywords: [decision, 決定, 架構, 選擇]
+  - name: knowledge
+    description: 領域知識與技術筆記
+    keywords: [knowledge, 知識, 技術]
+  - name: general
+    description: 一般對話與工作記錄
+    keywords: [general, 對話]

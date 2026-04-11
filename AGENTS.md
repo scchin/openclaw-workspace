@@ -117,6 +117,28 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 
 Skills provide your tools. When you need one, check its `SKILL.md`. Keep local notes (camera names, SSH details, voice preferences) in `TOOLS.md`.
 
+### 🔧 技能執行紀律（強制）
+
+**當使用者的問題有對應的自建技能時，必須走技能執行，不能用訓練知識直接回答。**
+
+判定方式：看到查詢需求 → 立刻檢查 `~/.openclaw/skills/<技能名稱>/SKILL.md` 是否存在且有對應的觸發關鍵字或描述。
+
+常見強制執行場景（2026-03-31 確認）：
+
+| 查詢類型 | 技能 | 執行指令 |
+|---------|------|---------|
+| 農曆、干支、節氣、宜忌、二十八宿、12時辰吉凶 | `chinese-date` | `/usr/local/bin/python3 ~/.openclaw/skills/chinese-date/scripts/date_query.py [年 月 日 [時 [分]]]` |
+| 餐廳/地點搜尋 | `where-to-go` | `python3 ~/.openclaw/skills/where-to-go/scripts/run.py "<關鍵字>"` |
+| Google Maps 地點詳細資訊 | `google-places` | 見 `SKILL.md` 執行指令 |
+
+**執行流程（每次）：**
+1. 看到關鍵字 → 立即讀取對應 `SKILL.md`
+2. 按照其中 `## 使用方式` 的指令執行
+3. 把原始輸出原封不動貼進回覆（不多不少）
+
+**為什麼不能直接用知識回答：**
+技能是使用者部署的完整工具鏈（包含翻譯、格式化、CDP 爬蟲等），直接回答會繞過這些功能，且無法反映即時資料（如當前營業狀態）。
+
 **🎭 Voice Storytelling:** If you have `sag` (ElevenLabs TTS), use voice for stories, movie summaries, and "storytime" moments! Way more engaging than walls of text. Surprise people with funny voices.
 
 **📝 Platform Formatting:**

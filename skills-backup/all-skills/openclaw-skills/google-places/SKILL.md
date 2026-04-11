@@ -1,8 +1,10 @@
 ---
 name: google-places
 description: 查詢 Google Maps 地點完整資訊（地址、電話、經緯度、營業時間、評分、用戶評論、用戶反饋價格、每人消費含分布圖、服務、Menu、熱門品項、特色菜色）。CDP 直連 OpenClaw 瀏覽器讀取 Google Maps 動態頁面，輪詢策略確保所有資訊完整載入。⚠️ 這是所有地點查詢的預設方式與天條：廁所、停車場、美術館、旅館、飯店、圖書館、博物館、公園、學校、景點、餐廳、加油站等全部適用。
+author: King Sean of KS
+---
 
-# Google Places 地點查詢（query.py v10）
+# Google Places 地點查詢（query.py v10.5（2026-04-06：get_reviews() months 參數化，預設 None（無時間限制）；網友心得改用全量評論（all_reviews）；cmd_search/cmd_full/cmd_details 維持6個月限制用於價格回饋））
 
 ## 單一指令（自動完整查詢）
 
