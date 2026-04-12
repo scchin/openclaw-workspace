@@ -760,9 +760,16 @@ def cmd_search(args):
     price_range_api = get_price_range_api(place_id)
     maps_price = {"found": False}
     try:
-        maps_price = asyncio.run(scrape_price_from_browser(place_id, maps_url))
+        maps_price = asyncio.run(asyncio.wait_for(
+            scrape_price_from_browser(place_id, maps_url),
+            timeout=45.0
+        ))
+    except asyncio.TimeoutError:
+        maps_price = {"found": False, "error": "CDP timeout (45s)"}
+        print("[CDP] ⚠️ CDP timeout after 45s, skipping CDP data", flush=True)
     except Exception as e:
         maps_price = {"found": False, "error": str(e)}
+        print(f"[CDP] ⚠️ CDP error: {e}", flush=True)
     print(format_output(data, maps_price, reviews_6m, price_range_api, all_reviews))
 
 
@@ -778,9 +785,16 @@ def cmd_full(args):
     price_range_api = get_price_range_api(place_id)
     maps_price = {"found": False}
     try:
-        maps_price = asyncio.run(scrape_price_from_browser(place_id, maps_url))
+        maps_price = asyncio.run(asyncio.wait_for(
+            scrape_price_from_browser(place_id, maps_url),
+            timeout=45.0
+        ))
+    except asyncio.TimeoutError:
+        maps_price = {"found": False, "error": "CDP timeout (45s)"}
+        print("[CDP] ⚠️ CDP timeout after 45s, skipping CDP data", flush=True)
     except Exception as e:
         maps_price = {"found": False, "error": str(e)}
+        print(f"[CDP] ⚠️ CDP error: {e}", flush=True)
     print(format_output(data, maps_price, reviews_6m, price_range_api, all_reviews))
 
 
@@ -803,7 +817,7 @@ def warmup_chrome():
     global _WARMED
     if _WARMED:
         return
-    import urllib.request, json, time, socket, shutil, os
+    import urllib.request, json, time, socket, os
     HOST = "127.0.0.1"
     PORT = 18800   # 與 scrape_price_from_browser() 一致
 
@@ -823,44 +837,22 @@ def warmup_chrome():
             return False
 
     def start_edge_background():
-        CDP_PROFILE = "/tmp/openclaw-chrome-cdp-warmup"
-        def _copy_login_profile():
-            try:
-                shutil.rmtree(CDP_PROFILE, ignore_errors=True)
-                os.makedirs(CDP_PROFILE, exist_ok=True)
-                for browser_name, base_path in [
-                    ("Chrome", os.path.expanduser("~/Library/Application Support/Google/Chrome")),
-                    ("Edge",   os.path.expanduser("~/Library/Application Support/Microsoft Edge")),
-                ]:
-                    default_path = os.path.join(base_path, "Default")
-                    if os.path.isdir(default_path):
-                        shutil.copytree(default_path, os.path.join(CDP_PROFILE, "Default"), dirs_exist_ok=True)
-                        for item in ["Extensions", "Extension State", "Local App Settings", "Local Storage", "Session Storage", "Sync Data"]:
-                            src = os.path.join(base_path, item)
-                            dst = os.path.join(CDP_PROFILE, item)
-                            if os.isdir(src):
-                                shutil.copytree(src, dst, dirs_exist_ok=True)
-                        return True
-                return False
-            except Exception:
-                return False
-
-        _copy_login_profile()
+        # ★ 分離 profile：warmup 用獨立目錄，不影響 scrape 的 Chrome session
+        WARMUP_PROFILE = "/tmp/openclaw-chrome-warmup"
+        os.makedirs(WARMUP_PROFILE, exist_ok=True)
         if port_used(PORT):
-            os.system("lsof -ti :%d 2>/dev/null | xargs kill -9 2>/dev/null; sleep 2" % PORT)
-        import subprocess, sys
-        edge_path = "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+            os.system("ps aux 2>/dev/null | grep 'openclaw-chrome-warmup' | grep -v grep | awk '{print $2}' | xargs kill -9 2>/dev/null; sleep 2")
+        import subprocess
         chrome_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+        edge_path = "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
         browser = chrome_path if os.path.exists(chrome_path) else edge_path
-        user_data_dir = CDP_PROFILE
         args = [
             browser,
-            f"--headless=new",
+            "--headless=new",
             f"--remote-debugging-port={PORT}",
-            f"--user-data-dir={user_data_dir}",
+            f"--user-data-dir={WARMUP_PROFILE}",
             "--no-first-run",
             "--no-default-browser-check",
-            "--single-process",
             "about:blank",
         ]
         try:
