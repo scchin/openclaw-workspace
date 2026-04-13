@@ -1,9 +1,9 @@
 ---
 name: google-places
-description: 查詢 Google Maps 地點完整資訊（地址、電話、經緯度、營業時間、評分、用戶評論、用戶反饋價格、每人消費含分布圖、服務、Menu、熱門品項、特色菜色）。CDP 直連 OpenClaw 瀏覽器讀取 Google Maps 動態頁面，輪詢策略確保所有資訊完整載入。⚠️ 這是所有地點查詢的預設方式與天條：廁所、停車場、美術館、旅館、飯店、圖書館、博物館、公園、學校、景點、餐廳、加油站等全部適用。
+description: 查詢 Google Maps 地點完整資訊（地址、電話、經緯度、營業時間、評分、用戶評論、用戶反饋價格、每人消費含分布圖、服務、Menu、熱門品項、特色菜色（評論正則比對 DISH_ITEMS 87條））。CDP 直連 OpenClaw 瀏覽器讀取 Google Maps 動態頁面，輪詢策略確保所有資訊完整載入。⚠️ 這是所有地點查詢的預設方式與天條：廁所、停車場、美術館、旅館、飯店、圖書館、博物館、公園、學校、景點、餐廳、加油站等全部適用。
 ---
 
-# Google Places 地點查詢（query.py v10）
+# Google Places 地點查詢（query.py v10.1）
 
 ## 單一指令（自動完整查詢）
 
@@ -51,6 +51,8 @@ python scripts/query.py search "火鍋" --lat 24.16659 --lng 120.667087 --radius
 
 🌐 網站：https://www.facebook.com/mammymambo/
 🔗 Google Maps：https://www.google.com/maps/place/?q=place_id:ChIJs9ZwdXQXaTQRa5LL3bcnLq4
+🌐 官方 Google 商家頁面：https://www.google.com/search?q=店名+地點#rd=place_id:ChIJs9ZwdXQXaTQRa5LL3bcnLq4
+
 🍽️ Menu：https://store.dudooeat.com/order/store/f7a3eee9f71f4c2cb24ba41cc1bc1178
 
 💵 每人消費：$1–200（71人回報）
@@ -61,12 +63,11 @@ python scripts/query.py search "火鍋" --lat 24.16659 --lng 120.667087 --radius
 📌 服務：內用、外帶、外送
 🍜 熱門品項：空間（7則）｜調酒（7則）｜聚餐（4則）｜唱歌（3則）
 
-🔥 特色菜色：蝦滷飯、脆皮燒肉、辣椒、海鮮炒麵、油蔥蝦仁飯
+🔥 特色菜色：（從評論文字正則比對 DISH_ITEMS（87條），凡評論提到具體菜名即列入，最多8項）
+   例：蝦滷飯、脆皮燒肉、蛋餅、蘑菇鐵板麵…（評論提到什麼就呈現什麼，不預設立場）
 
-📝 網友心得：
-王仁偉：辣椒很辣，喜歡吃辣務必試試
-林小雨：環境乾淨，桌距大不擁擠
-Yao Wang：蝦子有幫忙剝殼大加分
+📝 網友心得（最近至少5則，由新到舊排序）：
+作者：內容（超過150字自動截斷）
 
 💬 用戶反饋價格（6個月內）：
 · LISON（5⭐，44天前）提及：$85, $100
@@ -81,7 +82,7 @@ Yao Wang：蝦子有幫忙剝殼大加分
 - **`💵 每人消費`**：API `priceRange` 優先，CDP 分布圖附長條圖（展開在每人消費下方）
 - **`📌 服務`**：從頁面「關於」區塊動態解析（內用/外帶/外送/寵物友善/預約等）
 - **`🍜 熱門品項`**：從評論摘要區塊抓取（支援新舊兩種 DOM 格式）
-- **`🔥 特色菜色`**：所有菜色併為一行
+- **`🔥 特色菜色`**：評論正則比對 DISH_ITEMS（87條），提到什麼呈現什麼，最多8項
 - **`📝 網友心得`**：標題一行 + 每則心得一行（作者：內容），超過 150 字自動截斷
 - **`💬 用戶反饋價格`**：標題一行 + 每則一行（提及：價格），原文引用若超過 150 字做智慧摘要
 - **`🚦 狀態`**：`✅ 營業中（今日 HH:MM – HH:MM，距離關門 X 小時 Y 分鐘）` 或 `❌ 休息中（今日 HH:MM – HH:MM）`

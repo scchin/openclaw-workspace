@@ -15,7 +15,7 @@ Backup all OpenClaw skills to GitHub, or restore them on a new device.
 When user says "backup skills", "sync skills to GitHub", or requests a full/incremental skill backup:
 
 ```bash
-bash /Users/KS/.openclaw/skills/github-backup/scripts/backup.sh
+bash /Users/KS/.openclaw/skills/skills-github-backup/scripts/backup.sh
 ```
 
 ## Restore (on a new device)

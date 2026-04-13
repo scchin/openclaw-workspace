@@ -4,6 +4,7 @@
 整合 Step 2→3→4→5：搜尋 → 過濾排序 → 詳細查詢 → 輸出完整結果
 
 更新：
+- 2026-04-12 v2.24：修復 _wrap_chars 呼叫時缺少 indent 參數導致的 TypeError（修正評論斷行崩潰問題）
 - 2026-04-09 v2.23：餐飲時段搜尋時，若候選不足，自動擴展至各餐飲類型（小吃、便當、合菜、義式、咖哩、燒肉、牛排…），以擴大候選池；排除 30 分鐘內即將打烊的店家（僅限餐飲時段）；餐飲時段排序改為距離由近到遠，早午餐店家 penalty +500m往後挪；_MEAT_DISPLAY 語法修復（dict→list of tuple）
 - 2026-04-01 v2.18：💵每人：6層 fallback（新增第⑥層 place_data.priceRange）；
   google-places SSL→ssl._create_unverified_context() 確保 priceRange API 可用；
@@ -36,10 +37,13 @@ import os
 import re
 import math
 import time
+from datetime import datetime, timedelta
 import textwrap
 import asyncio
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import List, Dict, Optional, Tuple
+from translation_helper import translate_to_zh
+
 
 # --- 設定 ----------------------------------------------------
 DEFAULT_LAT = 24.18588146738243
@@ -149,12 +153,12 @@ def _wrap_chars(indent: str, text: str, width: int) -> List[str]:
             # 無標點，直接截斷
             lines.append(indent + chunk)
             start += width
-    # 時間孤兒處理
+    # 時間孤兒處理（當時間独自成一行時，挪回上一行）
     out: List[str] = list(lines)
     while len(out) >= 2:
         last = out[-1].strip()
         m = _TIME_RE.match(last)
-        if m:
+        if m and len(out[-2].strip()) > 8:  # 上一行起碼要有內容才合併（防呆）
             out.pop()
             out[-1] = out[-1].rstrip() + " " + last
         else:
@@ -234,18 +238,61 @@ def _is_closing_soon(status_line: str) -> bool:
         return int(m_min.group(1)) < 30
     return False
 
-def _is_closing_soon(status_line: str) -> bool:
-    """檢查店家是否在 30 分鐘內打烊"""
-    if not status_line: return False
-    # 模式 1: "距離關門 X 小時 Y 分鐘"
-    m_full = re.search(r"距離關門\s*(\d+)\s*小時\s*(\d+)\s*分鐘", status_line)
-    if m_full:
-        return (int(m_full.group(1)) * 60 + int(m_full.group(2))) < 30
-    # 模式 2: "距離關門 X 分鐘"
-    m_min = re.search(r"距離關門\s*(\d+)\s*分鐘", status_line)
-    if m_min:
-        return int(m_min.group(1)) < 30
-    return False
+def _calculate_status_info(place_data: dict) -> Tuple[str, str, str]:
+    """
+    從原始 place_data 計算營業狀態與剩餘時間。
+    回傳 (icon, text, extra)
+    """
+    if not place_data: return "❌", "未知", ""
+    
+    now = datetime.now()
+    day_names_en = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
+    today_en = day_names_en[now.weekday()]
+    
+    hours_data = place_data.get("currentOpeningHours") or place_data.get("hours")
+    today_hours = None
+    
+    if isinstance(hours_data, dict):
+        reg_hours = hours_data.get("regularHours", [])
+        for h in reg_hours:
+            if isinstance(h, dict) and h.get("day") == today_en:
+                today_hours = h.get("hours")
+                break
+    elif isinstance(hours_data, list):
+        for h in hours_data:
+            if isinstance(h, dict) and h.get("day") == today_en:
+                today_hours = h.get("hours")
+                break
+            elif isinstance(h, str):
+                parts = h.split(": ", 1)
+                if len(parts) == 2 and parts[0].strip() == today_en:
+                    today_hours = parts[1].strip()
+                    break
+    
+    if not today_hours or "closed" in today_hours.lower():
+        return "❌", "休息中", ""
+
+    try:
+        # 匹配格式: 10:30 AM – 9:30 PM
+        m = re.search(r'(\d{1,2}):(\d{2})\s*(AM|PM)\s*[\u2013\u002d-]\s*(\d{1,2}):(\d{2})\s*(AM|PM)', today_hours, re.IGNORECASE)
+        if m:
+            ch = int(m.group(4))
+            cm = int(m.group(5))
+            campm = m.group(6).upper()
+            close_h24 = ch % 12 + (12 if campm == 'PM' else 0)
+            close_dt = now.replace(hour=close_h24, minute=cm, second=0, microsecond=0)
+            if close_h24 <= 0: close_dt += timedelta(days=1)
+            diff = close_dt - now
+            secs = int(diff.total_seconds())
+            if secs > 0:
+                extra = f"{secs//3600} 小時 {(secs%3600)//60} 分鐘後關門"
+                return "✅", "營業中", f"（{extra}）"
+            else:
+                return "✅", "營業中", f"（今日 {today_hours}，已超過關門時間）"
+    except Exception:
+        pass
+    
+    return "✅", "營業中", f"（今日 {today_hours}）"
 
 def haversine(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     R = 6371000
@@ -658,6 +705,18 @@ def _is_brunchy(p: dict) -> bool:
             or "\u65e9\u5348\u9910" in name
             or "brunch" in name.lower())
 
+def _is_desserty(p: dict) -> bool:
+    """Judge if a place is primarily a dessert/snack shop (v2.27 修正)"""
+    types = p.get("types") or []
+    name  = p.get("name", "")
+    # 定義甜點類關鍵字（根據使用者 2026-04-13 指示）
+    dessert_kws = ["豆花", "芋圓", "蛋糕", "抹茶", "甜點", "甜品", "冰品", "咖啡", "奶茶", "甜品店", "蛋糕店"]
+    if any(kw in name for kw in dessert_kws):
+        return True
+    # 類型判定
+    if "bakery" in types or "cafe" in types or "dessert_shop" in types:
+        return True
+    return False
 
 def goplaces_search(keyword: str, lat: float, lng: float,
                     radius_m: int, min_rating: float,
@@ -730,14 +789,62 @@ def goplaces_search(keyword: str, lat: float, lng: float,
 
 
 # -------------------------------------------------------------
-# filter + sort
+# 產業類別驗證 (Industry Category Gatekeeper)
 # -------------------------------------------------------------
+INDUSTRY_MAP = {
+    "FOOD": {"restaurant", "food", "cafe", "bakery", "meal_takeaway", "bar"},
+    "PARKING": {"parking"},
+    "GAS_STATION": {"gas_station"},
+    "MUSEUM": {"museum"},
+    "LIBRARY": {"library"},
+    "PARK": {"park"},
+    "SCHOOL": {"school"},
+    "LODGING": {"lodging"},
+}
+
+def _is_industry_match(place: dict, keyword: str) -> bool:
+    """
+    產業類別優先原則：驗證地點類別是否符合關鍵字的底層邏輯。
+    """
+    types = place.get("types", [])
+    if not isinstance(types, list):
+        types = []
+    
+    # 1. 餐飲/食物類：必須屬於 FOOD 產業
+    if keyword in MEAL_KEYWORDS or keyword in FOOD_KEYWORDS:
+        return any(t in INDUSTRY_MAP["FOOD"] for t in types)
+    
+    # 2. 設施類：針對特定關鍵字驗證類別
+    if keyword == "停車場":
+        return any(t in INDUSTRY_MAP["PARKING"] for t in types)
+    if keyword == "加油站":
+        return any(t in INDUSTRY_MAP["GAS_STATION"] for t in types)
+    
+    # 3. 地點類：針對特定關鍵字驗證類別
+    if keyword in ("美術館", "博物館"):
+        return any(t in INDUSTRY_MAP["MUSEUM"] for t in types)
+    if keyword == "圖書館":
+        return any(t in INDUSTRY_MAP["LIBRARY"] for t in types)
+    if keyword == "公園":
+        return any(t in INDUSTRY_MAP["PARK"] for t in types)
+    if keyword == "學校":
+        return any(t in INDUSTRY_MAP["SCHOOL"] for t in types)
+    if keyword in ("旅館", "民宿"):
+        return any(t in INDUSTRY_MAP["LODGING"] for t in types)
+    
+    # 4. 兜底：若無明確定義的類別對應，則允許通過（避免過度過濾）
+    return True
 
 def filter_and_sort(candidates: List[dict],
                     center_lat: float, center_lng: float,
-                    min_rating: float) -> List[dict]:
+                    min_rating: float,
+                    keyword: str = "") -> List[dict]:
     filtered = []
     for c in candidates:
+        # ★★★ 產業類別驗證 (Gatekeeper) ★★★
+        if not _is_industry_match(c, keyword):
+            continue
+            
         if is_permanently_closed(c): continue
         if get_rating(c) < min_rating: continue
         lat = c.get("location", {}).get("lat", 0)
@@ -936,8 +1043,12 @@ def format_full_output(place_data: dict, maps_price: dict,
             if ls.startswith("🏪 店名："):
                 cn = ls[len("🏪 店名："):].strip()
                 if cn:
-                    name = cn
+                    name = translate_to_zh(cn)
                 break
+    # 最終確保店名一定是中文（處理 raw_out 缺失 label 或 API 原名為英文之情況）
+    name = translate_to_zh(name)
+
+
     # 從 query_place_full() raw output 的「📍 地址：...」一行抓中文地址（覆寫 get_address 英文結果）
     addr_from_raw = ""
     if raw_out:
@@ -964,26 +1075,23 @@ def format_full_output(place_data: dict, maps_price: dict,
     status_icon  = "✅"
     status_txt   = "營業中"
     status_extra = ""
+    
+    # 同步優化：優先使用 place_data 計算狀態與時間，不再單純依賴 status_line 文本解析
+    status_icon, status_txt, status_extra = _calculate_status_info(place_data)
+    
+    # 如果 CDP 提供了更詳細的 status_line，則嘗試覆蓋（以即時 UI 為準）
     if maps_price.get("status_line"):
         sl = maps_price["status_line"]
-        # status_line 格式：「✅ 營業中（今日...）」或「❌ 休息中（...）」
         m2 = re.search(r"^([✅❌])\s*([^\s（\(]+)\s*[（\(](.+?)[）\)]$", sl)
         if m2:
-            status_icon = m2.group(1)
-            status_txt  = m2.group(2)
-            status_extra = "（" + m2.group(3) + "）"
-        else:
-            # fallback：只抓 emoji 與括號內文
-            m3 = re.search(r"^([✅❌])", sl)
-            m4 = re.search(r"[（\(]([^）\)]+)[）\)]$", sl)
-            if m3:
-                status_icon = m3.group(1)
-            if m4:
-                status_txt  = sl[len(status_icon):].strip().split("（")[0].strip() if len(sl) > len(status_icon) else "營業中"
-                status_extra = "（" + m4.group(1) + "）"
-    elif open_now is not None:
-        status_icon = "✅" if open_now else "❌"
-        status_txt  = "營業中" if open_now else "休息中"
+            icon, txt, extra_raw = m2.group(1), m2.group(2), m2.group(3)
+            # 統一格式：將「距離關門 X 小時 Y 分鐘」或「約剩...」統一為「X 小時 Y 分鐘後關門」
+            time_m = re.search(r"(?:距離關門|約剩)\s*(\d+)\s*小時\s*(\d+)\s*分鐘", extra_raw)
+            if time_m:
+                extra_processed = f"{time_m.group(1)} 小時 {time_m.group(2)} 分鐘後關門"
+            else:
+                extra_processed = extra_raw
+            status_icon, status_txt, status_extra = icon, txt, f"（{extra_processed}）"
 
     address_str = addr_from_raw if addr_from_raw else (get_address(place_data) if place_data else "無")
     phone_str  = f"📞 電話：{phone}" if phone else ""
@@ -1097,10 +1205,23 @@ def format_full_output(place_data: dict, maps_price: dict,
         for author, note, days_ago in rev_list:
             shown_texts.add(note)
             time_str = _days_ago_str(days_ago)
-            # 段落換行置換為空格，並以「作者：內容 時間」為單位做字元級斷行
-            full_text = f"👤 {author}：{note.replace(chr(10), ' ')} {time_str}"
-            wrapped = _wrap_chars(f"  ", full_text, width=_WRAP_WIDTH)
-            lines_out.extend(wrapped)
+            # 修正：執行翻譯以滿足使用者可讀性需求
+            translated_note = translate_to_zh(note)
+            safe_note = re.sub(r'[\ufe00-\ufe0f\u200d]', '', translated_note.replace(chr(10), " "))
+            # 加上 MARKER_START 讓 _wrap_chars 的無標點截斷只發生一次，避免 cascading
+            marked_note = f"MARKER_START{safe_note}"
+            wrapped = _wrap_chars("", marked_note, _WRAP_WIDTH)
+            for idx, seg in enumerate(wrapped):
+                stripped = seg.strip()
+                if not stripped or stripped in ("─", "──"):
+                    continue
+                if stripped.startswith("MARKER_START"):
+                    stripped = stripped[len("MARKER_START"):]
+                prefix = f"👤 {author}：" if idx == 0 else "  "
+                if stripped and stripped not in lines_out:
+                    lines_out.append(f"{prefix}`{stripped}`")
+            # 時間獨立一行（不在 _wrap_chars 內，避免時間孤兒問題）
+            lines_out.append(f"  {time_str}")
     else:
         lines_out.append(f"  👤 無（近期評論中未抓獲特定菜色）")
 
@@ -1118,10 +1239,22 @@ def format_full_output(place_data: dict, maps_price: dict,
                 segment += f"（{portion}）" if segment else f"  🍴（{portion}）"
             if price_str:
                 segment += f"  💰 {price_str}"
-            # 段落換行置換為空格，避免 _wrap_line 按空白分割時換行殘留
-            author_line = f"  👤 {author}：{full_sent.replace(chr(10), ' ')} {time_str}"
-            lines_out.append(segment)
-            lines_out.extend(_wrap_line("  ", author_line[2:]))
+            # 修正：執行翻譯以滿足使用者可讀性需求
+            translated_sent = translate_to_zh(full_sent)
+            safe_sent = re.sub(r'[︀-️‍]', '', translated_sent.replace("\n", " "))
+            safe_sent = re.sub(r'[\ufe00-\ufe0f\u200d]', '', translated_sent.replace("\n", " "))
+            author_line = f"👤 {author}：`{safe_sent}` {time_str}"
+
+            # 先輸出品項+價格行，再輸出作者+評論行
+            if segment.strip():
+                lines_out.append(segment)
+            wrapped = _wrap_chars("  ", author_line, width=_WRAP_WIDTH)
+            for wline in wrapped:
+                stripped = wline.strip()
+                if stripped and stripped not in ("─", "──"):
+                    existing = any(stripped == l.strip() for l in lines_out)
+                    if not existing:
+                        lines_out.append(wline if wline.startswith("  ") else f"  {stripped}")
 
     # Google Maps 連結（URL 可能很長，一樣斷行）
     if maps_url:
@@ -1137,6 +1270,7 @@ def format_full_output(place_data: dict, maps_price: dict,
 
 def parse_input(user_text: str) -> Dict:
     text = user_text.strip()
+
 
     # 1. 抓觸發關鍵字（第一個出現的）
     keyword = extract_keyword(text)
@@ -1233,6 +1367,7 @@ def parse_input(user_text: str) -> Dict:
 # -------------------------------------------------------------
 
 def search_and_detail(params: Dict, verbose: bool = True) -> str:
+    user_text = params.get("user_text", "")
     keyword   = params["keyword"]
     food_kw   = params["food_kw"]       # 可能為 None
     lat       = params["lat"]
@@ -1250,12 +1385,15 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
     seen_pids: set = set()   # 用 place_id 去重，避免重複加入同一店家
 
     # -- Step 2: 半徑擴張搜尋（累加候選，不中途中斷）--
+    # 使用原始 user_text 作為搜尋詞，而非僅使用觸發 keyword
+    search_query = user_text if user_text else keyword
+    
     for radius in EXPANSION_RADII:
         if radius < radius_m: continue
         final_radius = radius
         expansion_log.append(radius)
 
-        results = goplaces_search(keyword, lat, lng, radius, min_rating)
+        results = goplaces_search(search_query, lat, lng, radius, min_rating)
         if isinstance(results, list):
             new_results = results
         elif isinstance(results, dict) and "places" in results:
@@ -1281,19 +1419,19 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
         # 先擴 breakfast 類（可能混在 lunch 結果裡），再擴一般餐飲
         extra_keywords = []
         if keyword == "午餐":
-            extra_keywords = ["早餐", "早午餐", "小吃", "便當", "自助餐", "合菜", "快炒",
+            extra_keywords = ["早午餐", "便當", "自助餐", "合菜", "快炒",
                               "義式", "咖哩", "燒肉", "牛排", "日式", "韓式", "港式"]
         elif keyword == "晚餐":
-            extra_keywords = ["小吃", "便當", "合菜", "快炒", "義式", "咖哩",
+            extra_keywords = ["便當", "合菜", "快炒", "義式", "咖哩",
                               "燒肉", "牛排", "火鍋", "日式", "韓式", "港式"]
         elif keyword == "早餐":
-            extra_keywords = ["早午餐", "小吃", "蛋餅", "飯糰", "豆漿"]
+            extra_keywords = ["早午餐", "蛋餅", "飯糰", "豆漿"]
         elif keyword == "宵夜":
             extra_keywords = ["小吃", "鹹酥雞", "滷味", "關東煮", "火鍋", "燒烤"]
         elif keyword == "下午茶":
-            extra_keywords = ["咖啡", "甜點", "蛋糕", "冰品", "輕食", "義式"]
+            extra_keywords = ["咖啡", "甜點", "蛋糕", "冰品", "輕食", "義式", "豆花", "芋圓"]
         elif keyword == "點心":
-            extra_keywords = ["小吃", "鹹酥雞", "雞排", "水煎包", "蔥油餅", "蛋餅"]
+            extra_keywords = ["小吃", "鹹酥雞", "雞排", "水煎包", "蔥油餅", "蛋餅", "甜點", "豆花"]
         else:
             extra_keywords = ["小吃", "便當", "合菜", "義式", "咖哩", "燒肉", "牛排"]
 
@@ -1307,7 +1445,11 @@ def search_and_detail(params: Dict, verbose: bool = True) -> str:
                         candidates.append(place)
 
     # -- Step 3: 過濾 + 排序 --
-    filtered = filter_and_sort(candidates, lat, lng, min_rating)
+    filtered = filter_and_sort(candidates, lat, lng, min_rating, keyword)
+
+    # ★★★ 正餐與甜點隔離過濾（2026-04-13 修正） ★★★
+    if keyword in ("早餐", "午餐", "晚餐"):
+        filtered = [p for p in filtered if not _is_desserty(p)]
 
     # -- 食物關鍵字過濾 --
     if food_kw and filtered:
@@ -1490,14 +1632,8 @@ def _get_reviews_from_api_data(api_data: dict) -> list:
         orig_t = (r.get("original_text", {}) or {}).get("text", "") if isinstance(r.get("original_text"), dict) else str(r.get("original_text", ""))
         trans_t = (r.get("text", {}) or {}).get("text", "") if isinstance(r.get("text"), dict) else str(r.get("text", ""))
         raw_content = orig_t or trans_t
-        translated = None
-        if raw_content:
-            try:
-                from deep_translator import GoogleTranslator
-                translated = GoogleTranslator(source="auto", target="zh-TW").translate(raw_content)
-            except Exception:
-                pass
-        content = translated if translated else raw_content
+        # 直接使用原始評論內容（不翻譯），符合數據真實性原則
+        content = raw_content
         pub_str = r.get("publish_time", "")
         pub_time = _parse_pub_time(pub_str)
         if pub_time is None:
@@ -1538,29 +1674,102 @@ _MEAT_PROTEIN = [   # 蛋白質 / 肉類前綴（與形容詞搭配）
 ]
 # 合併所有菜色 pattern：dict（前綴映射）+ list of tuple（精確品項）
 _MEAT_DISPLAY = [
-    # 火鍋/燒烤
+    # ── 火鍋/燒烤（保留並擴充）──────────────────────────────
     ("麻辣鍋","麻辣鍋"),("石頭火鍋","石頭火鍋"),("涮涮鍋","涮涮鍋"),
     ("羊肉爐","羊肉爐"),("薑母鴨","薑母鴨"),("汕頭火鍋","汕頭火鍋"),
     ("燒肉","燒肉"),("烤肉","烤肉"),("和牛","和牛"),("牛舌","牛舌"),
     ("豬五花","豬五花"),("牛五花","牛五花"),("雞腿肉","雞腿肉"),
     ("海鮮拼盤","海鮮拼盤"),("大草蝦","草蝦"),("蛤蜊","蛤蜊"),
     ("生蠔","生蠔"),("干貝","干貝"),("透抽","透抽"),
-    # 燒烤/居酒屋
     ("牛肉串","牛肉串"),("羊肉串","羊肉串"),("雞肉串","雞肉串"),("豬五花串","豬五花串"),
     ("一夜干","一夜干"),("烤麻糬","烤麻糬"),("明太子","明太子"),
     ("柳葉魚","柳葉魚"),("烤飯糰","烤飯糰"),("飛魚卵","飛魚卵"),
-    # 日式
+    # ── 日式（保留並擴充）──────────────────────────────
     ("握壽司","握壽司"),("生魚片","生魚片"),("炙燒","炙燒"),("花壽司","花壽司"),
     ("拉麵","拉麵"),("豚骨拉麵","豚骨"),("味噌拉麵","味噌"),("醬油拉麵","醬油"),
-    ("咖哩飯","咖哩飯"),("牛井","牛井"),("鰻魚飯","鰻魚飯"),
-    ("烏龍麵","烏龍麵"),("蕎麥麵","蕎麥"),("咖哩烏龍","咖哩烏龍"),
-    # 義式/美式
+    ("咖喱飯","咖喱飯"),("咖哩飯","咖 curry飯"),("牛井","牛井"),("鰻魚飯","鰻魚飯"),
+    ("烏龍麵","烏龍麵"),("蕎麥麵","蕎麥"),("咖喱烏龍","咖 curry烏龍"),("咖哩烏龍","咖 curry烏龍"),
+    ("天婦羅","天婦羅"),("炸蝦","炸蝦"),("唐揚","唐揚"),("和風炸雞","和風炸雞"),
+    ("壽喜燒","壽喜燒"),("牛丼","牛丼"),("叉燒","叉燒"),("溫泉蛋","溫泉蛋"),
+    ("玉子燒","玉子燒"),("章魚燒","章魚燒"),("大阪燒","大阪燒"),("炒麵","炒麵"),
+    # ── 義式/美式（保留）──────────────────────────────
     ("義大利麵","義大利麵"),("披薩","披薩"),("薯條","薯條"),("漢堡","漢堡"),
     ("炸雞","炸雞"),("雞軟骨","雞軟骨"),("雞胗","雞胗"),
     ("牛排","牛排"),("肋眼","肋眼"),("菲力","菲力"),
-    # 飲料
+    # ── 飲料（保留並擴充）──────────────────────────────
     ("泰式奶茶","泰奶"),("檸檬愛玉","愛玉"),("冬瓜茶","冬瓜茶"),
     ("青茶","青茶"),("烏龍茶","烏龍茶"),("決明子茶","決明子"),
+    ("手搖飲","手搖飲"),("珍奶","珍奶"),("波霸奶茶","波霸"),("波霸","波霸"),
+    ("芋泥","芋泥"),("芋頭","芋頭"),("綠豆","綠豆"),("薏米","薏米"),
+    ("豆漿","豆漿"),("米漿","米漿"),("冬瓜牛奶","冬瓜牛奶"),("杏仁茶","杏仁茶"),
+    ("黑豆茶","黑豆茶"),("花茶","花茶"),("果茶","果茶"),("氣泡水","氣泡水"),
+    ("氣泡飲","氣泡飲"),("咖啡","咖啡"),("拿鐵","拿鐵"),("卡布奇諾","卡布"),
+    ("espresso","espresso"),("摩卡","摩卡"),("焦糖","焦糖"),
+    ("冰沙","冰沙"),("果昔","果昔"),("smoothie","smoothie"),
+    # ── 早餐品項（新增大擴充）──────────────────────────────
+    ("蛋餅","蛋餅"),("蛋餅皮","蛋餅皮"),("烙餅","烙餅"),("煎餅","煎餅"),("薄餅","薄餅"),
+    ("肉包","肉包"),("菜包","菜包"),("豆沙包","豆沙包"),("饅頭","饅頭"),
+    ("割包","割包"),("花卷","花卷"),("銀捲","銀捲"),
+    ("飯糰","飯糰"),("紫米飯糰","紫米飯糰"),("傳統飯糰","傳統飯糰"),
+    ("肉粽","肉粽"),("鹼粽","鹼粽"),("南部粽","南部粽"),("北部粽","北部粽"),
+    ("油條","油條"),("燒餅","燒餅"),("酥餅","酥餅"),("餡餅","餡餅"),
+    ("蔥油餅","蔥油餅"),("抓餅","抓餅"),("千層餅","千層餅"),
+    ("水煎包","水煎包"),("煎包","煎包"),("小籠包","小籠包"),("湯包","湯包"),
+    ("蒸餃","蒸餃"),("水餃","水餃"),("鍋貼","鍋貼"),("餛飩","餛飩"),
+    ("餛飩麵","餛鈍麵"),("餛飩湯","餛飩湯"),("大腸麵線","大腸麵線"),("蚵仔麵線","蚵仔麵線"),
+    ("蘿蔔糕","蘿蔔糕"),("菜頭粿","菜頭粿"),("碗粿","碗粿"),("米糕","米糕"),
+    ("肉圓","肉圓"),("蚵仔煎","蚵仔煎"),("肉燥飯","肉燥飯"),("滷肉飯","滷肉飯"),
+    ("雞腿飯","雞腿飯"),("便當","便當"),("自助餐","自助餐"),
+    ("皮蛋瘦肉粥","皮蛋瘦肉粥"),("蚵仔粥","蚵仔粥"),("海鮮粥","海鮮粥"),
+    ("鹹粥","鹹粥"),("白粥","白粥"),("地瓜粥","地瓜粥"),
+    ("陽春麵","陽春麵"),("擔仔麵","擔仔麵"),("意麵","意麵"),
+    ("鍋燒麵","鍋燒麵"),("鍋燒意麵","鍋燒意麵"),("刀削麵","刀削麵"),
+    ("麻醬麵","麻醬麵"),("炸醬麵","炸醬麵"),("榨菜肉絲麵","榨菜肉絲麵"),
+    ("鹹豆漿","鹹豆漿"),("甜豆漿","甜豆漿"),("豆花","豆花"),
+    ("米苔目","米苔目"),("愛玉","愛玉"),("石花凍","石花凍"),
+    ("仙草","仙草"),("芋圓","芋圓"),("地瓜圓","地瓜圓"),
+    ("燒仙草","燒仙草"),("杏仁豆腐","杏仁豆腐"),("楊枝甘露","楊枝甘露"),
+    ("油蔥蝦仁飯","油蔥蝦仁飯"),("蝦仁飯","蝦仁飯"),("蝦滷飯","蝦滷飯"),
+    ("脆皮燒肉","脆皮燒肉"),("燒肉飯","燒肉飯"),
+    ("鐵板麵","鐵板麵"),("蘑菇鐵板麵","蘑菇鐵板麵"),("黑胡椒鐵板麵","黑胡椒鐵板麵"),
+    ("鮪魚蛋漢堡","鮪魚蛋漢堡"),("雞肉吐司","雞肉吐司"),("豬肉漢堡","豬肉漢堡"),
+    ("總匯","總匯"),("三明治","三明治"),("吐司","吐司"),
+    ("荷包蛋","荷包蛋"),("煎蛋","煎蛋"),("嫩蛋","嫩蛋"),("蔥蛋","蔥蛋"),
+    ("剝皮辣椒","剝皮辣椒"),("胡麻","胡麻"),("胡麻豬","胡麻豬"),
+    ("霹靂霹靂","霹靂霹靂"),("剝皮辣椒雞","剝皮辣椒雞"),
+    # ── 中式小吃（擴充）──────────────────────────────
+    ("臭豆腐","臭豆腐"),("大腸","大腸"),("小腸","小腸"),("香腸","香腸"),
+    ("胗","胗"),("雞心","雞心"),("雞肝","雞肝"),
+    ("豬血糕","豬血糕"),("米血","米血"),("糯米腸","糯米腸"),
+    ("滷味","滷味"),("滷大腸","滷大腸"),("滷雞腿","滷雞腿"),("滷牛腱","滷牛腱"),
+    ("鹹酥雞","鹹酥雞"),("雞排","雞排"),("魷魚","魷魚"),
+    ("炸物","炸物"),("甜不辣","甜不辣"),("百頁豆腐","百頁豆腐"),
+    ("關東煮","關東煮"),("黑輪","黑輪"),
+    ("牛肉湯","牛肉湯"),("羊肉湯","羊肉湯"),("虱目魚","虱目魚"),
+    ("蚵仔","蚵仔"),("蛤仔","蛤仔"),("文蛤","文蛤"),
+    ("花枝","花枝"),("小卷","小卷"),
+    ("川燙","川燙"),("川燙花枝","川燙花枝"),
+    # ── 甜點/冰品（擴充）──────────────────────────────
+    ("冰淇淋","冰淇淋"),("冰淇淋聖代","聖代"),("聖代","聖代"),
+    ("雪花冰","雪花冰"),("剉冰","剉冰"),("芒果冰","芒果冰"),
+    ("珍珠","珍珠"),("布丁","布丁"),("奶酪","奶酪"),
+    ("提拉米蘇","提拉米蘇"),("蛋糕","蛋糕"),("巴斯克","巴斯克"),
+    ("乳酪蛋糕","乳酪蛋糕"),("戚風蛋糕","戚風蛋糕"),("磅蛋糕","磅蛋糕"),
+    ("泡芙","泡芙"),("千層","千層"),("千層蛋糕","千層蛋糕"),
+    ("蛋撻","蛋撻"),("菠蘿包","菠蘿包"),("奶油包","奶油包"),
+    ("司康","司康"),("瑪德蓮","瑪德蓮"),("費南雪","費南雪"),
+    ("巧克力","巧克力"),("生巧克力","生巧克力"),("抹茶","抹茶"),
+    ("果醬","果醬"),("蜂蜜","蜂蜜"),
+    # ── 火鍋湯底/鍋物（擴充）──────────────────────────────
+    ("麻辣湯底","麻辣"),("豚骨湯","豚骨"),("蔬菜湯","蔬菜湯"),
+    ("牛奶鍋","牛奶鍋"),("起司鍋","起司鍋"),("咖喱鍋","咖 curry鍋"),
+    ("泡菜鍋","泡菜鍋"),("酸白菜鍋","酸白菜鍋"),("麻油雞","麻油雞"),
+    # ── 其他主食（擴充）──────────────────────────────
+    ("炒飯","炒飯"),("炒麵","炒麵"),("燴飯","燴飯"),("蓋飯","蓋飯"),
+    ("雞肉飯","雞肉飯"),("排骨飯","排骨飯"),("牛腩飯","牛腩飯"),
+    ("焢肉飯","焢肉飯"),("控肉飯","控肉飯"),("爌肉飯","爌肉飯"),
+    ("羊肉炒麵","羊肉炒麵"),("蝦仁炒麵","蝦仁炒麵"),
+    ("剝皮辣椒麵","剝皮辣椒麵"),("剝皮辣椒雞麵","剝皮辣椒雞麵"),
 ]
 
 _DISH_PATTERNS = _MEAT_DISPLAY
@@ -1769,7 +1978,7 @@ def _parse_price_sentence(sent: str) -> Tuple[str, str, str]:
             portion = kw
             break
     else:
-        # 預設份量：抓「1人份」「2人份」等
+        # 預設份量：抓「1人份」「2人人份」等
         m = re.search(r"(\d+)\s*人[份道個位]", sent)
         if m:
             portion = f"{m.group(1)}人份"

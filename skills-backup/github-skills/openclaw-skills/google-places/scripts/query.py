@@ -7,7 +7,7 @@ Google Places 店家查詢工具 v10.1（穩定強化版）
 3. 增加導航檢查：在執行分頁操作前，確保頁面已完全加載且無驗證碼攔截。
 4. 移除冗餘的後置輪詢，將所有概要數據抓取集中在起始階段。
 """
-import subprocess, json, sys, os, re, asyncio, urllib.request, time, websockets, shutil
+import subprocess, json, sys, os, re, asyncio, urllib.request, urllib.parse, time, websockets, shutil
 from datetime import datetime, timezone, timedelta
 
 GOOGLE_PLACES_API_KEY
@@ -137,7 +137,7 @@ async def scrape_price_from_browser(place_id, maps_url=None):
     result = {
         "found": False, "price_range": None, "reporter": None,
         "price_histogram": [], "service": [], "popular_items": [],
-        "photo_label": "", "menu_url": None,
+        "photo_label": "", "menu_url": None, "food_categories": [],
     }
 
     def get_all_tabs(max_wait=60):
@@ -388,6 +388,14 @@ async def scrape_price_from_browser(place_id, maps_url=None):
             print("[Phase 2] Clicking '評論' tab...")
             if await click_tab(ws, "評論"):
                 await asyncio.sleep(0.8)
+                # 抓取評論區上方的食物分類（特色食品）
+                raw_food_cats = await cdp_eval(ws, "(function(){ var cats = []; var els = document.querySelectorAll('[role=navigation] button,[role=tablist] button,[role=tab]'); for(var i=0;i<els.length;i++){ var t=(els[i].innerText||'').trim(); if(t.length>0 && t.length<=10 && !t.match(/^[0-9]+則$/)) cats.push(t); } if(cats.length===0){ var navs=document.querySelectorAll('[role=navigation],nav'); for(var n=0;n<navs.length;n++){ var btns=navs[n].querySelectorAll('button'); for(var b=0;b<btns.length;b++){ var t=(btns[b].innerText||'').trim(); if(t.length>0 && t.length<=10 && !t.match(/^[0-9]+則$/)) cats.push(t); } } } return JSON.stringify({ok:true,cats:cats.slice(0,15)}); })()", timeout=12)
+                try:
+                    fc = json.loads(raw_food_cats) if isinstance(raw_food_cats, str) else raw_food_cats
+                    result["food_categories"] = fc.get("cats", []) if isinstance(fc, dict) else []
+                except: pass
+
+                # 熱門品項（既有邏輯）
                 raw_pop = await cdp_eval(ws, "(function(){ var found = []; var radios = document.querySelectorAll('[role=radio]'); for(var i=0;i<radios.length;i++){ var aria = radios[i].getAttribute('aria-label')||''; var text = (radios[i].innerText||'').trim(); if(aria.includes('mentioned in')) found.push(aria); else if(text){ var parts=text.split(String.fromCharCode(10)); if(parts.length>=2) found.push(parts[0].trim()); } } return JSON.stringify({ok:true,items:found.slice(0,8)}); })()", timeout=12)
                 try:
                     pi = json.loads(raw_pop) if isinstance(raw_pop, str) else raw_pop
@@ -455,15 +463,102 @@ def extract_prices(content):
 
 # ─── 特色菜色 ────────────────────────────────────────────────
 DISH_ITEMS = [
-    ("蝦滷飯",   "蝦滷飯"),
-    ("澎湖小卷", "小卷"),
-    ("煎干貝",   "干貝"),
-    ("脆皮燒肉", "燒肉"),
-    ("辣椒",     "辣椒"),
-    ("海鮮炒麵", "炒麵"),
-    ("海鮮粥",   "海鮮粥"),
-    ("油蔥蝦仁飯","油蔥蝦仁飯"),
-    ("川燙花枝", "花枝"),
+    # ── 火鍋/燒烤（保留並擴充）──────────────────────────────
+    ("麻辣鍋","麻辣鍋"),("石頭火鍋","石頭火鍋"),("涮涮鍋","涮涮鍋"),
+    ("羊肉爐","羊肉爐"),("薑母鴨","薑母鴨"),("汕頭火鍋","汕頭火鍋"),
+    ("燒肉","燒肉"),("烤肉","烤肉"),("和牛","和牛"),("牛舌","牛舌"),
+    ("豬五花","豬五花"),("牛五花","牛五花"),("雞腿肉","雞腿肉"),
+    ("海鮮拼盤","海鮮拼盤"),("大草蝦","草蝦"),("蛤蜊","蛤蜊"),
+    ("生蠔","生蠔"),("干貝","干貝"),("透抽","透抽"),
+    ("牛肉串","牛肉串"),("羊肉串","羊肉串"),("雞肉串","雞肉串"),("豬五花串","豬五花串"),
+    ("一夜干","一夜干"),("烤麻糬","烤麻糬"),("明太子","明太子"),
+    ("柳葉魚","柳葉魚"),("烤飯糰","烤飯糰"),("飛魚卵","飛魚卵"),
+    # ── 日式（保留並擴充）──────────────────────────────
+    ("握壽司","握壽司"),("生魚片","生魚片"),("炙燒","炙燒"),("花壽司","花壽司"),
+    ("拉麵","拉麵"),("豚骨拉麵","豚骨"),("味噌拉麵","味噌"),("醬油拉麵","醬油"),
+    ("咖喱飯","咖喱飯"),("咖哩飯","咖哩飯"),("牛井","牛井"),("鰻魚飯","鰻魚飯"),
+    ("烏龍麵","烏龍麵"),("蕎麥麵","蕎麥"),("咖喱烏龍","咖喱烏龍"),("咖哩烏龍","咖哩烏龍"),
+    ("天婦羅","天婦羅"),("炸蝦","炸蝦"),("唐揚","唐揚"),("和風炸雞","和風炸雞"),
+    ("壽喜燒","壽喜燒"),("牛丼","牛丼"),("叉燒","叉燒"),("溫泉蛋","溫泉蛋"),
+    ("玉子燒","玉子燒"),("章魚燒","章魚燒"),("大阪燒","大阪燒"),("炒麵","炒麵"),
+    # ── 義式/美式（保留）──────────────────────────────
+    ("義大利麵","義大利麵"),("披薩","披薩"),("薯條","薯條"),("漢堡","漢堡"),
+    ("炸雞","炸雞"),("雞軟骨","雞軟骨"),("雞胗","雞胗"),
+    ("牛排","牛排"),("肋眼","肋眼"),("菲力","菲力"),
+    # ── 飲料（保留並擴充）──────────────────────────────
+    ("泰式奶茶","泰奶"),("檸檬愛玉","愛玉"),("冬瓜茶","冬瓜茶"),
+    ("青茶","青茶"),("烏龍茶","烏龍茶"),("決明子茶","決明子"),
+    ("手搖飲","手搖飲"),("珍奶","珍奶"),("波霸奶茶","波霸"),("波霸","波霸"),
+    ("芋泥","芋泥"),("芋頭","芋頭"),("綠豆","綠豆"),("薏米","薏米"),
+    ("豆漿","豆漿"),("米漿","米漿"),("冬瓜牛奶","冬瓜牛奶"),("杏仁茶","杏仁茶"),
+    ("黑豆茶","黑豆茶"),("花茶","花茶"),("果茶","果茶"),("氣泡水","氣泡水"),
+    ("氣泡飲","氣泡飲"),("咖啡","咖啡"),("拿鐵","拿鐵"),("卡布奇諾","卡布"),
+    (" espresso","espresso"),("摩卡","摩卡"),("焦糖","焦糖"),
+    ("冰沙","冰沙"),("果昔","果昔"),("smoothie","smoothie"),
+    # ── 早餐品項（新增大擴充）──────────────────────────────
+    ("蛋餅","蛋餅"),("蛋餅皮","蛋餅皮"),("烙餅","烙餅"),("煎餅","煎餅"),("薄餅","薄餅"),
+    ("肉包","肉包"),("菜包","菜包"),("豆沙包","豆沙包"),("饅頭","饅頭"),
+    ("割包","割包"),("花卷","花卷"),("銀捲","銀捲"),
+    ("飯糰","飯糰"),("紫米飯糰","紫米飯糰"),("傳統飯糰","傳統飯糰"),
+    ("肉粽","肉粽"),("鹼粽","鹼粽"),("南部粽","南部粽"),("北部粽","北部粽"),
+    ("油條","油條"),("燒餅","燒餅"),("酥餅","酥餅"),("餡餅","餡餅"),
+    ("蔥油餅","蔥油餅"),("抓餅","抓餅"),("千層餅","千層餅"),
+    ("水煎包","水煎包"),("煎包","煎包"),("小籠包","小籠包"),("湯包","湯包"),
+    ("蒸餃","蒸餃"),("水餃","水餃"),("鍋貼","鍋貼"),("餛飩","餛飩"),
+    ("餛飩麵","餛飩麵"),("餛飩湯","餛飩湯"),("大腸麵線","大腸麵線"),("蚵仔麵線","蚵仔麵線"),
+    ("蘿蔔糕","蘿蔔糕"),("菜頭粿","菜頭粿"),("碗粿","碗粿"),("米糕","米糕"),
+    ("肉圓","肉圓"),("蚵仔煎","蚵仔煎"),("肉燥飯","肉燥飯"),("滷肉飯","滷肉飯"),
+    ("雞腿飯","雞腿飯"),("便當","便當"),("自助餐","自助餐"),
+    ("皮蛋瘦肉粥","皮蛋瘦肉粥"),("蚵仔粥","蚵仔粥"),("海鮮粥","海鮮粥"),
+    ("鹹粥","鹹粥"),("白粥","白粥"),("地瓜粥","地瓜粥"),
+    ("陽春麵","陽春麵"),("擔仔麵","擔仔麵"),("意麵","意麵"),
+    ("鍋燒麵","鍋燒麵"),("鍋燒意麵","鍋燒意麵"),("刀削麵","刀削麵"),
+    ("麻醬麵","麻醬麵"),("炸醬麵","炸醬麵"),("榨菜肉絲麵","榨菜肉絲麵"),
+    ("鹹豆漿","鹹豆漿"),("甜豆漿","甜豆漿"),("豆花","豆花"),
+    ("米苔目","米苔目"),("愛玉","愛玉"),("石花凍","石花凍"),
+    ("仙草","仙草"),("芋圓","芋圓"),("地瓜圓","地瓜圓"),
+    ("燒仙草","燒仙草"),("杏仁豆腐","杏仁豆腐"),("楊枝甘露","楊枝甘露"),
+    ("油蔥蝦仁飯","油蔥蝦仁飯"),("蝦仁飯","蝦仁飯"),("蝦滷飯","蝦滷飯"),
+    ("脆皮燒肉","脆皮燒肉"),("燒肉飯","燒肉飯"),
+    ("鐵板麵","鐵板麵"),("蘑菇鐵板麵","蘑菇鐵板麵"),("黑胡椒鐵板麵","黑胡椒鐵板麵"),
+    ("鮪魚蛋漢堡","鮪魚蛋漢堡"),("雞肉吐司","雞肉吐司"),("豬肉漢堡","豬肉漢堡"),
+    ("總匯","總匯"),("三明治","三明治"),("吐司","吐司"),
+    ("荷包蛋","荷包蛋"),("煎蛋","煎蛋"),("嫩蛋","嫩蛋"),("蔥蛋","蔥蛋"),
+    ("剝皮辣椒","剝皮辣椒"),("胡麻","胡麻"),("胡麻豬","胡麻豬"),
+    ("霹靂霹靂","霹靂霹靂"),("剝皮辣椒雞","剝皮辣椒雞"),
+    # ── 中式小吃（擴充）──────────────────────────────
+    ("臭豆腐","臭豆腐"),("大腸","大腸"),("小腸","小腸"),("香腸","香腸"),
+    ("胗","胗"),("雞心","雞心"),("雞肝","雞肝"),
+    ("豬血糕","豬血糕"),("米血","米血"),("糯米腸","糯米腸"),
+    ("滷味","滷味"),("滷大腸","滷大腸"),("滷雞腿","滷雞腿"),("滷牛腱","滷牛腱"),
+    ("鹹酥雞","鹹酥雞"),("雞排","雞排"),("魷魚","魷魚"),
+    ("炸物","炸物"),("甜不辣","甜不辣"),("百頁豆腐","百頁豆腐"),
+    ("關東煮","關東煮"),("黑輪","黑輪"),
+    ("牛肉湯","牛肉湯"),("羊肉湯","羊肉湯"),("虱目魚","虱目魚"),
+    ("蚵仔","蚵仔"),("蛤仔","蛤仔"),("文蛤","文蛤"),
+    ("花枝","花枝"),("小卷","小卷"),("透抽","透抽"),
+    ("川燙","川燙"),("川燙花枝","川燙花枝"),
+    # ── 甜點/冰品（擴充）──────────────────────────────
+    ("冰淇淋","冰淇淋"),("冰淇淋聖代","聖代"),("聖代","聖代"),
+    ("雪花冰","雪花冰"),("剉冰","剉冰"),("芒果冰","芒果冰"),
+    ("珍珠","珍珠"),("布丁","布丁"),("奶酪","奶酪"),
+    ("提拉米蘇","提拉米蘇"),("蛋糕","蛋糕"),("巴斯克","巴斯克"),
+    ("乳酪蛋糕","乳酪蛋糕"),("戚風蛋糕","戚風蛋糕"),("磅蛋糕","磅蛋糕"),
+    ("泡芙","泡芙"),("千層","千層"),("千層蛋糕","千層蛋糕"),
+    ("蛋撻","蛋撻"),("菠蘿包","菠蘿包"),("奶油包","奶油包"),
+    ("司康","司康"),("瑪德蓮","瑪德蓮"),("費南雪","費南雪"),
+    ("巧克力","巧克力"),("生巧克力","生巧克力"),("抹茶","抹茶"),
+    ("果醬","果醬"),("蜂蜜","蜂蜜"),
+    # ── 火鍋湯底/鍋物（擴充）──────────────────────────────
+    ("麻辣湯底","麻辣"),("豚骨湯","豚骨"),("蔬菜湯","蔬菜湯"),
+    ("牛奶鍋","牛奶鍋"),("起司鍋","起司鍋"),("咖喱鍋","咖喱鍋"),
+    ("泡菜鍋","泡菜鍋"),("酸白菜鍋","酸白菜鍋"),("麻油雞","麻油雞"),
+    # ── 其他主食（擴充）──────────────────────────────
+    ("炒飯","炒飯"),("炒麵","炒麵"),("燴飯","燴飯"),("蓋飯","蓋飯"),
+    ("雞肉飯","雞肉飯"),("排骨飯","排骨飯"),("牛腩飯","牛腩飯"),
+    ("焢肉飯","焢肉飯"),("控肉飯","控肉飯"),("爌肉飯","爌肉飯"),
+    ("羊肉炒麵","羊肉炒麵"),("蝦仁炒麵","蝦仁炒麵"),
+    ("剝皮辣椒麵","剝皮辣椒麵"),("剝皮辣椒雞麵","剝皮辣椒雞麵"),
 ]
 
 def extract_dish_highlights(reviews):
@@ -475,7 +570,7 @@ def extract_dish_highlights(reviews):
             key = pattern.split("，")[0].split("（")[0]
             idx = content.find(key)
             if idx < 0: continue
-            snippet = content[idx + len(key): idx + 60].strip()
+            snippet = content[idx + len(key): idx + 80].strip()
             snippet = re.sub(r"[\n\r]+", "，", snippet)
             snippet = re.sub(r"，+，", "，", snippet)
             snippet = re.sub(r"\s+", " ", snippet).strip()
@@ -484,12 +579,12 @@ def extract_dish_highlights(reviews):
             snippet = snippet.strip("。，、：：「」\"''()（）　 ")
             if len(snippet) < 4: continue
             found[canonical] = (pattern, snippet)
-        if len(found) >= 5: break
+        if len(found) >= 10: break
     result = []
     for pattern, canonical in DISH_ITEMS:
         if canonical in found:
             result.append((found[canonical][0], found[canonical][1]))
-    return result[:5]
+    return result[:8]
 
 
 def _days_friendly(days):
@@ -499,8 +594,10 @@ def _days_friendly(days):
 
 # ─── 網友心得 ────────────────────────────────────────────────
 def extract_review_highlights(reviews):
+    # 按發布時間由新到舊排序
+    sorted_reviews = sorted(reviews, key=lambda r: r.get("days_ago", 999))
     results = []; seen = set()
-    for review in reviews:
+    for review in sorted_reviews:
         author = review.get("author", "")
         content = review.get("content", "")
         if not content or author == "LISON": continue
@@ -512,13 +609,13 @@ def extract_review_highlights(reviews):
             if re.search(r"\$\d+", sent): continue
             if sent in seen: continue
             seen.add(sent); results.append((author, sent, time_str)); break
-        if len(results) >= 10: break
+        if len(results) >= 5: break
     unique = []
     for author, note, time_str in results:
         if len(note) < 10: continue
         if len(note) > 80: note = note[:80] + "…"
         unique.append((author, note, time_str))
-    return unique[:10]
+    return unique[:5]
 
 
 # ─── 用戶反饋價格 ────────────────────────────────────────────────
@@ -635,7 +732,8 @@ def format_output(data, maps_price, reviews, price_range_api=None, all_reviews=N
     rcount   = data.get("user_rating_count", 0)
     website  = data.get("website","無")
     open_now = data.get("open_now")
-    hours    = data.get("hours", [])
+    # 營業時間解析
+    hours_data = data.get("currentOpeningHours") or data.get("hours")
     place_id = data.get("place_id","")
     maps_url = f"https://www.google.com/maps/place/?q=place_id:{place_id}"
     api_name, api_addr = get_localized_name_addr(place_id)
@@ -649,15 +747,29 @@ def format_output(data, maps_price, reviews, price_range_api=None, all_reviews=N
     lines.append(f"⭐ 評分：{rating}（{rcount}則）")
     now = datetime.now()
     day_names_en = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
-    day_names_zh = ["週一","週二","週三","週四","週五","週六","週日"]
     today_en = day_names_en[now.weekday()]
     today_hours_line = None
-    for h in hours:
-        if not h: continue
-        parts = h.split(": ", 1)
-        if len(parts) != 2 or parts[0].strip() != today_en: continue
-        tp = parts[1].strip()
-        today_hours_line = None if tp.lower() == "closed" else tp
+
+    if isinstance(hours_data, dict):
+        reg_hours = hours_data.get("regularHours", [])
+        for h in reg_hours:
+            if isinstance(h, dict) and h.get("day") == today_en:
+                tp = h.get("hours", "")
+                today_hours_line = None if "closed" in tp.lower() else tp
+                break
+    elif isinstance(hours_data, list):
+        for h in hours_data:
+            if not h: continue
+            if isinstance(h, dict) and h.get("day") == today_en:
+                tp = h.get("hours", "")
+                today_hours_line = None if "closed" in tp.lower() else tp
+                break
+            elif isinstance(h, str):
+                parts = h.split(": ", 1)
+                if len(parts) == 2 and parts[0].strip() == today_en:
+                    tp = parts[1].strip()
+                    today_hours_line = None if tp.lower() == "closed" else tp
+                    break
     if open_now is True:
         if today_hours_line:
             full_m = re.search(r'(\d{1,2}):(\d{2})\s*(AM|PM)\s*[\u2013\u002d-]\s*(\d{1,2}):(\d{2})\s*(AM|PM)', today_hours_line, re.IGNORECASE)
@@ -684,6 +796,7 @@ def format_output(data, maps_price, reviews, price_range_api=None, all_reviews=N
         lines.append(f"🚦 狀態：❌ 休息中")
     lines.append(f"🌐 網站：{website}")
     lines.append(f"🔗 Google Maps：{maps_url}")
+    lines.append(f"🌐 官方 Google 商家頁面：https://www.google.com/search?q={urllib.parse.quote(name)}#{maps_url.split('?')[1]}")
     price_hist = (maps_price.get("price_histogram",[]) if maps_price else [])
     rep_label  = (maps_price.get("reporter","") if maps_price else "")
     if price_range_api:
@@ -714,10 +827,15 @@ def format_output(data, maps_price, reviews, price_range_api=None, all_reviews=N
             label = m.group(1).strip() if m else item.strip()
             if label and label not in cleaned: cleaned.append(label)
         if cleaned: lines.append(f"🍜 熱門品項：{'｜'.join(cleaned[:8])}")
-    dish_hl = extract_dish_highlights(reviews)
-    if dish_hl:
-        lines.append("🔥 特色菜色：")
-        for dish_name, snippet in dish_hl: lines.append(f"   {dish_name}：{snippet}")
+    food_cats = (maps_price.get("food_categories", []) if maps_price else [])
+    if food_cats:
+        lines.append(f"🔥 特色食品：{'、'.join(food_cats)}")
+    else:
+        # fallback to dish highlights if no food categories found
+        dish_hl = extract_dish_highlights(reviews)
+        if dish_hl:
+            lines.append("🔥 特色菜色：")
+            for dish_name, snippet in dish_hl: lines.append(f"   {dish_name}：{snippet}")
     rev_hl = extract_review_highlights(all_reviews if all_reviews is not None else reviews)
     if rev_hl:
         lines.append("📝 網友心得：")
