@@ -18,6 +18,8 @@ When user says "backup skills", "sync skills to GitHub", or requests a full/incr
 bash /Users/KS/.openclaw/skills/skills-github-backup/scripts/backup.sh
 ```
 
+Note: Running backup will now automatically trigger a `gateway restart` to ensure the UI skill list is refreshed.
+
 ## Restore (on a new device)
 
 When user says "restore skills", "download skills", or "還原技能":

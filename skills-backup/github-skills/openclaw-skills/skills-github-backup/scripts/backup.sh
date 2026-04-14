@@ -8,6 +8,7 @@ BACKUP_DIR="$WORKSPACE/skills-backup"
 GITHUB_REPO="scchin/openclaw-workspace"
 AGENTS_SKILLS="/Users/KS/.agents/skills"
 OPENCLAW_SKILLS="/Users/KS/.openclaw/skills"
+BUNDLED_SKILLS="/opt/homebrew/lib/node_modules/openclaw/skills"
 AUDIT_LOG="$BACKUP_DIR/backup-summary.json"
 
 EXCLUDE_BY_PATH="query\\.py|\\.env|SECRET|TOKEN|API_KEY|\\.pem|credentials"
@@ -58,14 +59,16 @@ if ! git remote -v | grep -q "github.com"; then
 fi
 
 echo "[3a/6] Syncing full skills to local backup (includes API keys)..."
-mkdir -p "$BACKUP_DIR/all-skills/agents-skills" "$BACKUP_DIR/all-skills/openclaw-skills"
+mkdir -p "$BACKUP_DIR/all-skills/agents-skills" "$BACKUP_DIR/all-skills/openclaw-skills" "$BACKUP_DIR/all-skills/bundled-skills"
 rsync -a --exclude='.venv' --exclude='__pycache__' --exclude='node_modules' --exclude='.git' "$AGENTS_SKILLS/" "$BACKUP_DIR/all-skills/agents-skills/"
 rsync -a --exclude='.venv' --exclude='__pycache__' --exclude='node_modules' --exclude='.git' "$OPENCLAW_SKILLS/" "$BACKUP_DIR/all-skills/openclaw-skills/"
+rsync -a --exclude='.venv' --exclude='__pycache__' --exclude='node_modules' --exclude='.git' "$BUNDLED_SKILLS/" "$BACKUP_DIR/all-skills/bundled-skills/"
 
 echo "[3b/6] Syncing GitHub-safe skills (API keys redacted)..."
-mkdir -p "$BACKUP_DIR/github-skills/agents-skills" "$BACKUP_DIR/github-skills/openclaw-skills"
+mkdir -p "$BACKUP_DIR/github-skills/agents-skills" "$BACKUP_DIR/github-skills/openclaw-skills" "$BACKUP_DIR/github-skills/bundled-skills"
 _prepare_github_safe_backup "$AGENTS_SKILLS" "$BACKUP_DIR/github-skills/agents-skills"
 _prepare_github_safe_backup "$OPENCLAW_SKILLS" "$BACKUP_DIR/github-skills/openclaw-skills"
+_prepare_github_safe_backup "$BUNDLED_SKILLS" "$BACKUP_DIR/github-skills/bundled-skills"
 
 echo "[OK] Sync done"
 
@@ -89,13 +92,13 @@ echo "[5/6] Pushing to GitHub..."
 git push origin main
 echo "[OK] Backup complete!"
 
-# ============================================================
-# Step 6: 完整性驗證與審計紀錄 (Integrity Check & Audit Log)
-# ============================================================
-echo -e "\n🔍 執行備份完整性驗證..."
+echo "[*] Triggering Gateway refresh to sync skill list..."
+/opt/homebrew/bin/openclaw gateway restart
+
+🔍 執行備份完整性驗證...
 
 # 計算本地技能數量 (SKILL.md)
-LOCAL_COUNT=$(find "$AGENTS_SKILLS" "$OPENCLAW_SKILLS" -name "SKILL.md" | wc -l | xargs)
+LOCAL_COUNT=$(find "$AGENTS_SKILLS" "$OPENCLAW_SKILLS" "$BUNDLED_SKILLS" -name "SKILL.md" | wc -l | xargs)
 # 計算備份目錄技能數量 (SKILL.md)
 BACKUP_COUNT=$(find "$BACKUP_DIR/github-skills" -name "SKILL.md" | wc -l | xargs)
 
