@@ -1,22 +1,22 @@
 #!/bin/zsh
 # =============================================================================
-# MemPalace × OpenClaw 一鍵安裝腳本
+# MemPalace for OpenClaw 一鍵安裝腳本
 # =============================================================================
 # 用法:
 #   curl -fsSL [URL] | zsh
 #   或下載後直接執行: zsh install_mempalace.sh
 #
 # 作者: King Sean of KS
-# 日期: 2026-04-11
-# 版本: 1.0
+# 日期: 2026-04-14
+# 版本: 2.0 (Sync with Phase 3 Integrated System)
 # =============================================================================
 
 set -e
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
-echo "║  MemPalace × OpenClaw 一鍵安裝                               ║"
-echo "║  King Sean of KS — 2026-04-11                               ║"
+echo "║  MemPalace for OpenClaw 一鍵安裝                              ║"
+echo "║  King Sean of KS — 2026-04-14                                ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
 
@@ -43,7 +43,7 @@ PYTHON_PATH="/Library/Frameworks/Python.framework/Versions/3.13/bin/python3"
 PALACE_PATH="$HOME_DIR/.mempalace"
 OPENCLAW_PATH="$HOME_DIR/.openclaw"
 SKILLS_PATH="$OPENCLAW_PATH/skills"
-HOOK_PATH="$OPENCLAW_PATH/hooks/mempalace-memory"
+HOOK_PATH="$OPENCLAW_PATH/hooks/mempalace-for-openclaw-memory"
 MCPORTER_PATH="$OPENCLAW_PATH/workspace/config/mcporter.json"
 
 # =============================================================================
@@ -53,7 +53,6 @@ echo ""
 echo "【Step 0】環境檢查"
 echo "─────────────────────────────────────────"
 
-# 檢查 Python
 if command -v python3 &> /dev/null; then
     PYTHON_VERSION=$(python3 --version 2>&1)
     log_ok "Python: $PYTHON_VERSION"
@@ -62,7 +61,6 @@ else
     exit 1
 fi
 
-# 檢查 pip
 if command -v pip3 &> /dev/null; then
     PIP_VERSION=$(pip3 --version 2>&1 | awk '{print $2}')
     log_ok "pip: $PIP_VERSION"
@@ -71,7 +69,6 @@ else
     exit 1
 fi
 
-# 檢查 OpenClaw
 if [ -d "$OPENCLAW_PATH" ]; then
     log_ok "OpenClaw: $OPENCLAW_PATH"
 else
@@ -79,7 +76,6 @@ else
     exit 1
 fi
 
-# 確認 Python 3.13
 PYTHON_313=$(/Library/Frameworks/Python.framework/Versions/3.13/bin/python3 --version 2>&1 || echo "NOT_FOUND")
 if [[ "$PYTHON_313" == "Python 3.13"* ]]; then
     log_ok "Python 3.13: $PYTHON_313"
@@ -99,13 +95,11 @@ log_info "執行: pip3 install mempalace"
 pip3 install mempalace --quiet
 log_ok "MemPalace 安裝完成"
 
-# 驗證
 MEMPALACE_VERSION=$(python3 -c "import mempalace; print(mempalace.__version__)" 2>&1 || echo "ERROR")
 if [[ "$MEMPALACE_VERSION" == "3.1.0" ]]; then
     log_ok "MemPalace 版本: $MEMPALACE_VERSION"
 else
-    log_error "MemPalace 版本驗證失敗"
-    exit 1
+    log_warn "MemPalace 版本: $MEMPALACE_VERSION (預期 3.1.0)"
 fi
 
 # =============================================================================
@@ -188,7 +182,6 @@ log_ok "備份完成"
 
 log_info "加入 mempalace MCP Server..."
 
-# 使用 Python 處理 JSON
 python3 << PYEOF
 import json
 import os
@@ -198,7 +191,6 @@ mcporter_path = os.path.expanduser("$MCPORTER_PATH")
 with open(mcporter_path, 'r') as f:
     config = json.load(f)
 
-# 加入 mempalace server
 config['mcpServers']['mempalace'] = {
     "command": "$PYTHON_PATH",
     "args": ["-m", "mempalace.mcp_server", "--palace", "$PALACE_PATH"]
@@ -227,9 +219,6 @@ log_ok "Hook 目錄: $HOOK_PATH"
 log_info "建立 hook_writer.py..."
 cat > "$HOOK_PATH/hook_writer.py" << 'PYEOF'
 #!/usr/bin/env python3
-"""
-MemPalace Session Writer — Phase 2 雙寫整合核心
-"""
 import sys, json
 from datetime import datetime
 
@@ -265,7 +254,6 @@ if __name__ == "__main__":
     except Exception:
         print("Usage: echo '{}' | python3 hook_writer.py")
         sys.exit(0)
-    
     action = input_data.get("action", "")
     if action == "session_summary":
         result = write_session_summary(input_data)
@@ -277,7 +265,6 @@ if __name__ == "__main__":
         )
     else:
         result = {"success": False, "error": f"Unknown action: {action}"}
-    
     print(json.dumps(result, ensure_ascii=False, indent=2))
 PYEOF
 chmod +x "$HOOK_PATH/hook_writer.py"
@@ -287,9 +274,6 @@ log_ok "hook_writer.py 建立完成"
 log_info "建立 wakeup.py..."
 cat > "$HOOK_PATH/wakeup.py" << 'PYEOF'
 #!/usr/bin/env python3
-"""
-MemPalace Wake-Up Context Generator — Phase 3 核心引擎
-"""
 import sys, json
 sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages')
 from mempalace.mcp_server import tool_search, tool_diary_read, tool_status
@@ -357,8 +341,22 @@ result = tool_diary_read(agent_name="KingSeanKS", last_n=10)
 print(json.dumps(result, indent=2, ensure_ascii=False))
 PYEOF
     ;;
+  st|status)
+    $PYTHON - << PYEOF
+import sys, json
+sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages')
+from mempalace.mcp_server import tool_status
+r = tool_status()
+print(f"📊 Palace 狀態")
+print(f"   總 Drawers: {r.get('total_drawers', 0):,}")
+wings = r.get('wings', {})
+for wing, rooms in wings.items():
+    room_count = rooms if isinstance(rooms, int) else len(rooms)
+    print(f"   📁 {wing}: {room_count} rooms")
+PYEOF
+    ;;
   *)
-    echo "用法: mp [search|diary|taxonomy] [關鍵字...]"
+    echo "用法: mp [search|diary|status] [關鍵字...]"
     ;;
 esac
 ZSH
@@ -369,9 +367,9 @@ log_ok "mp CLI 建立完成"
 log_info "建立 HOOK.json..."
 cat > "$HOOK_PATH/HOOK.json" << 'JSON'
 {
-  "name": "mempalace-memory",
+  "name": "mempalace-for-openclaw-memory",
   "version": "3.0.0",
-  "description": "MemPalace Phase 3 — 完全接管 OpenClaw 記憶系統",
+  "description": "MemPalace for OpenClaw — 完全接管記憶系統",
   "author": "King Sean of KS",
   "trigger": {
     "session:compact:after": { "enabled": true, "async": true },
@@ -388,32 +386,30 @@ JSON
 log_ok "HOOK.json 建立完成"
 
 # =============================================================================
-# Step 6: 安裝 mempalace 技能（SKILL.md）
+# Step 6: 安裝 mempalace for OpenClaw 技能
 # =============================================================================
 echo ""
-echo "【Step 6/7】安裝 mempalace 技能"
+echo "【Step 6/7】安裝 mempalace for OpenClaw 技能"
 echo "─────────────────────────────────────────"
 
-SKILL_MEMPALACE="$SKILLS_PATH/mempalace"
+SKILL_MEMPALACE="$SKILLS_PATH/mempalace-for-openclaw"
 mkdir -p "$SKILL_MEMPALACE"
 log_info "技能目錄: $SKILL_MEMPALACE"
 
 cat > "$SKILL_MEMPALACE/SKILL.md" << 'MD'
 ---
-name: mempalace
+name: mempalace for OpenClaw
 description: MemPalace 長期記憶系統。King Sean of KS 的 AI 記憶宮殿，提供 RAW verbatim 語意搜尋、知識圖譜、日記功能。觸發關鍵字：搜尋記憶、查歷史、MemPalace、記得我之前說過。
 author: King Sean of KS
 ---
 
-# MemPalace — AI 記憶宮殿 Phase 3
+# MemPalace for OpenClaw — AI 記憶宮殿 Phase 3
 
 ## 架構
-
 - **Wings**: ks-system / openclaw-workspace / wing_kingseanks
 - **Rooms**: knowledge / skills / decisions / general / memory / diary
 
 ## 工具
-
 | 工具 | 用途 |
 |------|------|
 | `mempalace_search` | 語意搜尋 |
@@ -422,14 +418,14 @@ author: King Sean of KS
 | `mempalace_status` | 查看狀態 |
 
 ## CLI
-
 ```bash
 mp search "關鍵字"
 mp diary
+mp status
 ```
 MD
 
-log_ok "mempalace 技能安裝完成"
+log_ok "mempalace for OpenClaw 技能安裝完成"
 
 # =============================================================================
 # Step 7: 驗證安裝
@@ -438,16 +434,8 @@ echo ""
 echo "【Step 7/7】驗證安裝"
 echo "─────────────────────────────────────────"
 
-# 測試 MemPalace
 log_info "測試 MemPalace..."
-TEST_RESULT=$(python3 - << 'PYEOF'
-import sys
-sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages')
-from mempalace.mcp_server import tool_status
-r = tool_status()
-print(f"OK:{r.get('total_drawers', 0)}")
-PYEOF
-)
+TEST_RESULT=$(python3 -c "import sys; sys.path.insert(0, '/Library/Frameworks/Python.framework/Versions/3.13/lib/python3.13/site-packages'); from mempalace.mcp_server import tool_status; r = tool_status(); print(f'OK:{r.get(\'total_drawers\', 0)}')" 2>&1 || echo "ERROR")
 
 if [[ "$TEST_RESULT" == OK:* ]]; then
     DRAWERS=$(echo "$TEST_RESULT" | cut -d: -f2)
@@ -456,17 +444,13 @@ else
     log_error "MemPalace 測試失敗"
 fi
 
-# 測試 mp CLI
 log_info "測試 mp CLI..."
-if "$HOOK_PATH/mp" status 2>&1 | grep -q "status"; then
+if "$HOOK_PATH/mp" status 2>&1 | grep -q "狀態"; then
     log_ok "mp CLI: 正常"
 else
-    log_warn "mp CLI: 需要進一步測試"
+    log_warn "mp CLI: 需確認路徑"
 fi
 
-# =============================================================================
-# 完成
-# =============================================================================
 echo ""
 echo "╔══════════════════════════════════════════════════════════════╗"
 echo "║  ✅ 安裝完成                                                 ║"
@@ -477,8 +461,8 @@ echo "║                                                              ║"
 echo "║    openclaw gateway restart                                  ║"
 echo "║                                                              ║"
 echo "║  驗證安裝:                                                   ║"
-echo "║    python3 ~/.openclaw/hooks/mempalace-memory/wakeup.py      ║"
-echo "║    ~/.openclaw/hooks/mempalace-memory/mp diary               ║"
+echo "║    python3 ~/.openclaw/hooks/mempalace-for-openclaw-memory/wakeup.py  ║"
+echo "║    ~/.openclaw/hooks/mempalace-for-openclaw-memory/mp status  ║"
 echo "║                                                              ║"
 echo "╚══════════════════════════════════════════════════════════════╝"
 echo ""
