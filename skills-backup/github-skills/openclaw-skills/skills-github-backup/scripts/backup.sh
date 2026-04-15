@@ -75,6 +75,7 @@ echo "[OK] Sync done"
 echo "[4/6] Checking for changes..."
 cd "$WORKSPACE"
 git add skills-backup/github-skills/
+git add pending_tasks.json
 if git diff --cached --quiet; then
     echo "[OK] No changes detected. Nothing to commit."
     COMMIT_STATUS="No changes"
