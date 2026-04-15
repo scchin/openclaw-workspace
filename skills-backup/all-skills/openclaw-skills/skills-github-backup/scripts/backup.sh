@@ -75,6 +75,7 @@ echo "[OK] Sync done"
 echo "[4/6] Checking for changes..."
 cd "$WORKSPACE"
 git add skills-backup/github-skills/
+git add pending_tasks.json
 if git diff --cached --quiet; then
     echo "[OK] No changes detected. Nothing to commit."
     COMMIT_STATUS="No changes"
@@ -94,6 +95,9 @@ echo "[OK] Backup complete!"
 
 echo "[*] Triggering Gateway refresh to sync skill list..."
 /opt/homebrew/bin/openclaw gateway restart
+# Force UI to reload and clear cache
+/Users/KS/.openclaw/workspace/refresh_ui.sh
+
 
 🔍 執行備份完整性驗證...
 

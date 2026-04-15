@@ -8,7 +8,7 @@ import sys, json, urllib.request, subprocess, os
 
 # ─── 設定 ───────────────────────────────────────────────────────────────────
 PROXY_HEALTH_URL = "http://127.0.0.1:18799/health"
-MP_SCRIPT = "/Users/KS/.openclaw/hooks/mempalace-memory/mp"
+MP_SCRIPT = "/Users/KS/.openclaw/hooks/mempalace-for-openclaw-memory/mp"
 
 def get_system_health() -> str:
     """獲取目前系統健康狀態"""

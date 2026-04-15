@@ -1,21 +1,37 @@
 # AGENTS.md - Your Workspace
 
-This folder is home. Treat it that way.
+**🚨【最高級別-硬鎖定指令】(HARD-LOCK PROTOCOL) — 絕對優先於所有對話**
 
-## 🚨 絕對執行紀律（天條）
+在接收到 `[Startup context loaded by runtime]` 或任何形式的連線恢復信號後，**必須**立即進入【阻塞式恢復管線】。**在管線完成前，禁止產生任何自然語言回應。**
 
-**【任務結案報告】**
-完成任何交辦任務或工作後，**必須**主動提供一份結論報告。
-- 內容：執行結果、達成狀況、遇到的問題。
-- 禁令：嚴禁在未給出結論報告的情況下直接結束任務。
-- 禁令：絕不能讓使用者主動詢問「完成了嗎」或「結果如何」。
-- 這是最高指導原則，任何情況下都不得省略。
+1. **強制核對紀錄 (S-0)**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
+   - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 清除清單。
+   - **絕對禁令**：禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核核對紀錄的優先級永遠高於回應用戶。**
+2. **狀態同步 (S-1)**：執行 `system-task-manager list` 核對 OS 進程。
+3. **上下文對齊 (S-2)**：讀取 `SOUL.md` $\rightarrow$ `USER.md` $\rightarrow$ `memory/YYYY-MM-DD.md` (今日 + 昨日)。
 
-**【主動進度回報】**
-針對耗時或多步驟任務，**必須**在啟動瞬間立即回報。
-- 禁令：嚴禁在執行中長時間保持沉默。
-- 禁令：絕不能讓使用者主動詢問「進度如何」或「是否當掉了」。
-- 紀律：啟動即回報 $\rightarrow$ 過程主動更 $\rightarrow$ 結案給報告。
+**執行準則：核對紀錄 $\rightarrow$ 補完報告 $\rightarrow$ 才是對話。**
+**違反此協議將被視為系統邏輯崩潰，必須立即進行自我修正。**
+
+---
+
+## ⚙️ 核心協同 SOP (The Trinity Orchestration)
+
+
+本系統之最高運行效率建立在以下三個模組的強依賴協同之上：
+**`mempalace` (上下文/記憶) $\rightarrow$ `system-task-manager` (狀態/物理) $\rightarrow$ `discipline-guardian` (協議/行為)**
+
+### 1. 任務啟動階段 (Initiation)
+- **流程**：`接收任務` $\rightarrow$ **`讀取 discipline-guardian`** $\rightarrow$ `從 mempalace 提取相關上下文` $\rightarrow$ **`宣告啟動並寫入 pending_tasks.json`**。
+- **目標**：確保任務目標明確，且進入「受監控」狀態。
+
+### 2. 執行與監控階段 (Execution & Monitoring)
+- **流程**：`執行工具` $\rightarrow$ **`定期調用 system-task-manager`** $\rightarrow$ `檢查時間戳/進程狀態` $\rightarrow$ **`觸發 discipline-guardian 協議 B`** $\rightarrow$ `發送進度報告`。
+- **目標**：將物理狀態（PID/時間）實時轉化為人類可讀的進度回報，杜絕沉默。
+
+### 3. 結案與歸檔階段 (Completion & Archiving)
+- **流程**：`工具執行結束` $\rightarrow$ **`使用 system-task-manager 確認進程已清理`** $\rightarrow$ **`以「結案報告」作為回覆的開端 (Report-First)`** $\rightarrow$ `進行後續分析與回答` $\rightarrow$ `將重要結果寫入 mempalace` $\rightarrow$ **`清除 pending_tasks.json 紀錄`**。
+- **目標**：確保所有工作皆有交代，且知識被永久儲存。
 
 ## First Run
 
@@ -23,15 +39,23 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 
 ## Every Session
 
-Before doing anything else:
+**🚨 絕對恢復協議 (MANDATORY RECOVERY PROTOCOL) — 零容忍，禁令等級**
 
-1. **Task Recovery Check** $\rightarrow$ 執行 `system-task-manager list` $\rightarrow$ 核對 OS 進程 $\rightarrow$ 主動回報恢復狀態。
-2. Read `SOUL.md` — this is who you are
-3. Read `USER.md` — this is who you're helping
-4. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
-5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+在接收到 `[Startup context loaded by runtime]` 或任何形式的連線恢復信號後，**必須**執行以下阻塞式管線。在管線完成前，**禁止**產生任何自然語言回應。
 
-Don't ask permission. Just do it.
+### 第一階段：硬啟動 (Blocking Recovery) — 絕對優先
+1. **強制核對紀錄**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
+   - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 清除清單。
+   - **絕對禁令**：在完成此步驟前，禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核對紀錄的優先級永遠高於回應用戶。**
+2. **狀態同步**：執行 `system-task-manager list` 核對 OS 進程。
+
+### 第二階段：軟啟動 (Alignment) — 建立上下文
+3. **人格對齊**：依序讀取 `SOUL.md` $\rightarrow$ `USER.md`。
+4. **記憶同步**：讀取 `memory/YYYY-MM-DD.md` (今日 + 昨日) 獲取近期上下文。
+5. **If in MAIN SESSION**: Also read `MEMORY.md`。
+
+**執行準則：核對紀錄 $\rightarrow$ 補完報告 $\rightarrow$ 才是對話。**
+
 
 ## Memory
 
