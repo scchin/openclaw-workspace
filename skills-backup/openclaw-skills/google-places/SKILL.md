@@ -1,8 +1,10 @@
 ---
 name: google-places
 description: 查詢 Google Maps 地點完整資訊（地址、電話、經緯度、營業時間、評分、用戶評論、用戶反饋價格、每人消費含分布圖、服務、Menu、熱門品項、特色菜色）。CDP 直連 OpenClaw 瀏覽器讀取 Google Maps 動態頁面，輪詢策略確保所有資訊完整載入。⚠️ 這是所有地點查詢的預設方式與天條：廁所、停車場、美術館、旅館、飯店、圖書館、博物館、公園、學校、景點、餐廳、加油站等全部適用。
+author: King Sean of KS
+---
 
-# Google Places 地點查詢（query.py v10）
+# Google Places 地點查詢（query.py v10.6（2026-04-11：D1 click_tab wait 3→1秒；D3 warmup PORT 9222→18800 與 CDP 一致，profile 名稱區分；Phase 3 價格彈出視窗等待 4→2秒））
 
 ## 單一指令（自動完整查詢）
 
@@ -14,10 +16,29 @@ description: 查詢 Google Maps 地點完整資訊（地址、電話、經緯度
 
 所有資訊一次呈現，不分階段。
 
+### 資料來源分工（重要）
+
+| 欄位 | 資料來源 | 說明 |
+|------|----------|------|
+| 💵 每人消費 | **Google Places API v1** (`priceRange`) | API 即時回傳，如 `$1–$200`。**非爬蟲**，是 Google 官方欄位，部分店家無此資料 |
+| 💬 用戶反饋價格 | **goplaces 6個月內評論**文字解析 | 正規表達式搜尋 `$數字` 格式，純文字比對，準確率高但依賴評論提及 |
+
+```
+query.py 內部邏輯：
+get_price_range_api(place_id)          → 💵 每人消費（Google Places API）
+get_reviews(place_id) + price parsing  → 💬 用戶反饋價格（評論文字）
+```
+
+**為何有兩個價格來源？**
+- API `priceRange` 是 Google 官方彙總，懶人首選，但並非每間店都有
+- 用戶反饋是網友親自留言的實際消費金額，更具體但需要湊齊足夠樣本
+
+---
+
 ```bash
 # 搜尋關鍵詞，自動執行完整查詢
 cd ~/.openclaw/skills/google-places
-.venv/bin/python scripts/query.py search "鰄老闆卷起來"
+.venv/bin/python scripts/query.py search "鰄老闆捲起來"
 
 # 直接以 place_id 查詢（等同完整查詢）
 python scripts/query.py full ChIJs9ZwdXQXaTQRa5LL3bcnLq4
@@ -76,6 +97,18 @@ Yao Wang：蝦子有幫忙剝殼大加分
 ### 排版規則
 
 - **每項資訊一行**：店名、地址、經緯度、電話、評分、狀態、網站、Google Maps、Menu、每人消費、服務、熱門品項，全部各自獨立一行
+- **⚠️ Webchat 顯示規則（v2.14 強制執行）：** webchat 對純 `\n` 換行支援極差，所有內容會全部黏在同一行。**輸出時必須將原始輸出包在 Triple backticks（```）程式區塊中**，才能正確保留換行。
+
+**固定格式（每次都這樣用，寫死，2026-03-24 修正）：**
+```
+```
+{原始輸出本尊，完整一字不漏，保留所有換行}
+```
+```
+
+**⚠️ 绝不可省略的執行步驟（2026-03-24 修正）：**
+1. 拿到原始輸出後，「原封不動」放進 ``` ``` ``` 這個殼裡（直接用 Enter 換行，不使用 \n 字元）
+2. 完全不做任何濃縮、刪減、重新組織
 - **🏪 店名**：自動去除 pipe 標籤（`|` 後面的分類詞全部移除，只保留正式名稱）
 - **`💵 每人消費`**：API `priceRange` 優先，CDP 分布圖附長條圖（展開在每人消費下方）
 - **`📌 服務`**：從頁面「關於」區塊動態解析（內用/外帶/外送/寵物友善/預約等）

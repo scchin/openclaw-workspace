@@ -79,4 +79,21 @@ fi
 # Step 5: Push
 echo "[5/5] Pushing to GitHub..."
 git push origin main
-echo "[OK] Backup complete!"
+
+# Step 6: Force UI Sync (The "Magic Refresh")
+echo "[6/6] Triggering Control UI force refresh..."
+# 1. Restart Gateway to clear internal cache
+openclaw gateway restart
+
+# 2. Wait for Gateway to be ready
+sleep 2
+
+# 3. Send refresh command to Sync Sidecar
+if curl -s http://127.0.0.1:18793/trigger-refresh > /dev/null; then
+    echo "[OK] UI refresh command sent successfully!"
+else
+    echo "[!] UI refresh failed. Please manually refresh (Cmd+Shift+R)."
+fi
+
+echo "[OK] Backup and UI sync complete!"
+

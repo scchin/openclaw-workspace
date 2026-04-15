@@ -4,7 +4,7 @@ description: 查詢 Google Maps 地點完整資訊（地址、電話、經緯度
 author: King Sean of KS
 ---
 
-# Google Places 地點查詢（query.py v10.5（2026-04-06：get_reviews() months 參數化，預設 None（無時間限制）；網友心得改用全量評論（all_reviews）；cmd_search/cmd_full/cmd_details 維持6個月限制用於價格回饋））
+# Google Places 地點查詢（query.py v10.6（2026-04-11：D1 click_tab wait 3→1秒；D3 warmup PORT 9222→18800 與 CDP 一致，profile 名稱區分；Phase 3 價格彈出視窗等待 4→2秒））
 
 ## 單一指令（自動完整查詢）
 
