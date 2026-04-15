@@ -14,9 +14,9 @@ PostgreSQL folds unquoted identifiers to lowercase. Quoted mixed-case identifier
 ```sql
 -- Quoted identifiers preserve case but require quotes everywhere
 CREATE TABLE "Users" (
- "userId" bigint PRIMARY KEY,
- "firstName" text,
- "lastName" text
+  "userId" bigint PRIMARY KEY,
+  "firstName" text,
+  "lastName" text
 );
 
 -- Must always quote or queries fail
@@ -32,9 +32,9 @@ SELECT firstName FROM Users;
 ```sql
 -- Unquoted lowercase identifiers are portable and tool-friendly
 CREATE TABLE users (
- user_id bigint PRIMARY KEY,
- first_name text,
- last_name text
+  user_id bigint PRIMARY KEY,
+  first_name text,
+  last_name text
 );
 
 -- Works without quotes, recognized by all tools

@@ -30,11 +30,11 @@ analyze orders (status, created_at);
 
 -- Check when tables were last analyzed
 select
- relname,
- last_vacuum,
- last_autovacuum,
- last_analyze,
- last_autoanalyze
+  relname,
+  last_vacuum,
+  last_autovacuum,
+  last_analyze,
+  last_autoanalyze
 from pg_stat_user_tables
 order by last_analyze nulls first;
 ```
@@ -44,8 +44,8 @@ Autovacuum tuning for busy tables:
 ```sql
 -- Increase frequency for high-churn tables
 alter table orders set (
- autovacuum_vacuum_scale_factor = 0.05,   -- Vacuum at 5% dead tuples (default 20%)
- autovacuum_analyze_scale_factor = 0.02   -- Analyze at 2% changes (default 10%)
+  autovacuum_vacuum_scale_factor = 0.05,     -- Vacuum at 5% dead tuples (default 20%)
+  autovacuum_analyze_scale_factor = 0.02     -- Analyze at 2% changes (default 10%)
 );
 
 -- Check autovacuum status

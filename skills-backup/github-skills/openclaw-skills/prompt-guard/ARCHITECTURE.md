@@ -11,112 +11,112 @@ Prompt Guard uses a **Defense in Depth** design. Multiple inspection layers redu
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│            INPUT MESSAGE              │
+│                        INPUT MESSAGE                            │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 0: Message Size Check                  │
-│ • Reject messages > 50KB (DoS prevention)           │
+│  Layer 0: Message Size Check                                    │
+│  • Reject messages > 50KB (DoS prevention)                      │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 1: Rate Limiting                     │
-│ • Per-user request tracking (30 req/60s default)        │
-│ • Memory-bounded (max 10,000 tracked users)          │
+│  Layer 1: Rate Limiting                                         │
+│  • Per-user request tracking (30 req/60s default)               │
+│  • Memory-bounded (max 10,000 tracked users)                    │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 1.5: Cache Lookup (v3.1.0)                │
-│ • SHA-256 hash of normalized message              │
-│ • LRU cache (1,000 entries)                  │
-│ • Cache hit → return immediately (90% token savings)      │
+│  Layer 1.5: Cache Lookup (v3.1.0)                               │
+│  • SHA-256 hash of normalized message                           │
+│  • LRU cache (1,000 entries)                                    │
+│  • Cache hit → return immediately (90% token savings)           │
 └─────────────────────────────────────────────────────────────────┘
-                │ miss
-                ▼
+                               │ miss
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 2: Text Normalization                  │
-│ • Homoglyph detection & replacement (Cyrillic/Greek → Latin)  │
-│ • Visible delimiter stripping (I+g+n+o+r+e → Ignore)     │
-│ • Character spacing collapse (i g n o r e → ignore)      │
-│ • Zero-width character removal (17 types)           │
-│ • Fullwidth character normalization               │
+│  Layer 2: Text Normalization                                    │
+│  • Homoglyph detection & replacement (Cyrillic/Greek → Latin)   │
+│  • Visible delimiter stripping (I+g+n+o+r+e → Ignore)          │
+│  • Character spacing collapse (i g n o r e → ignore)            │
+│  • Zero-width character removal (17 types)                      │
+│  • Fullwidth character normalization                             │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 3: Pattern Matching Engine (Tiered)           │
-│ • Tier 0: CRITICAL (~45 patterns) — always loaded       │
-│ • Tier 1: HIGH (~82 patterns) — default            │
-│ • Tier 2: MEDIUM (~100+ patterns) — on-demand         │
-│ • Runs against ORIGINAL + all DECODED variants         │
-│ • 577+ patterns across 50+ categories             │
-│ • 10 languages: EN, KO, JA, ZH, RU, ES, DE, FR, PT, VI    │
+│  Layer 3: Pattern Matching Engine (Tiered)                      │
+│  • Tier 0: CRITICAL (~45 patterns) — always loaded              │
+│  • Tier 1: HIGH (~82 patterns) — default                        │
+│  • Tier 2: MEDIUM (~100+ patterns) — on-demand                  │
+│  • Runs against ORIGINAL + all DECODED variants                 │
+│  • 577+ patterns across 50+ categories                          │
+│  • 10 languages: EN, KO, JA, ZH, RU, ES, DE, FR, PT, VI       │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 3.5: API Extra Patterns (v3.2.0 — optional)       │
-│ • Early-access patterns (API-first, flows to open source)   │
-│ • Premium patterns (API-exclusive)               │
-│ • Pre-compiled at init, merged into scan at runtime      │
-│ • Skipped entirely if API is disabled (default)        │
+│  Layer 3.5: API Extra Patterns (v3.2.0 — optional)              │
+│  • Early-access patterns (API-first, flows to open source)      │
+│  • Premium patterns (API-exclusive)                             │
+│  • Pre-compiled at init, merged into scan at runtime            │
+│  • Skipped entirely if API is disabled (default)                │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 4: Decode Pipeline                    │
-│ • Base64 decode + full pattern re-scan             │
-│ • Hex escape decode (\x41\x42)                 │
-│ • ROT13 decode (full-text + per-word)             │
-│ • URL decode (%69%67%6E)                    │
-│ • HTML entity decode (&#105; → i)               │
-│ • Unicode escape decode (\u0069 → i)              │
+│  Layer 4: Decode Pipeline                                       │
+│  • Base64 decode + full pattern re-scan                         │
+│  • Hex escape decode (\x41\x42)                                 │
+│  • ROT13 decode (full-text + per-word)                          │
+│  • URL decode (%69%67%6E)                                       │
+│  • HTML entity decode (&#105; → i)                              │
+│  • Unicode escape decode (\u0069 → i)                           │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 5: Behavioral Analysis                  │
-│ • Repetition detection (token overflow)            │
-│ • Invisible character detection (Unicode Tags U+E0001-U+E007F) │
-│ • Korean Jamo decomposition attacks              │
-│ • Canary token check (system prompt extraction)        │
-│ • Language detection (flag unsupported languages)        │
+│  Layer 5: Behavioral Analysis                                   │
+│  • Repetition detection (token overflow)                        │
+│  • Invisible character detection (Unicode Tags U+E0001-U+E007F) │
+│  • Korean Jamo decomposition attacks                            │
+│  • Canary token check (system prompt extraction)                │
+│  • Language detection (flag unsupported languages)               │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 6: Context-Aware Decision                │
-│ • Sensitivity adjustment (low/medium/high/paranoid)      │
-│ • Owner bypass rules (LOG for HIGH, still BLOCK for CRITICAL) │
-│ • Group context restrictions (non-owners blocked at MEDIUM+)  │
+│  Layer 6: Context-Aware Decision                                │
+│  • Sensitivity adjustment (low/medium/high/paranoid)            │
+│  • Owner bypass rules (LOG for HIGH, still BLOCK for CRITICAL)  │
+│  • Group context restrictions (non-owners blocked at MEDIUM+)   │
 └─────────────────────────────────────────────────────────────────┘
-                │
-                ▼
+                               │
+                               ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 7: Result + Logging + Reporting             │
-│ • DetectionResult with severity, action, reasons, fingerprint │
-│ • Markdown and/or JSONL logging (with optional hash chain)   │
-│ • HiveFence collective threat reporting            │
-│ • API threat reporting (v3.2.0, opt-in, anonymized)      │
-│ • Cache storage for future lookups               │
-└─────────────────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────────────────┐
-│ Layer 8: Output Scanner / DLP                 │
-│ • scan_output() — LLM response scanning            │
-│ • Canary token leakage detection                │
-│ • Credential format patterns (17+ key formats)         │
+│  Layer 7: Result + Logging + Reporting                          │
+│  • DetectionResult with severity, action, reasons, fingerprint  │
+│  • Markdown and/or JSONL logging (with optional hash chain)     │
+│  • HiveFence collective threat reporting                        │
+│  • API threat reporting (v3.2.0, opt-in, anonymized)            │
+│  • Cache storage for future lookups                             │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
-│ Layer 9: Enterprise DLP Sanitizer               │
-│ • sanitize_output() — redact-first, block-as-fallback     │
-│ • 17 credential patterns → [REDACTED:type] labels       │
-│ • Post-redaction re-scan: block if still HIGH+         │
-│ • Returns SanitizeResult with full audit metadata       │
+│  Layer 8: Output Scanner / DLP                                  │
+│  • scan_output() — LLM response scanning                       │
+│  • Canary token leakage detection                               │
+│  • Credential format patterns (17+ key formats)                 │
+└─────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────┐
+│  Layer 9: Enterprise DLP Sanitizer                              │
+│  • sanitize_output() — redact-first, block-as-fallback          │
+│  • 17 credential patterns → [REDACTED:type] labels              │
+│  • Post-redaction re-scan: block if still HIGH+                 │
+│  • Returns SanitizeResult with full audit metadata              │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -197,42 +197,42 @@ Prompt Guard uses a **Defense in Depth** design. Multiple inspection layers redu
 
 ```
 prompt-guard/
-├── prompt_guard/       # Core Python package
-│  ├── __init__.py      # Public API + version
-│  ├── models.py       # Severity, Action, DetectionResult, SanitizeResult
-│  ├── engine.py       # PromptGuard class (analyze, config, API integration)
-│  ├── patterns.py      # 577+ regex patterns (pure data)
-│  ├── scanner.py       # scan_text_for_patterns() (all pattern sets)
-│  ├── api_client.py     # Optional API client (v3.2.0)
-│  ├── pattern_loader.py   # Tiered pattern loading (v3.1.0)
-│  ├── cache.py        # LRU message hash cache (v3.1.0)
-│  ├── normalizer.py     # Homoglyph + text normalization
-│  ├── decoder.py       # 6 encoding decoders
-│  ├── output.py       # Output DLP + sanitize_output()
-│  ├── logging_utils.py    # SIEM logging + HiveFence reporting
-│  ├── hivefence.py      # HiveFence threat intelligence
-│  ├── cli.py         # CLI entry point
-│  ├── audit.py        # Security audit
-│  └── analyze_log.py     # Log analyzer
+├── prompt_guard/              # Core Python package
+│   ├── __init__.py            # Public API + version
+│   ├── models.py              # Severity, Action, DetectionResult, SanitizeResult
+│   ├── engine.py              # PromptGuard class (analyze, config, API integration)
+│   ├── patterns.py            # 577+ regex patterns (pure data)
+│   ├── scanner.py             # scan_text_for_patterns() (all pattern sets)
+│   ├── api_client.py          # Optional API client (v3.2.0)
+│   ├── pattern_loader.py      # Tiered pattern loading (v3.1.0)
+│   ├── cache.py               # LRU message hash cache (v3.1.0)
+│   ├── normalizer.py          # Homoglyph + text normalization
+│   ├── decoder.py             # 6 encoding decoders
+│   ├── output.py              # Output DLP + sanitize_output()
+│   ├── logging_utils.py       # SIEM logging + HiveFence reporting
+│   ├── hivefence.py           # HiveFence threat intelligence
+│   ├── cli.py                 # CLI entry point
+│   ├── audit.py               # Security audit
+│   └── analyze_log.py         # Log analyzer
 │
-├── patterns/         # Pattern YAML files (tiered)
-│  ├── critical.yaml     # Tier 0 (~45 patterns)
-│  ├── high.yaml       # Tier 1 (~82 patterns)
-│  └── medium.yaml      # Tier 2 (~100+ patterns)
+├── patterns/                  # Pattern YAML files (tiered)
+│   ├── critical.yaml          # Tier 0 (~45 patterns)
+│   ├── high.yaml              # Tier 1 (~82 patterns)
+│   └── medium.yaml            # Tier 2 (~100+ patterns)
 │
 ├── tests/
-│  └── test_detect.py     # 115+ regression tests
+│   └── test_detect.py         # 115+ regression tests
 │
 ├── .github/workflows/
-│  └── sync-patterns-to-api.yml # Auto-sync patterns to API server
+│   └── sync-patterns-to-api.yml  # Auto-sync patterns to API server
 │
-├── ARCHITECTURE.md      # This file
-├── CHANGELOG.md        # Full version history
-├── SKILL.md          # Agent skill definition
-├── README.md         # User documentation
-├── config.example.yaml    # Configuration template
-├── pyproject.toml       # Build config + dependencies
-└── requirements.txt      # Legacy install compatibility
+├── ARCHITECTURE.md            # This file
+├── CHANGELOG.md               # Full version history
+├── SKILL.md                   # Agent skill definition
+├── README.md                  # User documentation
+├── config.example.yaml        # Configuration template
+├── pyproject.toml             # Build config + dependencies
+└── requirements.txt           # Legacy install compatibility
 ```
 
 ---
@@ -244,14 +244,14 @@ Prompt Guard works fully offline. The API is an optional enhancement.
 ### Pattern Delivery Model (Approach C: Hybrid)
 
 ```
-Open Source (prompt-guard repo)   API Server (PG_API)
-┌──────────────────────────┐    ┌──────────────────────────┐
-│ patterns/critical.yaml │──sync─│ data/core/critical.yaml │
-│ patterns/high.yaml   │──sync─│ data/core/high.yaml   │
-│ patterns/medium.yaml  │──sync─│ data/core/medium.yaml  │
-└──────────────────────────┘    │ data/early/early.yaml  │ ← API-first
-                  │ data/premium/premium.yaml│ ← API-exclusive
-                  └──────────────────────────┘
+Open Source (prompt-guard repo)     API Server (PG_API)
+┌──────────────────────────┐       ┌──────────────────────────┐
+│  patterns/critical.yaml  │──sync─│  data/core/critical.yaml │
+│  patterns/high.yaml      │──sync─│  data/core/high.yaml     │
+│  patterns/medium.yaml    │──sync─│  data/core/medium.yaml   │
+└──────────────────────────┘       │  data/early/early.yaml   │ ← API-first
+                                   │  data/premium/premium.yaml│ ← API-exclusive
+                                   └──────────────────────────┘
 ```
 
 ### How API patterns are loaded
@@ -277,38 +277,38 @@ Open Source (prompt-guard repo)   API Server (PG_API)
 
 ```yaml
 prompt_guard:
- sensitivity: medium    # low | medium | high | paranoid
- pattern_tier: high    # critical | high | full
- owner_ids: ["USER_ID"]
- canary_tokens: ["CANARY:abc"]
+  sensitivity: medium       # low | medium | high | paranoid
+  pattern_tier: high        # critical | high | full
+  owner_ids: ["USER_ID"]
+  canary_tokens: ["CANARY:abc"]
 
- cache:
-  enabled: true
-  max_size: 1000
+  cache:
+    enabled: true
+    max_size: 1000
 
- actions:
-  LOW: log
-  MEDIUM: warn
-  HIGH: block
-  CRITICAL: block_notify
+  actions:
+    LOW: log
+    MEDIUM: warn
+    HIGH: block
+    CRITICAL: block_notify
 
- rate_limit:
-  enabled: true
-  max_requests: 30
-  window_seconds: 60
+  rate_limit:
+    enabled: true
+    max_requests: 30
+    window_seconds: 60
 
- logging:
-  enabled: true
-  path: memory/security-log.md
-  format: markdown    # markdown | json
-  json_path: memory/security-log.jsonl
-  hash_chain: false
+  logging:
+    enabled: true
+    path: memory/security-log.md
+    format: markdown        # markdown | json
+    json_path: memory/security-log.jsonl
+    hash_chain: false
 
- api:           # On by default (beta key built in)
-  enabled: true
-  key: null        # built-in beta key, override with PG_API_KEY env var
-  reporting: false    # anonymous threat reporting (opt-in)
-  url: null        # default: https://pg-secure-api.vercel.app
+  api:                      # On by default (beta key built in)
+    enabled: true
+    key: null               # built-in beta key, override with PG_API_KEY env var
+    reporting: false        # anonymous threat reporting (opt-in)
+    url: null               # default: https://pg-secure-api.vercel.app
 ```
 
 ---

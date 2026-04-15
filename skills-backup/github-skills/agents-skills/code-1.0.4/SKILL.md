@@ -5,7 +5,7 @@ version: 1.0.4
 homepage: https://clawic.com/skills/code
 description: Coding workflow with planning, implementation, verification, and testing for clean software development.
 changelog: Improved description for better discoverability
-metadata: {"clawdbot":{"emoji":"💻","requires":{"bins":[],"os":["linux","darwin","win32"]
+metadata: {"clawdbot":{"emoji":"💻","requires":{"bins":[]},"os":["linux","darwin","win32"]}}
 ---
 
 ## When to Use
@@ -18,7 +18,7 @@ User preferences stored in `~/code/` when user explicitly requests.
 
 ```
 ~/code/
- - memory.md  # User-provided preferences only
+  - memory.md    # User-provided preferences only
 ```
 
 Create on first use: `mkdir -p ~/code`
@@ -114,7 +114,7 @@ This skill makes NO network requests.
 
 **This skill does NOT:**
 - Execute code automatically
-- Access network or external services 
+- Access network or external services  
 - Access files outside `~/code/` and user's project
 - Take autonomous actions without user awareness
 - Delegate to sub-agents without user's explicit request

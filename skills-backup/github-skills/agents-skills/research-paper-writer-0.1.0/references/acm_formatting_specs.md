@@ -202,11 +202,11 @@ ACM, New York, NY, USA, XX pages. https://doi.org/10.1145/XXXXXX.XXXXXX
 ```
 1 INTRODUCTION
 2 RELATED WORK
- 2.1 Context Modeling
- 2.2 Adaptation Techniques
+  2.1 Context Modeling
+  2.2 Adaptation Techniques
 3 PROPOSED APPROACH
- 3.1 Architecture Overview
-  3.1.1 Context Acquisition Module
+  3.1 Architecture Overview
+    3.1.1 Context Acquisition Module
 ```
 
 ### Figures and Tables
@@ -223,7 +223,7 @@ ACM, New York, NY, USA, XX pages. https://doi.org/10.1145/XXXXXX.XXXXXX
 
 Example:
 ```
-          E = mc²          (1)
+                    E = mc²                    (1)
 ```
 
 ### Code Listings
@@ -236,9 +236,9 @@ Example:
 Example:
 ```python
 def context_aware_function(context):
-  if context.location == "office":
-    return set_work_mode()
-  return set_personal_mode()
+    if context.location == "office":
+        return set_work_mode()
+    return set_personal_mode()
 ```
 
 ### Algorithms
@@ -307,11 +307,11 @@ Example table:
 ```
 Table 1: Accuracy Results
 
-Dataset   Baseline  Proposed
+Dataset     Baseline    Proposed
 ────────────────────────────────
-Dataset A   87.3%   94.2%
-Dataset B   89.1%   95.7%
-Dataset C   85.7%   93.4%
+Dataset A      87.3%      94.2%
+Dataset B      89.1%      95.7%
+Dataset C      85.7%      93.4%
 ────────────────────────────────
 ```
 
@@ -332,16 +332,16 @@ Examples:
 **Journal article:**
 ```
 [1] Author1 Name, Author2 Name, and Author3 Name. Year.
-  Title of article. Journal Name Volume, Issue (Month Year),
-  pages. DOI:10.1145/XXXXXXX
+    Title of article. Journal Name Volume, Issue (Month Year),
+    pages. DOI:10.1145/XXXXXXX
 ```
 
 **Conference paper:**
 ```
 [2] Author1 Name and Author2 Name. Year. Title of paper.
-  In Proceedings of Conference Name (CONF 'YY), Month,
-  City, Country. ACM, New York, NY, USA, pages.
-  DOI:10.1145/XXXXXXX
+    In Proceedings of Conference Name (CONF 'YY), Month,
+    City, Country. ACM, New York, NY, USA, pages.
+    DOI:10.1145/XXXXXXX
 ```
 
 **Book:**
@@ -352,19 +352,19 @@ Examples:
 **Book chapter:**
 ```
 [4] Author Name. Year. Chapter Title. In Book Title,
-  Editor Name (Ed.). Publisher, City, Country, pages.
+    Editor Name (Ed.). Publisher, City, Country, pages.
 ```
 
 **Website/Online:**
 ```
 [5] Author Name. Year. Page Title. Website Name.
-  Retrieved Month Day, Year from URL
+    Retrieved Month Day, Year from URL
 ```
 
 **Technical report:**
 ```
 [6] Author Name. Year. Report Title. Technical Report Number.
-  Institution, City, Country.
+    Institution, City, Country.
 ```
 
 **Rules:**
@@ -384,7 +384,7 @@ Format depends on publication rights:
 ```
 Permission to make digital or hard copies of all or part of this work...
 © 2025 Association for Computing Machinery.
-ACM ISBN 978-1-4503-XXXX-X/YY/MM...15.00
+ACM ISBN 978-1-4503-XXXX-X/YY/MM...$15.00
 https://doi.org/10.1145/XXXXXX.XXXXXX
 ```
 
@@ -490,7 +490,7 @@ Author Two (email@domain.com), Institution
 ### LaTeX
 Use ACM Master Article Template:
 ```latex
-\documentclass[sigconf]{acmart
+\documentclass[sigconf]{acmart}
 ```
 
 Common document classes:
@@ -552,13 +552,13 @@ Common document classes:
 ## Template Variations
 
 ### Conference Proceedings
-- `\documentclass[sigconf]{acmart`
+- `\documentclass[sigconf]{acmart}`
 - Two-column format
 - Copyright block required
 - Page limit enforced
 
 ### Journal Articles
-- `\documentclass[acmsmall]{acmart` or `acmlarge`
+- `\documentclass[acmsmall]{acmart}` or `acmlarge`
 - More flexible length
 - Different heading styles
 - May include received/revised dates

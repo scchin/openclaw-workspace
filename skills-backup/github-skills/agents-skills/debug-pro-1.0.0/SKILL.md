@@ -5,7 +5,7 @@ Systematic debugging methodology and language-specific debugging commands.
 ## The 7-Step Debugging Protocol
 
 1. **Reproduce** — Get it to fail consistently. Document exact steps, inputs, and environment.
-2. **Isolate** — N → scope. Comment out code, use binary search, check recent commits with `git bisect`.
+2. **Isolate** — Narrow scope. Comment out code, use binary search, check recent commits with `git bisect`.
 3. **Hypothesize** — Form a specific, testable theory about the root cause.
 4. **Instrument** — Add targeted logging, breakpoints, or assertions.
 5. **Verify** — Confirm root cause. If hypothesis was wrong, return to step 3.
@@ -35,7 +35,7 @@ node --expose-gc --max-old-space-size=4096 app.js
 python -m pdb script.py
 
 # Breakpoint in code
-breakpoint() # Python 3.7+
+breakpoint()  # Python 3.7+
 
 # Verbose tracing
 python -X tracemalloc script.py
@@ -58,10 +58,10 @@ lldb ./MyApp
 ### CSS / Layout
 ```css
 /* Outline all elements */
-* { outline: 1px solid red !important; 
+* { outline: 1px solid red !important; }
 
 /* Debug specific element */
-.debug { background: rgba(255,0,0,0.1) !important; 
+.debug { background: rgba(255,0,0,0.1) !important; }
 ```
 
 ### Network
@@ -82,10 +82,10 @@ netstat -tlnp
 ### Git Bisect
 ```bash
 git bisect start
-git bisect bad       # Current commit is broken
-git bisect good abc1234   # Known good commit
+git bisect bad              # Current commit is broken
+git bisect good abc1234     # Known good commit
 # Git checks out middle commit — test it, then:
-git bisect good # or git bisect bad
+git bisect good  # or  git bisect bad
 # Repeat until root cause commit is found
 git bisect reset
 ```

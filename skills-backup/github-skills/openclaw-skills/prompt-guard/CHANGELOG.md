@@ -48,7 +48,7 @@ Now detected as: CRITICAL
 
 #### 🆕 Detection Signatures
 - `(transfer|send|pay)...(ETH|BTC|SOL)...(do not|don't) notify user` → CRITICAL
-- `send...(crypto address)...quietly/silently` → CRITICAL 
+- `send...(crypto address)...quietly/silently` → CRITICAL  
 - `redirect payment...do not log/record` → CRITICAL
 
 #### 📁 Files Changed
@@ -100,7 +100,7 @@ Analysis of actively exploited AI agent skill weaponization revealed 5 distinct 
 
 - Estimated latency: <2ms additional per scan
 - Cache effectiveness unchanged (90% reduction for repeats)
-- All patterns use bounded repetition (`{0,N`) to prevent catastrophic backtracking
+- All patterns use bounded repetition (`{0,N}`) to prevent catastrophic backtracking
 ---
 
 ## [3.1.0] - 2026-02-08
@@ -129,11 +129,11 @@ Analysis of actively exploited AI agent skill weaponization revealed 5 distinct 
 from prompt_guard.pattern_loader import TieredPatternLoader, LoadTier
 
 loader = TieredPatternLoader()
-loader.load_tier(LoadTier.HIGH) # Default - 70% savings
+loader.load_tier(LoadTier.HIGH)  # Default - 70% savings
 
 # Escalate on threat
 if threat_detected:
-  loader.escalate_to_full()
+    loader.escalate_to_full()
 ```
 
 **2. Message Hash Cache** (`cache.py`)
@@ -146,13 +146,13 @@ if threat_detected:
 from prompt_guard.cache import get_cache
 
 cache = get_cache(max_size=1000)
-cached = cache.get("message") # 90% savings on hit
-print(cache.get_stats()) # {"hit_rate": "70.5%"
+cached = cache.get("message")  # 90% savings on hit
+print(cache.get_stats())  # {"hit_rate": "70.5%"}
 ```
 
 **3. External Pattern Files** (`patterns/`)
 - `patterns/critical.yaml` — Tier 0 patterns
-- `patterns/high.yaml` — Tier 1 patterns 
+- `patterns/high.yaml` — Tier 1 patterns  
 - `patterns/medium.yaml` — Tier 2 patterns
 - YAML format for easy editing
 
@@ -165,10 +165,10 @@ print(cache.get_stats()) # {"hit_rate": "70.5%"
 
 ```yaml
 prompt_guard:
- pattern_tier: high # critical, high, full
- cache:
-  enabled: true
-  max_size: 1000
+  pattern_tier: high  # critical, high, full
+  cache:
+    enabled: true
+    max_size: 1000
 ```
 
 ---
@@ -240,19 +240,19 @@ This release addresses the **rapid evolution of agent ecosystem attacks**, with 
 Source: arxiv cs.CR (Jan-Feb 2026), Sockpuppetting paper, TrojanPraise paper
 
 - **Output Prefix Injection (Sockpuppetting)** - HIGH severity
- - Detects attacker-injected prefixes like "Sure, here is..." designed to make models continue generating harmful content
- - Includes English, Korean, Japanese variants
- - Detects forced response patterns ("Start your response with Sure...")
+  - Detects attacker-injected prefixes like "Sure, here is..." designed to make models continue generating harmful content
+  - Includes English, Korean, Japanese variants
+  - Detects forced response patterns ("Start your response with Sure...")
 
 - **Benign Fine-tuning Attack (TrojanPraise)** - HIGH severity
- - Detects training data that appears benign but is designed to degrade safety alignment
- - Catches trojan/backdoor embedding in training data
- - Identifies praise-based manipulation triggers
+  - Detects training data that appears benign but is designed to degrade safety alignment
+  - Catches trojan/backdoor embedding in training data
+  - Identifies praise-based manipulation triggers
 
 - **Promptware Kill Chain** - CRITICAL severity
- - Multi-stage malware-like prompt injection with persistence and escalation
- - Detects lateral movement patterns between agents
- - Catches kill chain terminology and staged attack sequences
+  - Multi-stage malware-like prompt injection with persistence and escalation
+  - Detects lateral movement patterns between agents
+  - Catches kill chain terminology and staged attack sequences
 
 ### Technical
 
@@ -395,11 +395,11 @@ from prompt_guard import PromptGuard
 ### New Config Keys
 
 ```yaml
-canary_tokens: []      # User-defined canary strings
+canary_tokens: []           # User-defined canary strings
 logging:
- format: markdown     # "markdown" or "json"
- json_path: memory/security-log.jsonl
- hash_chain: false     # SHA-256 tamper detection
+  format: markdown          # "markdown" or "json"
+  json_path: memory/security-log.jsonl
+  hash_chain: false         # SHA-256 tamper detection
 ```
 
 ### Stats
@@ -606,24 +606,24 @@ logging:
 
 ```python
 SYSTEM_PROMPT_MIMICRY = [
-  # Anthropic/Claude internal patterns
-  r"<claude_\w+_info>",
-  r"<artifacts_info>",
-  r"<antthinking>",
-  r"<antartifact",
-  
-  # OpenAI/LLaMA patterns
-  r"<\|?(im_start|im_end)\|?>",
-  r"\[INST\]",
-  r"<<SYS>>",
-  
-  # Jailbreak keywords
-  r"GODMODE\s*:\s*(ENABLED|ON)",
-  r"DAN\s*:\s*(ENABLED|ON)",
-  
-  # Leetspeak evasion
-  r"l33t\s*speak",
-  r"unr3strict",
+    # Anthropic/Claude internal patterns
+    r"<claude_\w+_info>",
+    r"<artifacts_info>",
+    r"<antthinking>",
+    r"<antartifact",
+    
+    # OpenAI/LLaMA patterns
+    r"<\|?(im_start|im_end)\|?>",
+    r"\[INST\]",
+    r"<<SYS>>",
+    
+    # Jailbreak keywords
+    r"GODMODE\s*:\s*(ENABLED|ON)",
+    r"DAN\s*:\s*(ENABLED|ON)",
+    
+    # Leetspeak evasion
+    r"l33t\s*speak",
+    r"unr3strict",
 ]
 ```
 

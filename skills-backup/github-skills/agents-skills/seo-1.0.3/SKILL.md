@@ -5,7 +5,7 @@ version: 1.0.3
 homepage: https://clawic.com/skills/seo
 changelog: "Improved name clarity with key capabilities"
 description: SEO specialist agent with site audits, content writing, keyword research, technical fixes, link building, and ranking strategies.
-metadata: {"clawdbot":{"emoji":"🔍","requires":{"bins":[],"os":["linux","darwin","win32"]
+metadata: {"clawdbot":{"emoji":"🔍","requires":{"bins":[]},"os":["linux","darwin","win32"]}}
 ---
 
 ## Setup
@@ -22,9 +22,9 @@ SEO workspace at `~/seo/`. See `memory-template.md` for setup.
 
 ```
 ~/seo/
-├── memory.md    # Site profiles, audit history, keyword tracking
-├── audits/     # Site audit reports
-└── content/     # SEO content drafts
+├── memory.md        # Site profiles, audit history, keyword tracking
+├── audits/          # Site audit reports
+└── content/         # SEO content drafts
 ```
 
 ## Quick Reference

@@ -25,11 +25,11 @@
 1. Parse correction type (preference, pattern, override)
 2. Check if duplicate (exists in any tier)
 3. If new:
-  - Add to corrections.md with timestamp
-  - Increment correction counter
+   - Add to corrections.md with timestamp
+   - Increment correction counter
 4. If duplicate:
-  - Bump counter, update timestamp
-  - If counter >= 3: ask to confirm as rule
+   - Bump counter, update timestamp
+   - If counter >= 3: ask to confirm as rule
 5. Determine namespace (global, domain, project)
 6. Write to appropriate file
 7. Update index.md line counts
@@ -78,18 +78,18 @@ When applying learned pattern:
 
 ## 2026-02-15
 - [14:32] Changed verbose explanation → bullet summary
- Type: communication
- Context: Telegram response
- Confirmed: pending (1/3)
+  Type: communication
+  Context: Telegram response
+  Confirmed: pending (1/3)
 
 ## 2026-02-14
 - [09:15] Use SQLite not Postgres for MVP
- Type: technical
- Context: database discussion
- Confirmed: yes (said "always")
+  Type: technical
+  Context: database discussion
+  Confirmed: yes (said "always")
 ```
 
-### projects/{name.md
+### projects/{name}.md
 ```markdown
 # Project: my-app
 

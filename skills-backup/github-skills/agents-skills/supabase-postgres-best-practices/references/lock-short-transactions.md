@@ -13,13 +13,13 @@ Long-running transactions hold locks that block other queries. Keep transactions
 
 ```sql
 begin;
-select * from orders where id = 1 for update; -- Lock acquired
+select * from orders where id = 1 for update;  -- Lock acquired
 
 -- Application makes HTTP call to payment API (2-5 seconds)
 -- Other queries on this row are blocked!
 
 update orders set status = 'paid' where id = 1;
-commit; -- Lock held for entire duration
+commit;  -- Lock held for entire duration
 ```
 
 **Correct (minimal transaction scope):**
@@ -31,10 +31,10 @@ commit; -- Lock held for entire duration
 -- Only hold lock for the actual update
 begin;
 update orders
-set status = 'paid', payment_id = 1
-where id = 2 and status = 'pending'
+set status = 'paid', payment_id = $1
+where id = $2 and status = 'pending'
 returning *;
-commit; -- Lock held for milliseconds
+commit;  -- Lock held for milliseconds
 ```
 
 Use `statement_timeout` to prevent runaway transactions:

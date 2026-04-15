@@ -5,7 +5,7 @@ version: 1.0.2
 homepage: https://clawic.com/skills/memory
 description: Infinite organized memory that complements your agent's built-in memory with unlimited categorized storage.
 changelog: Redesigned as complementary system, user-defined categories, optional sync from built-in memory.
-metadata: {"clawdbot":{"emoji":"🧠","requires":{"bins":[],"os":["linux","darwin","win32"]
+metadata: {"clawdbot":{"emoji":"🧠","requires":{"bins":[]},"os":["linux","darwin","win32"]}}
 ---
 
 # Memory 🧠
@@ -17,15 +17,15 @@ Your agent has basic built-in memory. This skill adds infinite, perfectly organi
 ## How It Works
 
 ```
-Built-in Agent Memory     This Skill (~/memory/)
-┌─────────────────────┐    ┌─────────────────────────────┐
-│ MEMORY.md      │    │ Infinite categorized storage │
-│ memory/ (daily logs)│  +  │ Any structure you want    │
-│ Basic recall    │    │ Perfect organization     │
-└─────────────────────┘    └─────────────────────────────┘
-     ↓                 ↓
-  Agent basics          Everything else
-  (works automatically)      (scales infinitely)
+Built-in Agent Memory          This Skill (~/memory/)
+┌─────────────────────┐        ┌─────────────────────────────┐
+│ MEMORY.md           │        │ Infinite categorized storage │
+│ memory/ (daily logs)│   +    │ Any structure you want       │
+│ Basic recall        │        │ Perfect organization         │
+└─────────────────────┘        └─────────────────────────────┘
+         ↓                                  ↓
+   Agent basics                    Everything else
+   (works automatically)           (scales infinitely)
 ```
 
 **Not a replacement.** Your agent's built-in memory keeps working. This adds a parallel system for unlimited, organized storage.
@@ -47,15 +47,15 @@ Memory lives in `~/memory/` — a dedicated folder separate from built-in agent 
 
 ```
 ~/memory/
-├── config.md       # System configuration
-├── INDEX.md        # What's stored, where to find it
+├── config.md              # System configuration
+├── INDEX.md               # What's stored, where to find it
 │
-├── [user-defined]/    # Categories the user needs
-│  ├── INDEX.md      # Category overview
-│  └── {items.md     # Individual entries
+├── [user-defined]/        # Categories the user needs
+│   ├── INDEX.md           # Category overview
+│   └── {items}.md         # Individual entries
 │
-└── sync/         # Optional: synced from built-in memory
-  └── ...
+└── sync/                  # Optional: synced from built-in memory
+    └── ...
 ```
 
 **The user defines the categories.** Common examples:
@@ -140,9 +140,9 @@ To find information:
 grep -r "keyword" ~/memory/
 
 # Navigate
-cat ~/memory/INDEX.md      # What categories exist?
-cat ~/memory/projects/INDEX.md # What projects?
-cat ~/memory/projects/alpha.md # Specific project
+cat ~/memory/INDEX.md           # What categories exist?
+cat ~/memory/projects/INDEX.md  # What projects?
+cat ~/memory/projects/alpha.md  # Specific project
 ```
 
 ### 6. Sync from Built-In (Optional)
@@ -151,8 +151,8 @@ If user wants certain info copied from built-in memory:
 
 ```
 ~/memory/sync/
-├── preferences.md  # Synced from built-in
-└── decisions.md   # Synced from built-in
+├── preferences.md    # Synced from built-in
+└── decisions.md      # Synced from built-in
 ```
 
 **Sync is one-way:** Built-in → this system. Never modify built-in.
@@ -166,13 +166,13 @@ When a category grows large:
 
 ```
 ~/memory/projects/
-├── INDEX.md      # "See active/, archived/"
+├── INDEX.md           # "See active/, archived/"
 ├── active/
-│  ├── INDEX.md    # 30 active projects
-│  └── ...
+│   ├── INDEX.md       # 30 active projects
+│   └── ...
 └── archived/
-  ├── INDEX.md    # 200 archived projects
-  └── ...
+    ├── INDEX.md       # 200 archived projects
+    └── ...
 ```
 
 ---
@@ -204,8 +204,8 @@ grep -r "keyword" ~/memory/
 Navigate via indices:
 ```
 1. ~/memory/INDEX.md → find category
-2. ~/memory/{category/INDEX.md → find item
-3. ~/memory/{category/{item.md → read details
+2. ~/memory/{category}/INDEX.md → find item
+3. ~/memory/{category}/{item}.md → read details
 ```
 
 ### For Huge Memory (500+ files)

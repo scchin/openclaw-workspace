@@ -50,7 +50,7 @@ User may request a state file:
 ## In Progress
 [R2] Dark mode - Step 2/4 (awaiting user approval)
 
-## Queued 
+## Queued  
 [R3] Header fix
 
 ## Done

@@ -18,15 +18,15 @@ Not every task should be automated. Start by finding the highest-value opportuni
 
 1. Track every task you do for a week (use a notebook or simple spreadsheet)
 2. For each task, note:
-  - How long it takes
-  - How often you do it (daily, weekly, monthly)
-  - Whether it's repetitive or requires judgment
+   - How long it takes
+   - How often you do it (daily, weekly, monthly)
+   - Whether it's repetitive or requires judgment
 
 3. Calculate time cost per task:
-  ```
-  Time Cost = (Minutes per task × Frequency per month) / 60
-  ```
-  Example: 15 min task done 20x/month = 5 hours/month
+   ```
+   Time Cost = (Minutes per task × Frequency per month) / 60
+   ```
+   Example: 15 min task done 20x/month = 5 hours/month
 
 4. Sort by time cost (highest to lowest)
 
@@ -61,12 +61,12 @@ Three main options for no-code automation. Pick based on complexity and budget.
 
 | Tool | Best For | Pricing | Learning Curve | Power Level |
 |---|---|---|---|---|
-| **Zapier** | Simple, 2-3 step workflows | 20-50/month | Easy | Low-Medium |
-| **Make (Integromat)** | Visual, multi-step workflows | 9-30/month | Medium | Medium-High |
-| **n8n** | Complex, developer-friendly, self-hosted | Free (self-hosted) or 20/month | Medium-Hard | High |
+| **Zapier** | Simple, 2-3 step workflows | $20-50/month | Easy | Low-Medium |
+| **Make (Integromat)** | Visual, multi-step workflows | $9-30/month | Medium | Medium-High |
+| **n8n** | Complex, developer-friendly, self-hosted | Free (self-hosted) or $20/month | Medium-Hard | High |
 
 **Selection guide:**
-- Budget < 20/month → Try Zapier free tier or n8n self-hosted
+- Budget < $20/month → Try Zapier free tier or n8n self-hosted
 - Need visual workflow builder → Make
 - Simple 2-step workflows → Zapier
 - Complex workflows with branching logic → Make or n8n
@@ -84,18 +84,18 @@ Before building, map out the workflow on paper or a whiteboard.
 
 ```
 TRIGGER: What event starts the workflow?
- Example: "New row added to Google Sheet"
+  Example: "New row added to Google Sheet"
 
 CONDITIONS (optional): Should this workflow run every time, or only when certain conditions are met?
- Example: "Only if Status column = 'Approved'"
+  Example: "Only if Status column = 'Approved'"
 
 ACTIONS: What should happen as a result?
- Step 1: [action]
- Step 2: [action]
- Step 3: [action]
+  Step 1: [action]
+  Step 2: [action]
+  Step 3: [action]
 
 ERROR HANDLING: What happens if something fails?
- Example: "Send me a Slack message if action fails"
+  Example: "Send me a Slack message if action fails"
 ```
 
 **Example workflow (lead capture → CRM → email):**
@@ -105,10 +105,10 @@ TRIGGER: New form submission on website
 CONDITIONS: Email field is not empty
 
 ACTIONS:
- Step 1: Add lead to CRM (e.g., Airtable or HubSpot)
- Step 2: Send welcome email via email tool (e.g., ConvertKit)
- Step 3: Create task in project management tool (e.g., Notion) to follow up in 3 days
- Step 4: Send me a Slack notification: "New lead: [Name]"
+  Step 1: Add lead to CRM (e.g., Airtable or HubSpot)
+  Step 2: Send welcome email via email tool (e.g., ConvertKit)
+  Step 3: Create task in project management tool (e.g., Notion) to follow up in 3 days
+  Step 4: Send me a Slack notification: "New lead: [Name]"
 
 ERROR HANDLING: If Step 1 fails, send email alert to me
 ```
@@ -146,7 +146,7 @@ Now implement it in your chosen tool.
 
 | Issue | Cause | Fix |
 |---|---|---|
-| Workflow doesn't trigger | Trigger conditions too n → | Check filter settings, broaden criteria |
+| Workflow doesn't trigger | Trigger conditions too narrow | Check filter settings, broaden criteria |
 | Action fails | API rate limit or permissions | Add delay between actions, re-authenticate |
 | Data missing or incorrect | Field mapping wrong | Double-check which fields are mapped |
 | Workflow runs multiple times | Duplicate triggers | De-duplicate based on unique ID |
@@ -189,45 +189,45 @@ Once you've automated the basics, consider these higher-leverage workflows:
 ```
 TRIGGER: New client signs contract (via DocuSign, HelloSign)
 ACTIONS:
- 1. Create project in project management tool
- 2. Add client to CRM with "Active" status
- 3. Send onboarding email sequence
- 4. Create invoice in accounting software
- 5. Schedule kickoff call on calendar
- 6. Add client to Slack workspace (if applicable)
+  1. Create project in project management tool
+  2. Add client to CRM with "Active" status
+  3. Send onboarding email sequence
+  4. Create invoice in accounting software
+  5. Schedule kickoff call on calendar
+  6. Add client to Slack workspace (if applicable)
 ```
 
 ### Content distribution automation
 ```
 TRIGGER: New blog post published on website (via RSS or webhook)
 ACTIONS:
- 1. Post link to LinkedIn with auto-generated caption
- 2. Post link to Twitter as a thread
- 3. Add post to email newsletter draft (in email tool)
- 4. Add to content calendar (Notion or Airtable)
- 5. Send notification to team (Slack) that post is live
+  1. Post link to LinkedIn with auto-generated caption
+  2. Post link to Twitter as a thread
+  3. Add post to email newsletter draft (in email tool)
+  4. Add to content calendar (Notion or Airtable)
+  5. Send notification to team (Slack) that post is live
 ```
 
 ### Customer health monitoring
 ```
 TRIGGER: Every Monday at 9am (scheduled trigger)
 ACTIONS:
- 1. Pull usage data for all customers from database (via API)
- 2. Flag customers with <50% of average usage
- 3. Add flagged customers to "At Risk" segment in CRM
- 4. Send re-engagement email campaign to at-risk customers
- 5. Create task for me to personally reach out to top 10 at-risk customers
+  1. Pull usage data for all customers from database (via API)
+  2. Flag customers with <50% of average usage
+  3. Add flagged customers to "At Risk" segment in CRM
+  4. Send re-engagement email campaign to at-risk customers
+  5. Create task for me to personally reach out to top 10 at-risk customers
 ```
 
 ### Invoice and payment tracking
 ```
 TRIGGER: Payment received (Stripe webhook)
 ACTIONS:
- 1. Mark invoice as paid in accounting software
- 2. Send receipt email to customer
- 3. Update CRM: customer status = "Paid"
- 4. Add revenue to monthly dashboard (Google Sheets or Airtable)
- 5. Send me a Slack notification: "Payment received: X from [Customer]"
+  1. Mark invoice as paid in accounting software
+  2. Send receipt email to customer
+  3. Update CRM: customer status = "Paid"
+  4. Add revenue to monthly dashboard (Google Sheets or Airtable)
+  5. Send me a Slack notification: "Payment received: $X from [Customer]"
 ```
 
 ---
@@ -239,7 +239,7 @@ Not every automation is worth the time investment. Calculate ROI to prioritize.
 **ROI formula:**
 ```
 Time Saved per Month (hours) = (Minutes per task / 60) × Frequency per month
-Cost = (Setup time in hours × 50/hour) + Tool cost per month
+Cost = (Setup time in hours × $50/hour) + Tool cost per month
 Payback Period (months) = Setup cost / Monthly time saved value
 
 If payback period < 3 months → Worth it
@@ -250,8 +250,8 @@ If payback period > 6 months → Probably not worth it (unless it unlocks other 
 ```
 Task: Manually copying form submissions to CRM (15 min, 20x/month = 5 hours/month saved)
 Setup time: 1 hour
-Tool cost: 20/month (Zapier)
-Payback: (50 setup cost) / (250/month value saved) = 0.2 months → Absolutely worth it
+Tool cost: $20/month (Zapier)
+Payback: ($50 setup cost) / ($250/month value saved) = 0.2 months → Absolutely worth it
 ```
 
 **Rule:** Focus on automations with payback < 3 months. Those are your highest-leverage investments.

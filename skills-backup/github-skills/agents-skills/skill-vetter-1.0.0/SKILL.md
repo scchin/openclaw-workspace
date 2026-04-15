@@ -93,7 +93,7 @@ RED FLAGS: [None / List them]
 
 PERMISSIONS NEEDED:
 • Files: [list or "None"]
-• Network: [list or "None"] 
+• Network: [list or "None"]  
 • Commands: [list or "None"]
 ───────────────────────────────────────
 RISK LEVEL: [🟢 LOW / 🟡 MEDIUM / 🔴 HIGH / ⛔ EXTREME]
@@ -109,7 +109,7 @@ NOTES: [Any observations]
 For GitHub-hosted skills:
 ```bash
 # Check repo stats
-curl -s "https://api.github.com/repos/OWNER/REPO" | jq '{stars: .stargazers_count, forks: .forks_count, updated: .updated_at'
+curl -s "https://api.github.com/repos/OWNER/REPO" | jq '{stars: .stargazers_count, forks: .forks_count, updated: .updated_at}'
 
 # List skill files
 curl -s "https://api.github.com/repos/OWNER/REPO/contents/skills/SKILL_NAME" | jq '.[].name'

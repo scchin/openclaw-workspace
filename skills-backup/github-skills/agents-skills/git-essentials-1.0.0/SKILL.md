@@ -2,7 +2,7 @@
 name: git-essentials
 description: Essential Git commands and workflows for version control, branching, and collaboration.
 homepage: https://git-scm.com/
-metadata: {"clawdbot":{"emoji":"🌳","requires":{"bins":["git"]
+metadata: {"clawdbot":{"emoji":"🌳","requires":{"bins":["git"]}}}
 ---
 
 # Git Essentials
@@ -34,7 +34,7 @@ git status
 # Add files to staging
 git add file.txt
 git add .
-git add -A # All changes including deletions
+git add -A  # All changes including deletions
 
 # Commit changes
 git commit -m "Commit message"
@@ -44,7 +44,7 @@ git commit -am "Message"
 
 # Amend last commit
 git commit --amend -m "New message"
-git commit --amend --no-edit # Keep message
+git commit --amend --no-edit  # Keep message
 ```
 
 ### Viewing changes
@@ -68,14 +68,14 @@ git diff commit1 commit2
 ```bash
 # List branches
 git branch
-git branch -a # Include remote branches
+git branch -a  # Include remote branches
 
 # Create branch
 git branch feature-name
 
 # Switch branch
 git checkout feature-name
-git switch feature-name # Modern alternative
+git switch feature-name  # Modern alternative
 
 # Create and switch
 git checkout -b feature-name
@@ -83,7 +83,7 @@ git switch -c feature-name
 
 # Delete branch
 git branch -d branch-name
-git branch -D branch-name # Force delete
+git branch -D branch-name  # Force delete
 
 # Rename branch
 git branch -m old-name new-name
@@ -192,7 +192,7 @@ git bisect good commit-hash
 ```bash
 # Discard changes in file
 git restore file.txt
-git checkout -- file.txt # Old way
+git checkout -- file.txt  # Old way
 
 # Discard all changes
 git restore .
@@ -202,7 +202,7 @@ git restore .
 ```bash
 # Unstage file
 git restore --staged file.txt
-git reset HEAD file.txt # Old way
+git reset HEAD file.txt  # Old way
 
 # Unstage all
 git reset
@@ -242,10 +242,10 @@ git stash apply
 git stash pop
 
 # Apply specific stash
-git stash apply stash@{2
+git stash apply stash@{2}
 
 # Delete stash
-git stash drop stash@{0
+git stash drop stash@{0}
 
 # Clear all stashes
 git stash clear
@@ -378,14 +378,14 @@ git push origin main
 Add to `~/.gitconfig`:
 ```ini
 [alias]
-  st = status
-  co = checkout
-  br = branch
-  ci = commit
-  unstage = reset HEAD --
-  last = log -1 HEAD
-  visual = log --graph --oneline --all
-  amend = commit --amend --no-edit
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = log --graph --oneline --all
+    amend = commit --amend --no-edit
 ```
 
 ## Tips
@@ -421,7 +421,7 @@ git commit --amend -m "Correct message"
 ```bash
 # Edit files to resolve conflicts
 git add resolved-files
-git commit # Or git merge --continue
+git commit  # Or git merge --continue
 ```
 
 ## Documentation

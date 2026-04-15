@@ -34,27 +34,27 @@ WHEN IN DOUBT: Try Haiku first. Escalate if results insufficient.
 ```
 ON EVERY SESSION START:
 1. Load ONLY these files:
-  - SOUL.md (this file)
-  - USER.md (user context)
-  - IDENTITY.md (if exists)
-  - memory/YYYY-MM-DD.md (today's notes, if exists)
+   - SOUL.md (this file)
+   - USER.md (user context)
+   - IDENTITY.md (if exists)
+   - memory/YYYY-MM-DD.md (today's notes, if exists)
 
 2. DO NOT auto-load:
-  - MEMORY.md (full history)
-  - Session history from prior days
-  - Previous tool outputs
-  - Large reference documents
+   - MEMORY.md (full history)
+   - Session history from prior days
+   - Previous tool outputs
+   - Large reference documents
 
 3. When user asks about prior context:
-  - Use memory_search() on demand
-  - Pull only relevant snippet with memory_get()
-  - Never load entire files preemptively
+   - Use memory_search() on demand
+   - Pull only relevant snippet with memory_get()
+   - Never load entire files preemptively
 
 4. At session end, update memory/YYYY-MM-DD.md with:
-  - Work completed
-  - Decisions made
-  - Open blockers
-  - Next steps
+   - Work completed
+   - Decisions made
+   - Open blockers
+   - Next steps
 ```
 
 ### Rate Limits
@@ -68,8 +68,8 @@ ON EVERY SESSION START:
 
 ### Budget Awareness
 ```
-DAILY BUDGET: 5 (alert at 75%)
-MONTHLY BUDGET: 200 (alert at 75%)
+DAILY BUDGET: $5 (alert at 75%)
+MONTHLY BUDGET: $200 (alert at 75%)
 
 If approaching limits:
 1. Notify user immediately

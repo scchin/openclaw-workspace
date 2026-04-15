@@ -13,12 +13,12 @@ JSONB queries without indexes scan the entire table. Use GIN indexes for contain
 
 ```sql
 create table products (
- id bigint primary key,
- attributes jsonb
+  id bigint primary key,
+  attributes jsonb
 );
 
 -- Full table scan for every query
-select * from products where attributes @> '{"color": "red"';
+select * from products where attributes @> '{"color": "red"}';
 select * from products where attributes->>'brand' = 'Nike';
 ```
 
@@ -29,7 +29,7 @@ select * from products where attributes->>'brand' = 'Nike';
 create index products_attrs_gin on products using gin (attributes);
 
 -- Now containment queries use the index
-select * from products where attributes @> '{"color": "red"';
+select * from products where attributes @> '{"color": "red"}';
 
 -- For specific key lookups, use expression index
 create index products_brand_idx on products ((attributes->>'brand'));

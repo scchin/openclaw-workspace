@@ -1,11 +1,11 @@
 ---
 name: feishu-screenshot
 description: >
- Capture macOS screenshots and send to Feishu. Use when the user asks to
- take a screenshot and share it via Feishu. Triggers: "截个屏发飞书",
- "截屏", "screenshot", "take a screenshot and send".
- NOT for: sending existing files (use feishu-send-file skill),
- or sending text messages (use message tool).
+  Capture macOS screenshots and send to Feishu. Use when the user asks to
+  take a screenshot and share it via Feishu. Triggers: "截个屏发飞书",
+  "截屏", "screenshot", "take a screenshot and send".
+  NOT for: sending existing files (use feishu-send-file skill),
+  or sending text messages (use message tool).
 ---
 
 # Feishu Screenshot
@@ -16,7 +16,7 @@ Capture macOS screenshots and send to Feishu conversations.
 
 ```bash
 # 1. Capture screenshot to temp directory
-screencapture -x "TMPDIR/screenshot.png"
+screencapture -x "$TMPDIR/screenshot.png"
 
 # 2. Send to Feishu
 # Use message tool with media parameter
@@ -41,7 +41,7 @@ OpenClaw handles:
 
 ## Important Notes
 
-**Use `TMPDIR` not `/tmp`**
+**Use `$TMPDIR` not `/tmp`**
 - macOS temp directory: `/var/folders/.../T`
 - OpenClaw file access restricts to `os.tmpdir()` and workspace
 - `/tmp` may not be accessible
@@ -57,16 +57,16 @@ Taking a screenshot and sending to Feishu:
 
 ```bash
 # Capture
-SCREENSHOT_PATH="TMPDIR/screenshot_(date +%s).png"
-screencapture -x "SCREENSHOT_PATH"
+SCREENSHOT_PATH="$TMPDIR/screenshot_$(date +%s).png"
+screencapture -x "$SCREENSHOT_PATH"
 ```
 
 Then use message tool:
 ```
 message(
- action=send,
- media="SCREENSHOT_PATH",
- channel="feishu"
+  action=send,
+  media="$SCREENSHOT_PATH",
+  channel="feishu"
 )
 ```
 

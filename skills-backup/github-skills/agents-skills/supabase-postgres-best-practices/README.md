@@ -19,27 +19,27 @@ npm run build
 ## Creating a New Reference
 
 1. **Choose a section prefix** based on the category:
-  - `query-` Query Performance (CRITICAL)
-  - `conn-` Connection Management (CRITICAL)
-  - `security-` Security & RLS (CRITICAL)
-  - `schema-` Schema Design (HIGH)
-  - `lock-` Concurrency & Locking (MEDIUM-HIGH)
-  - `data-` Data Access Patterns (MEDIUM)
-  - `monitor-` Monitoring & Diagnostics (LOW-MEDIUM)
-  - `advanced-` Advanced Features (LOW)
+   - `query-` Query Performance (CRITICAL)
+   - `conn-` Connection Management (CRITICAL)
+   - `security-` Security & RLS (CRITICAL)
+   - `schema-` Schema Design (HIGH)
+   - `lock-` Concurrency & Locking (MEDIUM-HIGH)
+   - `data-` Data Access Patterns (MEDIUM)
+   - `monitor-` Monitoring & Diagnostics (LOW-MEDIUM)
+   - `advanced-` Advanced Features (LOW)
 
 2. **Copy the template**:
-  ```bash
-  cp references/_template.md references/query-your-reference-name.md
-  ```
+   ```bash
+   cp references/_template.md references/query-your-reference-name.md
+   ```
 
 3. **Fill in the content** following the template structure
 
 4. **Validate and build**:
-  ```bash
-  npm run validate
-  npm run build
-  ```
+   ```bash
+   npm run validate
+   npm run build
+   ```
 
 5. **Review** the generated `AGENTS.md`
 
@@ -47,18 +47,18 @@ npm run build
 
 ```
 skills/supabase-postgres-best-practices/
-├── SKILL.md      # Agent-facing skill manifest (Agent Skills spec)
-├── AGENTS.md     # [GENERATED] Compiled references document
-├── README.md     # This file
+├── SKILL.md           # Agent-facing skill manifest (Agent Skills spec)
+├── AGENTS.md          # [GENERATED] Compiled references document
+├── README.md          # This file
 └── references/
-  ├── _template.md   # Reference template
-  ├── _sections.md   # Section definitions
-  ├── _contributing.md # Writing guidelines
-  └── *.md       # Individual references
+    ├── _template.md      # Reference template
+    ├── _sections.md      # Section definitions
+    ├── _contributing.md  # Writing guidelines
+    └── *.md              # Individual references
 
 packages/skills-build/
-├── src/        # Generic build system source
-└── package.json    # NPM scripts
+├── src/               # Generic build system source
+└── package.json       # NPM scripts
 ```
 
 ## Reference File Structure

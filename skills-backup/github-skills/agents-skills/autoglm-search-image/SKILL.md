@@ -1,11 +1,11 @@
 ---
 name: autoglm-search-image
 description: >
- 使用 AutoGLM 搜图接口，根据用户输入的关键词搜索相关图片。当用户需要搜索图片、查找图片素材等场景时使用此 skill。
- Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
+  使用 AutoGLM 搜图接口，根据用户输入的关键词搜索相关图片。当用户需要搜索图片、查找图片素材等场景时使用此 skill。
+  Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
 compatibility:
- requires:
-  - Python 3.x（标准库，无需额外安装）
+  requires:
+    - Python 3.x（标准库，无需额外安装）
 ---
 
 # AutoGLM Search Image Skill
@@ -20,7 +20,7 @@ compatibility:
 |------|------|
 | 地址 | `https://autoglm-api.zhipuai.cn/agentdr/v1/assistant/skills/search-image` |
 | 方式 | POST |
-| 请求体 | `{"query": "<搜索关键词>"` |
+| 请求体 | `{"query": "<搜索关键词>"}` |
 
 脚本启动时会先向本地服务发起 HTTP GET 请求获取 token：
 
@@ -56,22 +56,22 @@ python search-image.py "猫咪"
 ### 响应结构
 ```json
 {
- "code": 0,
- "msg": "SUCCESS",
- "data": {
-  "results": [
-   {
-    "original_url": "图片链接",
-    "caption": "图片描述",
-    "source": "来源",
-    "original_width": 1267,
-    "original_height": 845
-   
-  ],
-  "query": "搜索词",
-  "count": 4
- 
-
+  "code": 0,
+  "msg": "SUCCESS",
+  "data": {
+    "results": [
+      {
+        "original_url": "图片链接",
+        "caption": "图片描述",
+        "source": "来源",
+        "original_width": 1267,
+        "original_height": 845
+      }
+    ],
+    "query": "搜索词",
+    "count": 4
+  }
+}
 ```
 
 ### 输出要求

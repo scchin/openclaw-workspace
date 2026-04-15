@@ -20,30 +20,30 @@ All planning and coding happens inside Opencode.
 
 - Start Opencode.
 - Open session selector using:
- /sessions
+  /sessions
 - If the current project already exists:
- - Select the existing session.
+  - Select the existing session.
 - Never create a new session without user approval.
 
 ## Agent (mode) control
 
 - Open agent selector using:
- /agents
+  /agents
 - Available agents:
- - Plan
- - Build
+  - Plan
+  - Build
 - Always select Plan first.
 - Switch agents whenever required using `/agents`.
 
 ## Model selection
 
 - Open model selector using:
- /models
+  /models
 - Select the user-requested provider.
 - If authentication is required:
- - Copy the login link provided by Opencode.
- - Send it to the user.
- - Wait for confirmation before continuing.
+  - Copy the login link provided by Opencode.
+  - Send it to the user.
+  - Wait for confirmation before continuing.
 
 ## Plan agent behavior
 
@@ -52,7 +52,7 @@ All planning and coding happens inside Opencode.
 - Allow Opencode to ask clarification questions.
 - Review the plan carefully.
 - If the plan is incorrect or incomplete:
- - Ask Opencode to revise it.
+  - Ask Opencode to revise it.
 - Do not allow code generation in Plan.
 
 ## Build agent behavior
@@ -60,9 +60,9 @@ All planning and coding happens inside Opencode.
 - Switch to Build using `/agents`.
 - Ask Opencode to implement the approved plan.
 - If Opencode asks any question:
- - Immediately switch back to Plan.
- - Answer and confirm the plan.
- - Switch back to Build.
+  - Immediately switch back to Plan.
+  - Answer and confirm the plan.
+  - Switch back to Build.
 
 ## Completion
 

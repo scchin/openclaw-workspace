@@ -2,13 +2,13 @@
 name: obsidian-ontology-sync
 description: Bidirectional sync between Obsidian PKM (human-friendly notes) and structured ontology (machine-queryable graph). Automatically extracts entities and relationships from markdown, maintains ontology graph, and provides feedback to improve note structure. Run sync every few hours via cron.
 metadata:
- {
-  "tags": ["obsidian", "ontology", "knowledge-graph", "pkm", "automation"],
-  "openclaw":
-   {
-    "requires": { "skills": ["obsidian", "ontology"] 
-   
- 
+  {
+    "tags": ["obsidian", "ontology", "knowledge-graph", "pkm", "automation"],
+    "openclaw":
+      {
+        "requires": { "skills": ["obsidian", "ontology"] }
+      }
+  }
 ---
 
 # Obsidian-Ontology Sync
@@ -19,11 +19,11 @@ metadata:
 
 ```
 Obsidian Notes (Markdown)
-  ↓ Extract (every 3 hours)
+    ↓ Extract (every 3 hours)
 Ontology Graph (Structured)
-  ↓ Query & Analyze
+    ↓ Query & Analyze
 Insights & Suggestions
-  ↓ Feedback
+    ↓ Feedback
 Improved Note Templates
 ```
 
@@ -64,21 +64,21 @@ Great developer, responsive communication.
 **Becomes:**
 ```json
 {
- "entity": {
-  "id": "person_alice_johnson",
-  "type": "Person",
-  "properties": {
-   "name": "Alice Johnson",
-   "email": "alice@company.com",
-   "notes": "Great developer, responsive communication"
-  
- ,
- "relations": [
-  {"from": "person_alice_johnson", "rel": "works_at", "to": "org_acme",
-  {"from": "person_alice_johnson", "rel": "met_at", "to": "event_tech_conference_2026",
-  {"from": "person_alice_johnson", "rel": "assigned_to", "to": "project_alpha"
- ]
-
+  "entity": {
+    "id": "person_alice_johnson",
+    "type": "Person",
+    "properties": {
+      "name": "Alice Johnson",
+      "email": "alice@company.com",
+      "notes": "Great developer, responsive communication"
+    }
+  },
+  "relations": [
+    {"from": "person_alice_johnson", "rel": "works_at", "to": "org_acme"},
+    {"from": "person_alice_johnson", "rel": "met_at", "to": "event_tech_conference_2026"},
+    {"from": "person_alice_johnson", "rel": "assigned_to", "to": "project_alpha"}
+  ]
+}
 ```
 
 ### From Client Notes (`references/clients/*.md`)
@@ -135,23 +135,23 @@ python3 skills/obsidian-ontology-sync/scripts/sync.py extract
 ```python
 # Contact files
 if file.startswith("references/contacts/"):
-  entity_type = "Person"
-  extract_email_from_content()
-  extract_company_from_property("Company:")
-  extract_projects_from_links([[Project]])
-  
+    entity_type = "Person"
+    extract_email_from_content()
+    extract_company_from_property("Company:")
+    extract_projects_from_links([[Project]])
+    
 # Client files
 if file.startswith("references/clients/"):
-  entity_type = "Organization"
-  extract_contract_value()
-  extract_projects()
-  
+    entity_type = "Organization"
+    extract_contract_value()
+    extract_projects()
+    
 # Team files
 if file.startswith("references/team/"):
-  entity_type = "Person"
-  role = "team_member"
-  extract_assignments()
-  extract_response_patterns()
+    entity_type = "Person"
+    role = "team_member"
+    extract_assignments()
+    extract_response_patterns()
 ```
 
 ### 2. Analysis Phase (Ontology → Insights)
@@ -211,75 +211,75 @@ python3 skills/obsidian-ontology-sync/scripts/sync.py feedback
 # /root/life/pkm/ontology-sync/config.yaml
 
 obsidian:
- vault_path: /root/life/pkm
- 
- # What to sync
- sources:
-  contacts:
-   path: references/contacts
-   entity_type: Person
-   extract:
-    - email_from_content
-    - company_from_property
-    - projects_from_links
+  vault_path: /root/life/pkm
   
-  clients:
-   path: references/clients
-   entity_type: Organization
-   extract:
-    - contract_value
-    - projects
-    - contacts
-  
-  team:
-   path: references/team
-   entity_type: Person
-   role: team_member
-   extract:
-    - assignments
-    - response_patterns
-    - reports_to
-  
-  daily_status:
-   path: daily-status
-   extract:
-    - response_times
-    - behavioral_patterns
-    - blockers
+  # What to sync
+  sources:
+    contacts:
+      path: references/contacts
+      entity_type: Person
+      extract:
+        - email_from_content
+        - company_from_property
+        - projects_from_links
+    
+    clients:
+      path: references/clients
+      entity_type: Organization
+      extract:
+        - contract_value
+        - projects
+        - contacts
+    
+    team:
+      path: references/team
+      entity_type: Person
+      role: team_member
+      extract:
+        - assignments
+        - response_patterns
+        - reports_to
+    
+    daily_status:
+      path: daily-status
+      extract:
+        - response_times
+        - behavioral_patterns
+        - blockers
 
 ontology:
- storage_path: /root/life/pkm/memory/ontology
- format: jsonl # or sqlite for scale
- 
- # Entity types to track
- entities:
-  - Person
-  - Organization
-  - Project
-  - Event
-  - Task
- 
- # Relationships to extract
- relationships:
-  - works_at
-  - assigned_to
-  - met_at
-  - for_client
-  - reports_to
-  - has_task
-  - blocks
+  storage_path: /root/life/pkm/memory/ontology
+  format: jsonl  # or sqlite for scale
+  
+  # Entity types to track
+  entities:
+    - Person
+    - Organization
+    - Project
+    - Event
+    - Task
+  
+  # Relationships to extract
+  relationships:
+    - works_at
+    - assigned_to
+    - met_at
+    - for_client
+    - reports_to
+    - has_task
+    - blocks
 
 feedback:
- output_path: /root/life/pkm/ontology-sync/feedback
- generate_reports: true
- suggest_templates: true
- highlight_missing: true
+  output_path: /root/life/pkm/ontology-sync/feedback
+  generate_reports: true
+  suggest_templates: true
+  highlight_missing: true
 
 schedule:
- # Run via cron every 3 hours
- sync_interval: "0 */3 * * *"
- analyze_daily: "0 9 * * *" # 9 AM daily
- feedback_weekly: "0 10 * * MON" # Monday 10 AM
+  # Run via cron every 3 hours
+  sync_interval: "0 */3 * * *"
+  analyze_daily: "0 9 * * *"  # 9 AM daily
+  feedback_weekly: "0 10 * * MON"  # Monday 10 AM
 ```
 
 ## Scheduled Sync (Cron Integration)
@@ -292,9 +292,9 @@ python3 skills/obsidian-ontology-sync/scripts/setup-cron.py
 
 # Or manually via cron tool
 cron add \
- --schedule "0 */3 * * *" \
- --task "python3 skills/obsidian-ontology-sync/scripts/sync.py extract" \
- --label "Obsidian → Ontology Sync"
+  --schedule "0 */3 * * *" \
+  --task "python3 skills/obsidian-ontology-sync/scripts/sync.py extract" \
+  --label "Obsidian → Ontology Sync"
 ```
 
 **Cron Jobs Created:**
@@ -310,28 +310,28 @@ Once synced, you can query:
 ```bash
 # All team members on high-value projects
 python3 skills/ontology/scripts/ontology.py query \
- --type Person \
- --where '{"role":"team_member"' \
- --related assigned_to \
- --filter '{"type":"Project","value__gt":400000'
+  --type Person \
+  --where '{"role":"team_member"}' \
+  --related assigned_to \
+  --filter '{"type":"Project","value__gt":400000}'
 
 # Contacts from specific event not yet followed up
 python3 skills/ontology/scripts/ontology.py query \
- --type Person \
- --where '{"met_at":"event_tech_conference_2026"' \
- --missing has_task
+  --type Person \
+  --where '{"met_at":"event_tech_conference_2026"}' \
+  --missing has_task
 
 # Team response patterns
 python3 skills/ontology/scripts/ontology.py query \
- --type Person \
- --where '{"role":"team_member"' \
- --aggregate response_pattern
+  --type Person \
+  --where '{"role":"team_member"}' \
+  --aggregate response_pattern
 
 # Projects by client
 python3 skills/ontology/scripts/ontology.py query \
- --type Project \
- --group-by for_client \
- --count
+  --type Project \
+  --group-by for_client \
+  --count
 ```
 
 ## Feedback Loop Examples
@@ -457,24 +457,24 @@ Found 3 contacts at "TechHub":
 ```
 /root/life/pkm/
 ├── references/
-│  ├── contacts/     # Source notes (you write these)
-│  ├── clients/      # Source notes
-│  └── team/       # Source notes
-├── daily-status/     # Source notes
-├── projects/       # Source notes
+│   ├── contacts/          # Source notes (you write these)
+│   ├── clients/           # Source notes
+│   └── team/              # Source notes
+├── daily-status/          # Source notes
+├── projects/              # Source notes
 │
-├── memory/ontology/    # Generated ontology
-│  ├── graph.jsonl    # Entity/relation storage
-│  └── schema.yaml    # Type definitions
+├── memory/ontology/       # Generated ontology
+│   ├── graph.jsonl        # Entity/relation storage
+│   └── schema.yaml        # Type definitions
 │
-└── ontology-sync/     # Sync outputs
-  ├── config.yaml    # Your config
-  ├── feedback/
-  │  ├── daily-insights.md
-  │  ├── weekly-feedback.md
-  │  └── suggestions.md
-  └── logs/
-    └── sync-YYYY-MM-DD.log
+└── ontology-sync/         # Sync outputs
+    ├── config.yaml        # Your config
+    ├── feedback/
+    │   ├── daily-insights.md
+    │   ├── weekly-feedback.md
+    │   └── suggestions.md
+    └── logs/
+        └── sync-YYYY-MM-DD.log
 ```
 
 ## Advanced: Bidirectional Sync
@@ -511,7 +511,7 @@ python3 skills/obsidian-ontology-sync/scripts/sync.py apply-feedback
 
 ```bash
 # Already have ontology skill installed
-clawhub install obsidian # If not already installed
+clawhub install obsidian  # If not already installed
 ```
 
 ### 2. Create Config
@@ -564,7 +564,7 @@ python3 skills/obsidian-ontology-sync/scripts/sync.py extract --dry-run --verbos
 
 # Check specific file
 python3 skills/obsidian-ontology-sync/scripts/debug.py \
- --file references/contacts/Alice.md
+  --file references/contacts/Alice.md
 ```
 
 ### Query Not Finding Data

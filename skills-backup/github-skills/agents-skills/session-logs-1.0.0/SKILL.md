@@ -1,7 +1,7 @@
 ---
 name: session-logs
 description: Search and analyze your own session logs (older/parent conversations) using jq.
-metadata: {"openclaw":{"emoji":"📜","requires":{"bins":["jq","rg"]
+metadata: {"openclaw":{"emoji":"📜","requires":{"bins":["jq","rg"]}}}
 ---
 
 # session-logs
@@ -33,16 +33,16 @@ Each `.jsonl` file contains messages with:
 ### List all sessions by date and size
 ```bash
 for f in ~/.clawdbot/agents/<agentId>/sessions/*.jsonl; do
- date=(head -1 "f" | jq -r '.timestamp' | cut -dT -f1)
- size=(ls -lh "f" | awk '{print 5')
- echo "date size (basename f)"
+  date=$(head -1 "$f" | jq -r '.timestamp' | cut -dT -f1)
+  size=$(ls -lh "$f" | awk '{print $5}')
+  echo "$date $size $(basename $f)"
 done | sort -r
 ```
 
 ### Find sessions from a specific day
 ```bash
 for f in ~/.clawdbot/agents/<agentId>/sessions/*.jsonl; do
- head -1 "f" | jq -r '.timestamp' | grep -q "2026-01-06" && echo "f"
+  head -1 "$f" | jq -r '.timestamp' | grep -q "2026-01-06" && echo "$f"
 done
 ```
 
@@ -64,21 +64,21 @@ jq -s '[.[] | .message.usage.cost.total // 0] | add' <session>.jsonl
 ### Daily cost summary
 ```bash
 for f in ~/.clawdbot/agents/<agentId>/sessions/*.jsonl; do
- date=(head -1 "f" | jq -r '.timestamp' | cut -dT -f1)
- cost=(jq -s '[.[] | .message.usage.cost.total // 0] | add' "f")
- echo "date cost"
-done | awk '{a[1]+=2 END {for(d in a) print d, ""a[d]' | sort -r
+  date=$(head -1 "$f" | jq -r '.timestamp' | cut -dT -f1)
+  cost=$(jq -s '[.[] | .message.usage.cost.total // 0] | add' "$f")
+  echo "$date $cost"
+done | awk '{a[$1]+=$2} END {for(d in a) print d, "$"a[d]}' | sort -r
 ```
 
 ### Count messages and tokens in a session
 ```bash
 jq -s '{
- messages: length,
- user: [.[] | select(.message.role == "user")] | length,
- assistant: [.[] | select(.message.role == "assistant")] | length,
- first: .[0].timestamp,
- last: .[-1].timestamp
-' <session>.jsonl
+  messages: length,
+  user: [.[] | select(.message.role == "user")] | length,
+  assistant: [.[] | select(.message.role == "assistant")] | length,
+  first: .[0].timestamp,
+  last: .[-1].timestamp
+}' <session>.jsonl
 ```
 
 ### Tool usage breakdown

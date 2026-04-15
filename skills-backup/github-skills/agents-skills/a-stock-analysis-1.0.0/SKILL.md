@@ -13,35 +13,35 @@ description: A股实时行情与分时量能分析。获取沪深股票实时价
 
 ```bash
 # 单只股票
-uv run {baseDir/scripts/analyze.py 600789
+uv run {baseDir}/scripts/analyze.py 600789
 
 # 多只股票
-uv run {baseDir/scripts/analyze.py 600789 002446 002342
+uv run {baseDir}/scripts/analyze.py 600789 002446 002342
 
 # 含分时量能分析
-uv run {baseDir/scripts/analyze.py 600789 --minute
+uv run {baseDir}/scripts/analyze.py 600789 --minute
 
 # JSON输出
-uv run {baseDir/scripts/analyze.py 600789 --json
+uv run {baseDir}/scripts/analyze.py 600789 --json
 ```
 
 ### 持仓管理
 
 ```bash
 # 显示持仓
-uv run {baseDir/scripts/portfolio.py show
+uv run {baseDir}/scripts/portfolio.py show
 
 # 添加持仓
-uv run {baseDir/scripts/portfolio.py add 600789 --cost 10.416 --qty 3400
+uv run {baseDir}/scripts/portfolio.py add 600789 --cost 10.416 --qty 3400
 
 # 更新持仓
-uv run {baseDir/scripts/portfolio.py update 600789 --cost 10.2
+uv run {baseDir}/scripts/portfolio.py update 600789 --cost 10.2
 
 # 删除持仓
-uv run {baseDir/scripts/portfolio.py remove 600789
+uv run {baseDir}/scripts/portfolio.py remove 600789
 
 # 分析所有持仓（含分时量能）
-uv run {baseDir/scripts/portfolio.py analyze
+uv run {baseDir}/scripts/portfolio.py analyze
 ```
 
 ## 股票代码格式
@@ -97,26 +97,26 @@ uv run {baseDir/scripts/portfolio.py analyze
 ============================================================
 
 【实时行情】
- 现价: 10.32 涨跌: +0.88%
- 今开: 10.20 最高: 10.77 最低: 9.82
- 昨收: 10.23 换手: 2.38%
- 成交量: 218.2万手 成交额: 22.51亿
+  现价: 10.32  涨跌: +0.88%
+  今开: 10.20  最高: 10.77  最低: 9.82
+  昨收: 10.23  换手: 2.38%
+  成交量: 218.2万手  成交额: 22.51亿
 
 【分时量能分析】鲁抗医药
- 全天成交: 2181838手 (225105.3万元)
+  全天成交: 2181838手 (225105.3万元)
 
- 成交分布:
-  早盘30分(9:30-10:00): 907228手 (41.6%)
-  上午中段(10:00-11:30): 866457手 (39.7%)
-  下午中段(13:00-14:30): 181321手 (8.3%)
-  尾盘30分(14:30-15:00): 225180手 (10.3%)
+  成交分布:
+    早盘30分(9:30-10:00): 907228手 (41.6%)
+    上午中段(10:00-11:30): 866457手 (39.7%)
+    下午中段(13:00-14:30): 181321手 (8.3%)
+    尾盘30分(14:30-15:00): 225180手 (10.3%)
 
- 放量时段 TOP 10:
-  09:31:00 价格:10.03 成交:216545手 金额:21965.3万
-  ...
+  放量时段 TOP 10:
+    09:31:00 价格:10.03 成交:216545手 金额:21965.3万
+    ...
 
- 【主力动向判断】
-  🔥 早盘主力抢筹明显
+  【主力动向判断】
+    🔥 早盘主力抢筹明显
 ```
 
 ## 持仓文件

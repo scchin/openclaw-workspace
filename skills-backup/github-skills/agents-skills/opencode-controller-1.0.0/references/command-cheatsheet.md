@@ -1,13 +1,13 @@
 ## Core Opencode commands
 
 - Start Opencode:
- opencode
+  opencode
 
 - Session selection:
- /sessions
+  /sessions
 
 - Agent (mode) selection:
- /agents
+  /agents
 
 - Model selection:
- /models
+  /models

@@ -20,7 +20,7 @@
 
 ## Inject
 
-- `echo "db_password: {{ op://app-prod/db/password " | op inject`
+- `echo "db_password: {{ op://app-prod/db/password }}" | op inject`
 - `op inject -i config.yml.tpl -o config.yml`
 
 ## Whoami / accounts

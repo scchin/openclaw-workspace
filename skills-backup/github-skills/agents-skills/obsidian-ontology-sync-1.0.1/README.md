@@ -21,43 +21,43 @@ python3 skills/obsidian-ontology-sync/scripts/sync.py feedback
 ## What It Does
 
 1. **Extract** - Scans your Obsidian notes and extracts:
-  - Entities (Person, Organization, Project)
-  - Relationships (works_at, assigned_to, etc.)
-  - Properties (email, phone, etc.)
+   - Entities (Person, Organization, Project)
+   - Relationships (works_at, assigned_to, etc.)
+   - Properties (email, phone, etc.)
 
 2. **Analyze** - Provides insights:
-  - Entity counts by type
-  - Relationship statistics
-  - Data quality issues (missing emails, orphaned entities)
+   - Entity counts by type
+   - Relationship statistics
+   - Data quality issues (missing emails, orphaned entities)
 
 3. **Feedback** - Generates suggestions:
-  - Missing information to fill in
-  - Relationship insights
-  - Template improvements
+   - Missing information to fill in
+   - Relationship insights
+   - Template improvements
 
 ## Setup Automatic Sync
 
 ```bash
 # Via OpenClaw cron (recommended)
 cron add \
- --schedule "0 */3 * * *" \
- --payload '{"kind":"systemEvent","text":"Run obsidian-ontology sync"' \
- --name "Obsidian-Ontology Sync"
+  --schedule "0 */3 * * *" \
+  --payload '{"kind":"systemEvent","text":"Run obsidian-ontology sync"}' \
+  --name "Obsidian-Ontology Sync"
 ```
 
 ## File Structure
 
 ```
 /root/life/pkm/
-├── references/contacts/   # Your notes (source)
-├── references/clients/   # Your notes (source)
-├── references/team/     # Your notes (source)
+├── references/contacts/     # Your notes (source)
+├── references/clients/      # Your notes (source)
+├── references/team/         # Your notes (source)
 │
-├── memory/ontology/     # Generated ontology
-│  └── graph.jsonl     # Entity/relation storage
+├── memory/ontology/         # Generated ontology
+│   └── graph.jsonl         # Entity/relation storage
 │
-└── ontology-sync/feedback/ # Generated feedback
-  └── feedback-YYYY-MM-DD.md
+└── ontology-sync/feedback/  # Generated feedback
+    └── feedback-YYYY-MM-DD.md
 ```
 
 ## Benefits
@@ -73,17 +73,17 @@ cron add \
 ```bash
 # Find all team members without email
 grep -l "type.*Person" memory/ontology/graph.jsonl | \
- while read f; do 
-  jq 'select(.entity.properties.email == null) | .entity.properties.name' f
- done
+  while read f; do 
+    jq 'select(.entity.properties.email == null) | .entity.properties.name' $f
+  done
 
 # Count entities by type
-jq -s 'group_by(.entity.type) | map({type: .[0].entity.type, count: length)' \
- memory/ontology/graph.jsonl
+jq -s 'group_by(.entity.type) | map({type: .[0].entity.type, count: length})' \
+  memory/ontology/graph.jsonl
 
 # Find people at specific organization
 jq 'select(.rel == "works_at" and .to == "organization_acme_corp")' \
- memory/ontology/graph.jsonl
+  memory/ontology/graph.jsonl
 ```
 
 ## Tags

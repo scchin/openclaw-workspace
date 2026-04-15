@@ -26,11 +26,11 @@ insert into events (user_id, action) values (2, 'click');
 ```sql
 -- Multiple rows in single statement
 insert into events (user_id, action) values
- (1, 'click'),
- (1, 'view'),
- (2, 'click'),
- -- ... up to ~1000 rows per batch
- (999, 'view');
+  (1, 'click'),
+  (1, 'view'),
+  (2, 'click'),
+  -- ... up to ~1000 rows per batch
+  (999, 'view');
 
 -- One round trip for 1000 rows
 ```

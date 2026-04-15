@@ -30,7 +30,7 @@ Never send "I noticed X is wrong, will fix" - fix first.
 
 When verifying API endpoints, show actual output:
 ```
-GET /api/users -> {"id": 1, "name": "test"
+GET /api/users -> {"id": 1, "name": "test"}
 ```
 
 Include actual response, not just "it works".

@@ -12,13 +12,13 @@
 ### Article / BlogPosting
 ```json
 {
- "@type": "Article",
- "headline": "...",
- "author": {"@type": "Person", "name": "...",
- "datePublished": "2025-01-15",
- "dateModified": "2025-01-20",
- "image": "..."
-
+  "@type": "Article",
+  "headline": "...",
+  "author": {"@type": "Person", "name": "..."},
+  "datePublished": "2025-01-15",
+  "dateModified": "2025-01-20",
+  "image": "..."
+}
 ```
 - `datePublished` required — omitting it loses rich result eligibility
 - `dateModified` shows in search when different from published
@@ -27,12 +27,12 @@
 ### LocalBusiness
 ```json
 {
- "@type": "LocalBusiness",
- "name": "...",
- "address": {"@type": "PostalAddress", ...,
- "telephone": "...",
- "openingHoursSpecification": [...]
-
+  "@type": "LocalBusiness",
+  "name": "...",
+  "address": {"@type": "PostalAddress", ...},
+  "telephone": "...",
+  "openingHoursSpecification": [...]
+}
 ```
 - Use specific subtype: `Restaurant`, `Dentist`, `LegalService`
 - `geo` coordinates help Google verify location
@@ -41,11 +41,11 @@
 ### FAQ
 ```json
 {
- "@type": "FAQPage",
- "mainEntity": [
-  {"@type": "Question", "name": "...", "acceptedAnswer": {...
- ]
-
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type": "Question", "name": "...", "acceptedAnswer": {...}}
+  ]
+}
 ```
 - FAQ schema shows expandable Q&A in search results — HUGE CTR boost
 - Content must be visible on page — hidden FAQ = spam
@@ -54,11 +54,11 @@
 ### Product
 ```json
 {
- "@type": "Product",
- "name": "...",
- "offers": {"@type": "Offer", "price": "...", "priceCurrency": "USD",
- "aggregateRating": {...
-
+  "@type": "Product",
+  "name": "...",
+  "offers": {"@type": "Offer", "price": "...", "priceCurrency": "USD"},
+  "aggregateRating": {...}
+}
 ```
 - `offers` required for price in search results
 - `aggregateRating` shows stars — needs actual review data

@@ -22,10 +22,10 @@ author: King Sean of KS
 # 參數：年 月 日 [時 [分]]
 # 不給時分 → 預設使用系統當前時間
 
-/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 3 20  # 查 2026-03-20 系統時間
-/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 3 20 0 54 # 凌晨
-/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 2 17 12 0 # 春節中午
-/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 1 1 12 0  # 元旦中午
+/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 3 20    # 查 2026-03-20 系統時間
+/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 3 20 0 54  # 凌晨
+/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 2 17 12 0  # 春節中午
+/usr/local/bin/python3 /Users/KS/.openclaw/skills/chinese-date/scripts/date_query.py 2026 1 1 12 0   # 元旦中午
 ```
 
 ### 便捷 shell wrapper（自動找 Python3）
@@ -38,13 +38,13 @@ bash /Users/KS/.openclaw/skills/chinese-date/scripts/query.sh 2026 3 20 0 54
 
 ```
 ================================================
- 📅 西元：2026 年 3 月 20 日 星期五
- 🎯 干支：丙午 年 / 辛卯 月 / 癸巳 日 / 壬子 時
- 🐾 生肖：馬 年
- 🌿 節氣：春分
- 📆 農曆：丙午年辛卯月癸巳日
- ✅ 宜：出行、嫁娶、掃墓、掃舍、整手足甲、求醫、沐浴
- ❌ 忌：伐木、動土、吵架、安葬、破土、遠行、開市
+  📅 西元：2026 年 3 月 20 日  星期五
+  🎯 干支：丙午 年 / 辛卯 月 / 癸巳 日 / 壬子 時
+  🐾 生肖：馬 年
+  🌿 節氣：春分
+  📆 農曆：丙午年辛卯月癸巳日
+  ✅ 宜：出行、嫁娶、掃墓、掃舍、整手足甲、求醫、沐浴
+  ❌ 忌：伐木、動土、吵架、安葬、破土、遠行、開市
 ================================================
 ```
 
@@ -69,11 +69,11 @@ npm install -g cantian-tymext
 
 ```
 chinese-date/
-├── SKILL.md       ← 本文件
+├── SKILL.md              ← 本文件
 ├── scripts/
-│  ├── install.sh    ← 懶人安裝腳本（首次設定用）
-│  ├── query.sh     ← 便捷 shell wrapper
-│  └── date_query.py   ← 主程式（v3，2026-03-31）
+│   ├── install.sh        ← 懶人安裝腳本（首次設定用）
+│   ├── query.sh          ← 便捷 shell wrapper
+│   └── date_query.py     ← 主程式（v3，2026-03-31）
 ```
 
 ### 依賴

@@ -31,7 +31,7 @@ for update skip locked;
 
 -- Worker 1 gets job 1, Worker 2 gets job 2 (no waiting)
 
-update jobs set status = 'processing' where id = 1;
+update jobs set status = 'processing' where id = $1;
 commit;
 ```
 
@@ -40,13 +40,13 @@ Complete queue pattern:
 ```sql
 -- Atomic claim-and-update in one statement
 update jobs
-set status = 'processing', worker_id = 1, started_at = now()
+set status = 'processing', worker_id = $1, started_at = now()
 where id = (
- select id from jobs
- where status = 'pending'
- order by created_at
- limit 1
- for update skip locked
+  select id from jobs
+  where status = 'pending'
+  order by created_at
+  limit 1
+  for update skip locked
 )
 returning *;
 ```

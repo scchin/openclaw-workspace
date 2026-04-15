@@ -57,12 +57,12 @@ Test across multiple configurations:
 **Minimum requirements**:
 - Test across at least 5-10 years
 - Include multiple market regimes:
- - Bull markets
- - Bear markets
- - High volatility periods
- - Low volatility periods
- - Trending markets
- - Range-bound markets
+  - Bull markets
+  - Bear markets
+  - High volatility periods
+  - Low volatility periods
+  - Trending markets
+  - Range-bound markets
 
 **Year-by-year analysis**: Strategy should show positive expectancy in majority of years, not rely on 1-2 exceptional years.
 
@@ -77,7 +77,7 @@ Create 2D heat maps varying two parameters simultaneously:
 
 **Interpretation**:
 - Robust strategies show "plateaus" of consistent performance
-- Fragile strategies show "spikes" or n → optimal ranges
+- Fragile strategies show "spikes" or narrow optimal ranges
 - Avoid strategies with performance cliffs at parameter boundaries
 
 ### Walk-Forward Analysis
@@ -97,11 +97,11 @@ Create 2D heat maps varying two parameters simultaneously:
 ### Realistic Slippage Assumptions
 
 **By market capitalization**:
-- Mega cap (>200B): 0.01-0.02%
-- Large cap (10B-200B): 0.02-0.05%
-- Mid cap (2B-10B): 0.05-0.10%
-- Small cap (300M-2B): 0.10-0.20%
-- Micro cap (<300M): 0.20-0.50%+
+- Mega cap (>$200B): 0.01-0.02%
+- Large cap ($10B-$200B): 0.02-0.05%
+- Mid cap ($2B-$10B): 0.05-0.10%
+- Small cap ($300M-$2B): 0.10-0.20%
+- Micro cap (<$300M): 0.20-0.50%+
 
 **By order type**:
 - Market orders: Higher slippage

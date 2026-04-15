@@ -1,31 +1,31 @@
 ---
 name: token-optimizer
-description: Reduce OpenClaw AI costs by 97%. Haiku model routing, free Ollama heartbeats, prompt caching, and budget controls. Go from 1,500/month to 50/month in 5 minutes.
+description: Reduce OpenClaw AI costs by 97%. Haiku model routing, free Ollama heartbeats, prompt caching, and budget controls. Go from $1,500/month to $50/month in 5 minutes.
 homepage: https://github.com/smartpeopleconnected/openclaw-token-optimizer
 triggers:
- - too expensive
- - costs too much
- - burning tokens
- - high token usage
- - reduce costs
- - save money
- - optimize tokens
- - budget exceeded
- - token optimization
- - cut api costs
- - lower ai spend
- - cheaper model
- - cost savings
- - api bill
- - spending too much
- - waste tokens
- - token budget
- - reduce token usage
+  - too expensive
+  - costs too much
+  - burning tokens
+  - high token usage
+  - reduce costs
+  - save money
+  - optimize tokens
+  - budget exceeded
+  - token optimization
+  - cut api costs
+  - lower ai spend
+  - cheaper model
+  - cost savings
+  - api bill
+  - spending too much
+  - waste tokens
+  - token budget
+  - reduce token usage
 ---
 
 # Token Optimizer for OpenClaw
 
-Slash your AI costs from 1,500+/month to under 50/month.
+Slash your AI costs from $1,500+/month to under $50/month.
 
 ## The Problem
 
@@ -57,9 +57,9 @@ Reuse prompts at 10% cost
 
 | Period | Before | After |
 |--------|--------|-------|
-| Daily | 2-3 | 0.10 |
-| Monthly | 70-90 | 3-5 |
-| Yearly | 800+ | 40-60 |
+| Daily | $2-3 | $0.10 |
+| Monthly | $70-90 | $3-5 |
+| Yearly | $800+ | $40-60 |
 
 ## What's Included
 
@@ -121,21 +121,21 @@ python cli.py rollback --to <backup-file>
 
 ```json
 {
- "agents": {
-  "defaults": {
-   "model": { "primary": "anthropic/claude-haiku-4-5" ,
-   "cache": { "enabled": true, "ttl": "5m" 
-  
- ,
- "heartbeat": {
-  "provider": "ollama",
-  "model": "ollama/llama3.2:3b"
- ,
- "budgets": {
-  "daily": 5.00,
-  "monthly": 200.00
- 
-
+  "agents": {
+    "defaults": {
+      "model": { "primary": "anthropic/claude-haiku-4-5" },
+      "cache": { "enabled": true, "ttl": "5m" }
+    }
+  },
+  "heartbeat": {
+    "provider": "ollama",
+    "model": "ollama/llama3.2:3b"
+  },
+  "budgets": {
+    "daily": 5.00,
+    "monthly": 200.00
+  }
+}
 ```
 
 ## Links

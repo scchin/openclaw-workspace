@@ -12,67 +12,67 @@ This guide extracts writing conventions from high-quality academic papers on con
 
 ### Tense Usage
 - **Present tense**: For established facts, general truths, and paper structure
- - "Context-aware systems adapt to user environments"
- - "This paper surveys recent advances in..."
+  - "Context-aware systems adapt to user environments"
+  - "This paper surveys recent advances in..."
 - **Past tense**: For specific studies, experiments conducted, and historical events
- - "Smith et al. conducted experiments on..."
- - "The system was evaluated using..."
+  - "Smith et al. conducted experiments on..."
+  - "The system was evaluated using..."
 - **Future tense**: For planned work or implications
- - "Future research will explore..."
+  - "Future research will explore..."
 
 ## Structural Patterns
 
 ### Abstract Writing
 Pattern observed in successful papers:
 1. **Opening sentence**: Broad context establishing importance
-  - "Context-aware systems have become increasingly important in ubiquitous computing environments."
+   - "Context-aware systems have become increasingly important in ubiquitous computing environments."
 2. **Problem identification**: Specific gap or challenge
-  - "However, engineering such systems poses significant challenges in requirements elicitation and validation."
+   - "However, engineering such systems poses significant challenges in requirements elicitation and validation."
 3. **Solution/Approach**: What the paper does
-  - "This paper presents a comprehensive survey of engineering practices for context-aware systems."
+   - "This paper presents a comprehensive survey of engineering practices for context-aware systems."
 4. **Key findings/contributions**: Main results
-  - "We identify 47 approaches across four lifecycle phases and provide a taxonomy of techniques."
+   - "We identify 47 approaches across four lifecycle phases and provide a taxonomy of techniques."
 5. **Implications**: Why it matters
-  - "Our findings provide guidance for practitioners in selecting appropriate engineering methods."
+   - "Our findings provide guidance for practitioners in selecting appropriate engineering methods."
 
 ### Introduction Structure
 Observed effective pattern (inverted pyramid):
 1. **Motivation paragraph**: Real-world context and importance
-  - Start with broad domain relevance
-  - Use concrete examples or scenarios
-  - Establish "why should readers care?"
+   - Start with broad domain relevance
+   - Use concrete examples or scenarios
+   - Establish "why should readers care?"
 
 2. **Problem statement**: Specific challenges
-  - Identify gaps in current approaches
-  - Quantify the problem if possible
-  - Show inadequacy of existing solutions
+   - Identify gaps in current approaches
+   - Quantify the problem if possible
+   - Show inadequacy of existing solutions
 
 3. **Proposed solution**: High-level overview
-  - Briefly describe approach without details
-  - Highlight key innovations
+   - Briefly describe approach without details
+   - Highlight key innovations
 
 4. **Contributions**: Numbered list (3-5 items)
-  - Be specific: "A taxonomy of..." not "We discuss..."
-  - Focus on tangible outputs: frameworks, algorithms, empirical findings
+   - Be specific: "A taxonomy of..." not "We discuss..."
+   - Focus on tangible outputs: frameworks, algorithms, empirical findings
 
 5. **Paper organization**: Roadmap
-  - "The rest of this paper is organized as follows. Section 2..."
+   - "The rest of this paper is organized as follows. Section 2..."
 
 ### Related Work Section
 Effective patterns:
 - **Thematic grouping**: Organize by approach type, not chronologically
- - "Requirements Engineering Approaches"
- - "Runtime Adaptation Techniques"
- - "Evaluation Methodologies"
+  - "Requirements Engineering Approaches"
+  - "Runtime Adaptation Techniques"
+  - "Evaluation Methodologies"
 
 - **Comparative analysis**: Explicitly compare
- - "Unlike [X] which focuses on Y, our approach..."
- - "[A] addresses Z but does not consider..."
- - "While [B] provides..., it requires..."
+  - "Unlike [X] which focuses on Y, our approach..."
+  - "[A] addresses Z but does not consider..."
+  - "While [B] provides..., it requires..."
 
 - **Gap identification**: Lead to your contribution
- - "However, these approaches share a common limitation..."
- - "To the best of our knowledge, no prior work has..."
+  - "However, these approaches share a common limitation..."
+  - "To the best of our knowledge, no prior work has..."
 
 ### Methodology/Approach Section
 Observed structure:
@@ -123,14 +123,14 @@ Keep it concise (typically 1/2 to 3/4 page).
 
 **Terminology Consistency:**
 - Choose one term and stick with it
- - "user" vs "end-user" vs "actor"
- - "approach" vs "method" vs "technique"
+  - "user" vs "end-user" vs "actor"
+  - "approach" vs "method" vs "technique"
 - Create a terminology table if needed
 
 **Quantification:**
 - Avoid vague quantifiers without data
- - Bad: "significantly improved"
- - Good: "improved accuracy by 12.3% (p < 0.05)"
+  - Bad: "significantly improved"
+  - Good: "improved accuracy by 12.3% (p < 0.05)"
 - Use precise numbers: "73 papers" not "many papers"
 
 ### Sentence Structure

@@ -14,7 +14,7 @@ Advisory locks provide application-level coordination without requiring database
 ```sql
 -- Creating dummy rows to lock on
 create table resource_locks (
- resource_name text primary key
+  resource_name text primary key
 );
 
 insert into resource_locks values ('report_generator');
@@ -35,7 +35,7 @@ select pg_advisory_unlock(hashtext('report_generator'));
 begin;
 select pg_advisory_xact_lock(hashtext('daily_report'));
 -- ... do work ...
-commit; -- Lock automatically released
+commit;  -- Lock automatically released
 ```
 
 Try-lock for non-blocking operations:
@@ -46,11 +46,11 @@ select pg_try_advisory_lock(hashtext('resource_name'));
 
 -- Use in application
 if (acquired) {
- -- Do work
- select pg_advisory_unlock(hashtext('resource_name'));
- else {
- -- Skip or retry later
-
+  -- Do work
+  select pg_advisory_unlock(hashtext('resource_name'));
+} else {
+  -- Skip or retry later
+}
 ```
 
 Reference: [Advisory Locks](https://www.postgresql.org/docs/current/explicit-locking.html#ADVISORY-LOCKS)

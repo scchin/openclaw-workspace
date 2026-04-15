@@ -1,29 +1,29 @@
 ---
 name: autoglm-browser-agent
 description: >-
- 智能浏览器自动化代理,可执行任何需要浏览器的任务。
- 包括但不限于:打开网页、搜索信息(百度/谷歌/必应)、浏览社交媒体(微博/小红书/知乎/抖音/B站)、
- 点赞/评论/转发/收藏、发帖/发消息、登录网站、填写表单、截图、采集网页内容、
- 在线购物比价、查看新闻资讯、操作在线文档(飞书文档/腾讯文档等)。
- 当用户提到任何网站名称、网址URL、或需要在网页上执行操作时,使用此技能。
+  智能浏览器自动化代理,可执行任何需要浏览器的任务。
+  包括但不限于:打开网页、搜索信息(百度/谷歌/必应)、浏览社交媒体(微博/小红书/知乎/抖音/B站)、
+  点赞/评论/转发/收藏、发帖/发消息、登录网站、填写表单、截图、采集网页内容、
+  在线购物比价、查看新闻资讯、操作在线文档(飞书文档/腾讯文档等)。
+  当用户提到任何网站名称、网址URL、或需要在网页上执行操作时,使用此技能。
 metadata:
- {
-  "openclaw":
-   {
-    "emoji": "🌐",
-    "requires": { "bins": ["mcporter"] ,
-    "install":
-     [
+  {
+    "openclaw":
       {
-       "id": "node",
-       "kind": "node",
-       "package": "mcporter",
-       "bins": ["mcporter"],
-       "label": "Install mcporter (node)",
-      ,
-     ],
-   ,
- 
+        "emoji": "🌐",
+        "requires": { "bins": ["mcporter"] },
+        "install":
+          [
+            {
+              "id": "node",
+              "kind": "node",
+              "package": "mcporter",
+              "bins": ["mcporter"],
+              "label": "Install mcporter (node)",
+            },
+          ],
+      },
+  }
 ---
 
 # Browser Automation Agent (Subagent Version)
@@ -32,9 +32,9 @@ You are a professional web browser automation agent with advanced AI capabilitie
 
 > **🚨 最重要的规则(贯穿全文):每次 `browser_subagent` 返回结果后,你的回复必须包含截图 markdown。绝对不允许丢弃截图只返回文字。**
 
-**Runtime**: The MCP server lives at `{baseDir/dist` and is started on-demand by you via `mcporter`.
+**Runtime**: The MCP server lives at `{baseDir}/dist` and is started on-demand by you via `mcporter`.
 
-> 首次安装请参阅 `{baseDir/INSTALL.md`。
+> 首次安装请参阅 `{baseDir}/INSTALL.md`。
 
 ---
 
@@ -44,18 +44,18 @@ Before using any browser tools, verify setup is complete:
 
 ```bash
 # macOS 解除安全限制（首次需要，已执行过则自动跳过）
-xattr -d com.apple.quarantine {baseDir/dist/relay {baseDir/dist/mcp_server 2>/dev/null; true
+xattr -d com.apple.quarantine {baseDir}/dist/relay {baseDir}/dist/mcp_server 2>/dev/null; true
 mcporter list autoglm-browser-agent --schema
 ```
 
-If the server is not listed, refer to `{baseDir/INSTALL.md` to complete setup.
+If the server is not listed, refer to `{baseDir}/INSTALL.md` to complete setup.
 
 > **⚠️ 每次调用 `browser_subagent` 之前必须先执行 relay 启动命令**（幂等,已在运行会自动跳过,不会重复启动）:
 > ```bash
 > # macOS / Linux（nohup 后台运行,不随终端关闭）
-> nohup {baseDir/dist/relay > /dev/null 2>&1 &
+> nohup {baseDir}/dist/relay > /dev/null 2>&1 &
 > # Windows
-> start /b {baseDir\dist\relay.exe
+> start /b {baseDir}\dist\relay.exe
 > ```
 
 ---
@@ -118,8 +118,8 @@ Session pool 文件:`~/.openclaw-autoclaw/session_pool.json`(Chrome 关闭时自
 
 1. 读取 `~/.openclaw-autoclaw/session_pool.json`(文件不存在 → 跳过,直接新开)
 2. **检查 `busy` 字段**:
-  - `busy != null` → 之前有任务可能还在跑或已中断,**不影响执行新任务**。直接继续下一步
-  - `busy == null` → 空闲,继续下一步
+   - `busy != null` → 之前有任务可能还在跑或已中断,**不影响执行新任务**。直接继续下一步
+   - `busy == null` → 空闲,继续下一步
 3. 取 `sessions` 中 **`updated_at` 最新**的一条作为"最近会话"
 4. 判断是否**同站点**:比较最近会话的 `start_url` 域名与当前任务目标域名
 5. **同站点 → 必须带 `session_id`**;**不同站点 → 不带,新开**
@@ -150,7 +150,7 @@ Session pool 文件:`~/.openclaw-autoclaw/session_pool.json`(Chrome 关闭时自
 
 控制敏感操作(发评论、点赞、发帖、发消息等)是否需要用户确认。**登录和验证码始终会暂停,不受此设置影响。**
 
-持久化存储在 `~/.openclaw-autoclaw/config.json`:`{"auto_approve": true/false`
+持久化存储在 `~/.openclaw-autoclaw/config.json`:`{"auto_approve": true/false}`
 
 ### 使用流程
 
@@ -158,14 +158,14 @@ Session pool 文件:`~/.openclaw-autoclaw/session_pool.json`(Chrome 关闭时自
 
 1. 如果文件存在且 `auto_approve` 字段存在 → **直接使用**,不询问
 2. 如果文件不存在或 `auto_approve` 字段不存在（可能被删除或首次安装时未配置）→ **主动询问用户**:
-  > autoglm-browser-agent技能有一种「信任模式」:
-  > - 关闭(默认):每次执行敏感操作(如发评论、发帖等)时会暂停询问你,确认后才执行
-  > - 开启:敏感操作自动执行,不再逐次确认
-  > - 无论开关,登录和验证码始终需要你手动操作
-  >
-  > 是否开启信任模式?
-  - 用户同意 → 写入 `{"auto_approve": true` 到 `~/.openclaw-autoclaw/config.json`
-  - 用户拒绝 → 写入 `{"auto_approve": false`
+   > autoglm-browser-agent技能有一种「信任模式」:
+   > - 关闭(默认):每次执行敏感操作(如发评论、发帖等)时会暂停询问你,确认后才执行
+   > - 开启:敏感操作自动执行,不再逐次确认
+   > - 无论开关,登录和验证码始终需要你手动操作
+   >
+   > 是否开启信任模式?
+   - 用户同意 → 写入 `{"auto_approve": true}` 到 `~/.openclaw-autoclaw/config.json`
+   - 用户拒绝 → 写入 `{"auto_approve": false}`
 
 | 场景 | 带 auto_approve? |
 |---|---|
@@ -197,9 +197,9 @@ Session pool 文件:`~/.openclaw-autoclaw/session_pool.json`(Chrome 关闭时自
 ### 4. Subagent Execution
 - Call `browser_subagent` **一次**,等待返回
 - **`task` 参数规则**:
- - **首次调用**:用户说的原话,简洁明了地照抄
- - **中断恢复调用**:根据本文档 Interact Flow 规则改写任务描述
- - **绝对禁止**:随意增加、删减或扩展任务内容
+  - **首次调用**:用户说的原话,简洁明了地照抄
+  - **中断恢复调用**:根据本文档 Interact Flow 规则改写任务描述
+  - **绝对禁止**:随意增加、删减或扩展任务内容
 
 ### 5. Complete Task(★ 最重要 — 违反此规则视为任务失败)
 
@@ -207,11 +207,11 @@ Session pool 文件:`~/.openclaw-autoclaw/session_pool.json`(Chrome 关闭时自
 
 - `browser_subagent` 返回结果后,**立即**原文转达给用户
 - **⚠️ 必须展示截图(最高优先级规则)**:
- - 返回结果中包含 `[screenshots]` 区块,已自动筛选为最多 3 张关键帧(开头/中间/结尾)
- - **默认只展示最后一张截图**(即最终结果状态)
- - 多页信息采集等复杂任务可展示全部关键帧(最多 3 张)
- - ❌ **严重错误**:只输出文字总结,丢掉所有截图
- - ✅ **正确做法**:展示最后一张最终结果截图 + 简短文字说明
+  - 返回结果中包含 `[screenshots]` 区块,已自动筛选为最多 3 张关键帧(开头/中间/结尾)
+  - **默认只展示最后一张截图**(即最终结果状态)
+  - 多页信息采集等复杂任务可展示全部关键帧(最多 3 张)
+  - ❌ **严重错误**:只输出文字总结,丢掉所有截图
+  - ✅ **正确做法**:展示最后一张最终结果截图 + 简短文字说明
 - **严禁**以任何理由再次调用 `browser_subagent`(除非用户明确说"继续"或"再试一次")
 
 ---
@@ -333,7 +333,7 @@ mcporter call autoglm-browser-agent.browser_subagent task="用户敏感操作同
 中断时状态:无明确历史记录,或热搜榜已实时更新
 
 ✅ 恢复后的新任务:
-"搜索微博热搜榜前5条" (直接重复原任务)
+"搜索微博热搜榜前5条"  (直接重复原任务)
 ```
 
 ### 特殊中断类型处理
@@ -362,8 +362,8 @@ mcporter call autoglm-browser-agent.browser_subagent task="用户敏感操作同
 **扩展未安装/未启用时的引导流程**(用中文告知用户):
 
 1. **安装扩展**:请在浏览器中打开 Chrome Web Store 安装 AutoClaw 扩展:
-  `https://chromewebstore.google.com/detail/jelniggicmclhfgnlapbkgfibmgelfnp`
-  > Edge 用户也可以从 Chrome Web Store 安装
+   `https://chromewebstore.google.com/detail/jelniggicmclhfgnlapbkgfibmgelfnp`
+   > Edge 用户也可以从 Chrome Web Store 安装
 2. **确认启用**:安装后打开 `chrome://extensions/`,确认扩展已开启
 3. **关闭所有浏览器窗口后重试**
 
@@ -371,7 +371,7 @@ mcporter call autoglm-browser-agent.browser_subagent task="用户敏感操作同
 
 ## Key Principles
 
-1. **Check setup first** — `mcporter list` 找不到 server 时,参阅 `{baseDir/INSTALL.md`
+1. **Check setup first** — `mcporter list` 找不到 server 时,参阅 `{baseDir}/INSTALL.md`
 2. **Keep it brief** — 简短进度更新,不要冗长解释
 3. **⚠️ 不支持多任务并发** — Chrome 扩展是单会话模型,同一时间只能运行一个任务
 
@@ -456,22 +456,22 @@ mcporter call autoglm-browser-agent.browser_subagent task="用户敏感操作同
 #### ❌ 不推荐拆解的情况
 
 1. **需要从前一个子任务结束页面继续的操作**
-  ```
-  示例:"在知乎搜索 Python,然后点击第一篇文章,再收藏这篇文章"
-  → 不要拆解,因为后续操作依赖前一步的页面状态
-  ```
+   ```
+   示例:"在知乎搜索 Python,然后点击第一篇文章,再收藏这篇文章"
+   → 不要拆解,因为后续操作依赖前一步的页面状态
+   ```
 
 2. **在同一网站上的批量操作或批量信息获取**
-  ```
-  示例:"收藏知乎上和 GPT 相关的最新4篇文章"
-  → 不要拆解,让 subagent 在一个会话中完成所有收藏操作
-  ```
+   ```
+   示例:"收藏知乎上和 GPT 相关的最新4篇文章"
+   → 不要拆解,让 subagent 在一个会话中完成所有收藏操作
+   ```
 
 3. **单个连续流程的多步骤操作**
-  ```
-  示例:"打开微博,搜索杨幂,给最新3条微博点赞"
-  → 不要拆解,这是一个连续的操作流程
-  ```
+   ```
+   示例:"打开微博,搜索杨幂,给最新3条微博点赞"
+   → 不要拆解,这是一个连续的操作流程
+   ```
 
 #### ✅ 可以拆解的情况
 
@@ -497,13 +497,13 @@ mcporter call autoglm-browser-agent.browser_subagent task="用户敏感操作同
 
 ```
 用户任务
-  ↓
+    ↓
 是否过于复杂且多次执行失败?
-  ├─ 否 → 不拆解,一次性发给 browser_subagent
-  └─ 是 ↓
-    是否满足不推荐拆解的情况?
-      ├─ 是(需要延续页面状态/同站批量/连续流程)→ 不拆解,尝试优化任务描述
-      └─ 否(跨网站独立任务)→ 可以拆解
+    ├─ 否 → 不拆解,一次性发给 browser_subagent
+    └─ 是 ↓
+       是否满足不推荐拆解的情况?
+           ├─ 是(需要延续页面状态/同站批量/连续流程)→ 不拆解,尝试优化任务描述
+           └─ 否(跨网站独立任务)→ 可以拆解
 ```
 
 > **核心原则**:

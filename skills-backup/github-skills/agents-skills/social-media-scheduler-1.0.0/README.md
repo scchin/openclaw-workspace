@@ -26,4 +26,4 @@ Solo founders, marketing teams, content creators, agencies — anyone who needs 
 
 ---
 
-For industry-specific context, check out our packs at https://afrexai-cto.github.io/context-packs/ — 47/vertical
+For industry-specific context, check out our packs at https://afrexai-cto.github.io/context-packs/ — $47/vertical

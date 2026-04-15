@@ -8,7 +8,7 @@
 **Token Optimizer - Reduce AI Costs by 97%**
 
 ### Tagline
-From 1,500+/month to under 50/month in 5 minutes
+From $1,500+/month to under $50/month in 5 minutes
 
 ### Category
 - Developer Tools
@@ -24,7 +24,7 @@ From 1,500+/month to under 50/month in 5 minutes
 Slash OpenClaw API costs by 97% with intelligent model routing, free heartbeats, and prompt caching.
 
 ### Medium Description (250 chars)
-Stop burning tokens on routine tasks. Token Optimizer configures OpenClaw to use Haiku by default, routes heartbeats to free local LLMs, enables prompt caching, and adds budget controls. Go from 1,500/month to 50/month in 5 minutes.
+Stop burning tokens on routine tasks. Token Optimizer configures OpenClaw to use Haiku by default, routes heartbeats to free local LLMs, enables prompt caching, and adds budget controls. Go from $1,500/month to $50/month in 5 minutes.
 
 ### Full Description
 
@@ -43,10 +43,10 @@ The default configuration prioritizes capability over cost - meaning you're burn
 
 | Metric | Before | After |
 |--------|--------|-------|
-| Daily Cost | 2-3 | 0.10 |
-| Monthly Cost | 70-90 | 3-5 |
+| Daily Cost | $2-3 | $0.10 |
+| Monthly Cost | $70-90 | $3-5 |
 | Context Size | 50KB | 8KB |
-| Heartbeat Cost | 5-15/mo | 0 |
+| Heartbeat Cost | $5-15/mo | $0 |
 
 **What's included:**
 
@@ -71,8 +71,8 @@ The default configuration prioritizes capability over cost - meaning you're burn
 
 | Plan | Price | Features |
 |------|-------|----------|
-| **Personal** | 29.99 | Single user, 1 year updates |
-| **Team** | 99.99 | Up to 5 users, priority support |
+| **Personal** | $29.99 | Single user, 1 year updates |
+| **Team** | $99.99 | Up to 5 users, priority support |
 | **Enterprise** | Contact | Unlimited users, custom integration |
 
 **30-day money-back guarantee**
@@ -98,10 +98,10 @@ The default configuration prioritizes capability over cost - meaning you're burn
 
 ### Reviews Template
 
-> "Cut our OpenClaw bill from 200/month to 8. Setup was painless."
+> "Cut our OpenClaw bill from $200/month to $8. Setup was painless."
 > - Developer, SaaS Startup
 
-> "The Ollama heartbeat alone saves us 15/month. Everything else is bonus."
+> "The Ollama heartbeat alone saves us $15/month. Everything else is bonus."
 > - Founder, AI Agency
 
 > "Finally, a tool that understands not everything needs Opus."

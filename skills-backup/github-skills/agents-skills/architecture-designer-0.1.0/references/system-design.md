@@ -3,7 +3,7 @@
 ## Design Template
 
 ```markdown
-# System: {System Name
+# System: {System Name}
 
 ## Requirements
 
@@ -18,23 +18,23 @@
 - **Security**: PCI DSS compliance required
 
 ### Constraints
-- Budget: X/month for infrastructure
+- Budget: $X/month for infrastructure
 - Timeline: MVP in 3 months
 - Team: 5 backend, 3 frontend engineers
 
 ## High-Level Architecture
 
 ```
-┌─────────────┐   ┌─────────────┐   ┌─────────────┐
-│  Client  │────▶│ API Gateway │────▶│ Service  │
-│  (Web)   │   │  (Kong)  │   │ (Node.js) │
-└─────────────┘   └─────────────┘   └─────────────┘
-              │          │
-              ▼          ▼
-          ┌─────────────┐   ┌─────────────┐
-          │  Auth   │   │ Database  │
-          │ (Auth0)  │   │ (PostgreSQL)│
-          └─────────────┘   └─────────────┘
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│   Client    │────▶│  API Gateway │────▶│  Service    │
+│   (Web)     │     │   (Kong)    │     │  (Node.js)  │
+└─────────────┘     └─────────────┘     └─────────────┘
+                           │                   │
+                           ▼                   ▼
+                    ┌─────────────┐     ┌─────────────┐
+                    │    Auth     │     │  Database   │
+                    │  (Auth0)    │     │ (PostgreSQL)│
+                    └─────────────┘     └─────────────┘
 ```
 
 ## Component Details

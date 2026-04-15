@@ -15,19 +15,19 @@ If you discover a security vulnerability in Prompt Guard, please report it respo
 1. **DO NOT** create a public GitHub issue
 2. **Email**: [security contact - create issue for contact info]
 3. **Include**:
-  - Description of the vulnerability
-  - Steps to reproduce
-  - Potential impact
-  - Suggested fix (if any)
+   - Description of the vulnerability
+   - Steps to reproduce
+   - Potential impact
+   - Suggested fix (if any)
 
 ## ⏱️ Response Timeline
 
 - **Acknowledgment**: Within 48 hours
 - **Initial Assessment**: Within 7 days
 - **Fix/Patch**: Depends on severity
- - Critical: 24-72 hours
- - High: 1-2 weeks
- - Medium/Low: Next release cycle
+  - Critical: 24-72 hours
+  - High: 1-2 weeks
+  - Medium/Low: Next release cycle
 
 ## 🎯 Scope
 

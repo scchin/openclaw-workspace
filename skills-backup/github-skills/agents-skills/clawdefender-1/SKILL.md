@@ -159,7 +159,7 @@ Protects sensitive files and configs:
 
 Dangerous shell patterns:
 - `rm -rf`, `mkfs`, `dd if=`
-- Fork bombs `:(){ :|:& ;:`
+- Fork bombs `:(){ :|:& };:`
 - Reverse shells, pipe to bash/sh
 - `chmod 777`, `eval`, `exec`
 
@@ -219,7 +219,7 @@ Some skills contain security patterns in documentation. These are excluded autom
 For custom exclusions, edit `clawdefender.sh`:
 
 ```bash
-[[ "skill_name" == "my-security-docs" ]] && continue
+[[ "$skill_name" == "my-security-docs" ]] && continue
 ```
 
 ## Exit Codes

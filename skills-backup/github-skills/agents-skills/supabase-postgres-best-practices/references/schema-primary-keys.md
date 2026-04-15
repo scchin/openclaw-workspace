@@ -15,12 +15,12 @@ efficiency.
 ```sql
 -- identity is the SQL-standard approach
 create table users (
- id serial primary key -- Works, but IDENTITY is recommended
+  id serial primary key  -- Works, but IDENTITY is recommended
 );
 
 -- Random UUIDs (v4) cause index fragmentation
 create table orders (
- id uuid default gen_random_uuid() primary key -- UUIDv4 = random = scattered inserts
+  id uuid default gen_random_uuid() primary key  -- UUIDv4 = random = scattered inserts
 );
 ```
 
@@ -29,21 +29,21 @@ create table orders (
 ```sql
 -- Use IDENTITY for sequential IDs (SQL-standard, best for most cases)
 create table users (
- id bigint generated always as identity primary key
+  id bigint generated always as identity primary key
 );
 
 -- For distributed systems needing UUIDs, use UUIDv7 (time-ordered)
 -- Requires pg_uuidv7 extension: create extension pg_uuidv7;
 create table orders (
- id uuid default uuid_generate_v7() primary key -- Time-ordered, no fragmentation
+  id uuid default uuid_generate_v7() primary key  -- Time-ordered, no fragmentation
 );
 
 -- Alternative: time-prefixed IDs for sortable, distributed IDs (no extension needed)
 create table events (
- id text default concat(
-  to_char(now() at time zone 'utc', 'YYYYMMDDHH24MISSMS'),
-  gen_random_uuid()::text
- ) primary key
+  id text default concat(
+    to_char(now() at time zone 'utc', 'YYYYMMDDHH24MISSMS'),
+    gen_random_uuid()::text
+  ) primary key
 );
 ```
 
@@ -51,11 +51,11 @@ Guidelines:
 
 - Single database: `bigint identity` (sequential, 8 bytes, SQL-standard)
 - Distributed/exposed IDs: UUIDv7 (requires pg_uuidv7) or ULID (time-ordered, no
- fragmentation)
+  fragmentation)
 - `serial` works but `identity` is SQL-standard and preferred for new
- applications
+  applications
 - Avoid random UUIDs (v4) as primary keys on large tables (causes index
- fragmentation)
+  fragmentation)
 
 Reference:
 [Identity Columns](https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-GENERATED-IDENTITY)

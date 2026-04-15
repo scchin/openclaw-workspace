@@ -14,9 +14,9 @@ Create a `config.json` file in the root of the skill or set environment variable
 
 ```json
 {
- "app_id": "YOUR_APP_ID",
- "app_secret": "YOUR_APP_SECRET"
-
+  "app_id": "YOUR_APP_ID",
+  "app_secret": "YOUR_APP_SECRET"
+}
 ```
 
 Environment variables:

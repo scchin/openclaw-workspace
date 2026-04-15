@@ -17,7 +17,7 @@ Postgres connections are expensive (1-3MB RAM each). Without pooling, applicatio
 -- Result: 500 concurrent users = 500 connections = crashed database
 
 -- Check current connections
-select count(*) from pg_stat_activity; -- 487 connections!
+select count(*) from pg_stat_activity;  -- 487 connections!
 ```
 
 **Correct (connection pooling):**
@@ -30,7 +30,7 @@ select count(*) from pg_stat_activity; -- 487 connections!
 -- Example for 4 cores: pool_size = 10
 
 -- Result: 500 concurrent users share 10 actual connections
-select count(*) from pg_stat_activity; -- 10 connections
+select count(*) from pg_stat_activity;  -- 10 connections
 ```
 
 Pool modes:

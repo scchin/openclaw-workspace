@@ -26,7 +26,7 @@ prs.slide_width = Inches(13.333)
 prs.slide_height = Inches(7.5)
 
 # 加入標題頁
-blank_layout = prs.slide_layouts[6] # 空白版面
+blank_layout = prs.slide_layouts[6]  # 空白版面
 slide = prs.slides.add_slide(blank_layout)
 title = slide.shapes.add_textbox(Inches(1), Inches(2.5), Inches(11), Inches(2))
 tf = title.text_frame

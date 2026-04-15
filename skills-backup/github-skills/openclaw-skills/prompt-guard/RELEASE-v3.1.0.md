@@ -84,9 +84,9 @@ AI 에이전트의 컨텍스트 윈도우는 유한합니다. SKILL.md가 크면
 
 ```
 patterns/
-├── critical.yaml  # Tier 0 (~30개)
-├── high.yaml    # Tier 1 (~70개)
-└── medium.yaml   # Tier 2 (~100개)
+├── critical.yaml   # Tier 0 (~30개)
+├── high.yaml       # Tier 1 (~70개)
+└── medium.yaml     # Tier 2 (~100개)
 ```
 
 패턴은 Python 런타임에서 YAML로 로드됩니다. **탐지 로직은 동일, 컨텍스트 부담만 감소.**
@@ -183,16 +183,16 @@ guard = PromptGuard()
 result = guard.analyze("user message")
 
 if result.action == "block":
-  return "🚫 차단됨"
+    return "🚫 차단됨"
 ```
 
 ### 설정 (선택)
 ```yaml
 prompt_guard:
- pattern_tier: high  # critical, high, full
- cache:
-  enabled: true
-  max_size: 1000
+  pattern_tier: high   # critical, high, full
+  cache:
+    enabled: true
+    max_size: 1000
 ```
 
 ---
@@ -202,33 +202,33 @@ prompt_guard:
 ```
 prompt-guard/
 │
-├── 📦 prompt_guard/       # 핵심 Python 패키지
-│  ├── __init__.py        # 모듈 export
-│  ├── engine.py         # PromptGuard 메인 클래스
-│  ├── patterns.py        # 550+ 정규식 패턴 정의
-│  ├── pattern_loader.py     # 🆕 티어드 로딩 시스템
-│  ├── cache.py         # 🆕 LRU 해시 캐시
-│  ├── scanner.py        # 패턴 매칭 엔진
-│  ├── normalizer.py       # 텍스트 정규화 (호모글리프 등)
-│  ├── decoder.py        # 인코딩 탐지/디코드
-│  ├── output.py         # 출력 DLP (자격증명 수정)
-│  ├── models.py         # Severity, Action, DetectionResult
-│  ├── hivefence.py       # HiveFence 네트워크 연동
-│  ├── logging_utils.py     # SIEM 호환 JSON 로깅
-│  └── cli.py          # CLI 진입점
+├── 📦 prompt_guard/              # 핵심 Python 패키지
+│   ├── __init__.py               # 모듈 export
+│   ├── engine.py                 # PromptGuard 메인 클래스
+│   ├── patterns.py               # 550+ 정규식 패턴 정의
+│   ├── pattern_loader.py         # 🆕 티어드 로딩 시스템
+│   ├── cache.py                  # 🆕 LRU 해시 캐시
+│   ├── scanner.py                # 패턴 매칭 엔진
+│   ├── normalizer.py             # 텍스트 정규화 (호모글리프 등)
+│   ├── decoder.py                # 인코딩 탐지/디코드
+│   ├── output.py                 # 출력 DLP (자격증명 수정)
+│   ├── models.py                 # Severity, Action, DetectionResult
+│   ├── hivefence.py              # HiveFence 네트워크 연동
+│   ├── logging_utils.py          # SIEM 호환 JSON 로깅
+│   └── cli.py                    # CLI 진입점
 │
-├── 📁 patterns/         # 🆕 외부 패턴 파일 (YAML)
-│  ├── critical.yaml       # Tier 0: ~30개 (항상 로드)
-│  ├── high.yaml         # Tier 1: ~70개 (기본 로드)
-│  └── medium.yaml        # Tier 2: ~100개 (동적 확장)
+├── 📁 patterns/                  # 🆕 외부 패턴 파일 (YAML)
+│   ├── critical.yaml             # Tier 0: ~30개 (항상 로드)
+│   ├── high.yaml                 # Tier 1: ~70개 (기본 로드)
+│   └── medium.yaml               # Tier 2: ~100개 (동적 확장)
 │
-├── 🧪 tests/           # 테스트 스위트
-│  └── test_detect.py      # 115개 회귀 테스트
+├── 🧪 tests/                     # 테스트 스위트
+│   └── test_detect.py            # 115개 회귀 테스트
 │
-├── 📄 SKILL.md          # 스킬 정의 (경량화됨: 261줄)
-├── 📄 CHANGELOG.md        # 전체 버전 히스토리
-├── 📄 RELEASE-v3.1.0.md     # 이 문서
-└── 📄 LICENSE          # MIT 라이센스
+├── 📄 SKILL.md                   # 스킬 정의 (경량화됨: 261줄)
+├── 📄 CHANGELOG.md               # 전체 버전 히스토리
+├── 📄 RELEASE-v3.1.0.md          # 이 문서
+└── 📄 LICENSE                    # MIT 라이센스
 ```
 
 ### 모듈별 역할
@@ -248,33 +248,33 @@ prompt-guard/
 
 ```
 사용자 메시지
-   ↓
+     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 1. 캐시 조회 (cache.py)                │
-│   └─ 히트? → 즉시 반환 (90% 절감)           │
+│  1. 캐시 조회 (cache.py)                                │
+│     └─ 히트? → 즉시 반환 (90% 절감)                     │
 └─────────────────────────────────────────────────────────┘
-   ↓ 미스
+     ↓ 미스
 ┌─────────────────────────────────────────────────────────┐
-│ 2. 전처리 (normalizer.py + decoder.py)         │
-│   └─ 호모글리프 변환, 인코딩 디코드          │
+│  2. 전처리 (normalizer.py + decoder.py)                 │
+│     └─ 호모글리프 변환, 인코딩 디코드                   │
 └─────────────────────────────────────────────────────────┘
-   ↓
+     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 3. 티어드 스캔 (pattern_loader.py + scanner.py)    │
-│   └─ Tier 0+1 스캔 → 위협? → Tier 2 확장       │
+│  3. 티어드 스캔 (pattern_loader.py + scanner.py)        │
+│     └─ Tier 0+1 스캔 → 위협? → Tier 2 확장             │
 └─────────────────────────────────────────────────────────┘
-   ↓
+     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 4. 결과 생성 (engine.py)                │
-│   └─ Severity, Action, SHIELD 카테고리 결정      │
+│  4. 결과 생성 (engine.py)                               │
+│     └─ Severity, Action, SHIELD 카테고리 결정           │
 └─────────────────────────────────────────────────────────┘
-   ↓
+     ↓
 ┌─────────────────────────────────────────────────────────┐
-│ 5. 캐시 저장 + 로깅 (cache.py + logging_utils.py)   │
-│   └─ 결과 캐시, SIEM 로그               │
+│  5. 캐시 저장 + 로깅 (cache.py + logging_utils.py)      │
+│     └─ 결과 캐시, SIEM 로그                             │
 └─────────────────────────────────────────────────────────┘
-   ↓
- DetectionResult 반환
+     ↓
+  DetectionResult 반환
 ```
 
 ---
@@ -339,6 +339,6 @@ copies of the Software...
 
 ---
 
-**Author:** Seojoon Kim 
-**License:** MIT 
+**Author:** Seojoon Kim  
+**License:** MIT  
 **Date:** 2026-02-09

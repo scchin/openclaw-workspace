@@ -2,12 +2,12 @@
 name: feishu-drive
 description: 飞书云空间文件管理 Skill。上传/下载/移动/搜索文件、创建文件夹、获取元数据等。当需要管理飞书云空间中的文件和文件夹时使用此 Skill。
 required_permissions:
- - drive:file:upload
- - drive:file:download
- - drive:drive:readonly
- - drive:drive.search:readonly
- - space:folder:create
- - space:document:move
+  - drive:file:upload
+  - drive:file:download
+  - drive:drive:readonly
+  - drive:drive.search:readonly
+  - space:folder:create
+  - space:document:move
 
 # 🚀 快速启动：三步打通云空间 (必读)
 为避免机器人文件进入“私有黑盒”，请在首次使用前完成以下配置：
@@ -28,7 +28,7 @@ required_permissions:
 | 项目 | 值 |
 |------|---|
 | Base URL | `https://open.feishu.cn/open-apis/drive/v1` |
-| 认证方式 | `Authorization: Bearer {tenant_access_token` |
+| 认证方式 | `Authorization: Bearer {tenant_access_token}` |
 | Content-Type | `application/json`（文件上传用 `multipart/form-data`） |
 
 ---
@@ -42,7 +42,7 @@ POST /open-apis/drive/v1/folders
 ```
 
 ```json
-{ "name": "文件夹名", "folder_token": "root" 
+{ "name": "文件夹名", "folder_token": "root" }
 ```
 
 **实测心法**：
@@ -83,11 +83,11 @@ POST /open-apis/drive/v1/files/upload_prepare
 
 ```json
 {
- "file_name": "large_file.zip",
- "parent_type": "explorer",
- "parent_node": "fldcnXXX",
- "size": 104857600
-
+  "file_name": "large_file.zip",
+  "parent_type": "explorer",
+  "parent_node": "fldcnXXX",
+  "size": 104857600
+}
 ```
 
 返回 `upload_id` 和分片信息。
@@ -128,7 +128,7 @@ POST /open-apis/drive/v1/files/:file_token/move
 ```
 
 ```json
-{ "type": "docx", "folder_token": "fldcn..." 
+{ "type": "docx", "folder_token": "fldcn..." }
 ```
 
 **实测心法**：需要同时拥有源文件夹和目标文件夹的权限。
@@ -140,7 +140,7 @@ POST /open-apis/drive/v1/files/:file_token/copy
 ```
 
 ```json
-{ "type": "bitable", "folder_token": "fldcn...", "name": "副本名称" 
+{ "type": "bitable", "folder_token": "fldcn...", "name": "副本名称" }
 ```
 
 **实测心法**：适用于从模板快速克隆多维表格、文档等。
@@ -157,10 +157,10 @@ POST /open-apis/drive/metadata/batch_query
 
 ```json
 {
- "metadatas": [
-  { "token": "...", "type": "docx" 
- ]
-
+  "metadatas": [
+    { "token": "...", "type": "docx" }
+  ]
+}
 ```
 
 **实测心法**：支持批量查询，效率更高。可获取文件所有者、创建时间等。
@@ -172,7 +172,7 @@ POST /open-apis/drive/v1/files/search
 ```
 
 ```json
-{ "search_word": "关键词" 
+{ "search_word": "关键词" }
 ```
 
 **实测心法**：搜索结果包含文档、表格及文件夹。
@@ -247,34 +247,34 @@ POST /open-apis/drive/v1/files/:file_token/security_labels
 ### 二、 典型业务场景
 
 **新项目资产中心自动构建：**
-*  **场景**：当公司启动新业务线（如：海外市场调研）时，AI 自动根据项目名称在团队云盘创建对应的资料库，并将预设的调研模版、汇报 PPT 等基础物料自动分发至该目录下。
-*  **价值**：确保项目启动初期资产不乱放，实现“开箱即用”的项目环境。
+*   **场景**：当公司启动新业务线（如：海外市场调研）时，AI 自动根据项目名称在团队云盘创建对应的资料库，并将预设的调研模版、汇报 PPT 等基础物料自动分发至该目录下。
+*   **价值**：确保项目启动初期资产不乱放，实现“开箱即用”的项目环境。
 
 **营销物料自动化分发与归档：**
-*  **场景**：内容团队完成设计稿后，AI 自动将物料同步至外包共享文件夹，并一键开启“互联网公开编辑”权限，方便供应商即刻查阅。
-*  **价值**：省去手动修改成百上千个文件权限的繁琐，极大缩短协作链路。
+*   **场景**：内容团队完成设计稿后，AI 自动将物料同步至外包共享文件夹，并一键开启“互联网公开编辑”权限，方便供应商即刻查阅。
+*   **价值**：省去手动修改成百上千个文件权限的繁琐，极大缩短协作链路。
 
 **财务/法务文档智能备份：**
-*  **场景**：系统自动汇总所有支付凭证或合同初稿，按月度/年度分门别类地归档至云空间，并自动对关键人员开放管理权限。
-*  **价值**：实现数字化审计痕迹的自动留存，确保存档的完整性。
+*   **场景**：系统自动汇总所有支付凭证或合同初稿，按月度/年度分门别类地归档至云空间，并自动对关键人员开放管理权限。
+*   **价值**：实现数字化审计痕迹的自动留存，确保存档的完整性。
 
 ---
 
 ### 三、 实测注意事项（教程必写 · 尽量详细）
 
 **权限“黑盒”隔阂 (Critical)：**
-*  **风险**：飞书机器人通过 API 创建的文件，默认所有者是“机器人”，用户在“我的空间”或“主目录”中无法看到，导致资产“失踪”。
-*  **对策**：教程必须强调 **“写后必授”** 原则。即在上传或克隆操作后，必须紧跟一个 `permissions` 接口调用，将相关负责人添加为 `full_access` 协作者。只有这样，文件才会出现在用户的「与我共享」列表中。
+*   **风险**：飞书机器人通过 API 创建的文件，默认所有者是“机器人”，用户在“我的空间”或“主目录”中无法看到，导致资产“失踪”。
+*   **对策**：教程必须强调 **“写后必授”** 原则。即在上传或克隆操作后，必须紧跟一个 `permissions` 接口调用，将相关负责人添加为 `full_access` 协作者。只有这样，文件才会出现在用户的「与我共享」列表中。
 
 **指定“空间锚点”原则：**
-*  **坑点**：严禁让机器人在根目录（root）随意创建文件，这会导致资产极难管理且极易触发权限越权风险。
-*  **建议**：在教程中引导用户先手动创建一个“顶级共享文件夹”，并将该文件夹的 Token 授权给机器人。让机器人所有的操作都发生在这个“锚点”之下，实现权限的可控继承。
+*   **坑点**：严禁让机器人在根目录（root）随意创建文件，这会导致资产极难管理且极易触发权限越权风险。
+*   **建议**：在教程中引导用户先手动创建一个“顶级共享文件夹”，并将该文件夹的 Token 授权给机器人。让机器人所有的操作都发生在这个“锚点”之下，实现权限的可控继承。
 
 **文件夹创建 API 兼容性：**
-*  **注意**：部分飞书租户的文件夹创建接口在 v1/v2 版本间存在路径规范差异（如 404 报错）。建议在自动化代码中优先尝试 `upload_all` 接口的 `parent_node` 参数来实现路径指定，而非频繁调用新建目录接口。
+*   **注意**：部分飞书租户的文件夹创建接口在 v1/v2 版本间存在路径规范差异（如 404 报错）。建议在自动化代码中优先尝试 `upload_all` 接口的 `parent_node` 参数来实现路径指定，而非频繁调用新建目录接口。
 
 **冒烟测试先行：**
-*  **技巧**：在执行大规模资产搬运前，先调用一次轻量级的 `list_files` 探测该 Token 是否可用。如果冒烟测试不通过（报 403/404），应引导用户检查“机器人可见性”或“文件夹协作授权”是否已开启。
+*   **技巧**：在执行大规模资产搬运前，先调用一次轻量级的 `list_files` 探测该 Token 是否可用。如果冒烟测试不通过（报 403/404），应引导用户检查“机器人可见性”或“文件夹协作授权”是否已开启。
 
 ---
 *注：以上内容已进行脱敏处理，所有“主帅”、“董事长”、“PixPaw”等私有信息已替换为通用互联网公司职能与项目描述。*
