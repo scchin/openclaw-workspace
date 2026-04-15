@@ -17,13 +17,14 @@ tags: [backup, sync, version-control, changelog]
 1. **變更提取 (Change Extraction)**：
    - 掃描 `workspace` 與 `skills` 目錄的最近變動。
    - 自動生成/更新當日的 `CHANGELOG_YYYY-MM-DD.md`。
-2. **全量同步 (Full Sync)**：
-   - 調用 `system-full-sync.sh` 執行以下操作：
-     - 同步所有專業技能與核心技能 $\rightarrow$ GitHub。
-     - 同步所有工作空間配置 $\rightarrow$ GitHub。
-     - 觸發網關重啟與 UI 強制刷新。
-3. **結案報告 (Final Report)**：
+2. **設定 Sentry 喚醒 (Sentry Scheduling)**：
+   - **禁止手動計算時間**。必須先執行 `python3 ~/.openclaw/workspace/sentry_scheduler.py 300` (或適當延遲)。
+   - 將腳本輸出之 UTC 時間戳填入 `cron` 工具的 `schedule.at` 欄位。
+3. **全量同步 (Full Sync)**：
+   - 調用 `system-full-sync.sh` 執行同步 $\rightarrow$ 網關重啟 $\rightarrow$ UI 刷新。
+4. **結案報告 (Final Report)**：
    - 根據 `discipline-guardian` 協議，輸出包含同步狀態、提交雜湊與變更摘要的報告。
+   - **原子順序**：報告 $\rightarrow$ 清除 `pending_tasks.json` $\rightarrow$ 結束。
 
 ## 🛠️ 使用方式
 
