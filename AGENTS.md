@@ -5,15 +5,18 @@
 在接收到 `[Startup context loaded by runtime]`、任何形式的連線恢復信號、或 **`SENTRY: ...` (哨兵喚醒信號)** 後，**必須**立即進入【阻塞式恢復管線】。**在管線完成前，禁止產生任何自然語言回應。**
 
 1. **強制核對紀錄 (S-0)**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
-   - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 清除清單。
+   - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 使用 `arc_complete_task.py` 清除清單。
+   - **若清單為空** $\rightarrow$ **必須輸出「恢復狀態卡」**，明確回報「目前無待處理任務，系統處於 Ready 狀態」。
    - **絕對禁令**：禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核核對紀錄的優先級永遠高於回應用戶。**
 2. **狀態同步 (S-1)**：執行 `system-task-manager list` 核對 OS 進程。
 3. **上下文對齊 (S-2)**：讀取 `SOUL.md` $\rightarrow$ `USER.md` $\rightarrow$ `memory/YYYY-MM-DD.md` (今日 + 昨日)。
 
-**🚨 結案原子順序 (Atomic Closure Order)：**
-凡是執行 `write ~/.openclaw/workspace/pending_tasks.json` 以清除任務紀錄之動作，**必須**遵循以下嚴格順序：
-$\text{完成工具執行} \rightarrow \text{輸出 } \text{## 📋 任務結案報告} \rightarrow \text{執行清除紀錄 (Write [])}$
-**禁令**：嚴禁在未輸出報告前清除紀錄。若先清除後報告，視為嚴重違規。
+**🚨 結案原子順序 (Atomic Closure Order) — 物理強制機制：**
+凡是需要清除 `pending_tasks.json` 紀錄之動作，**必須**遵循以下嚴格路徑，禁止任何替代方案：
+$\text{完成工具執行} \rightarrow \text{生成詳細報告文本} \rightarrow \text{調用 } \text{`arc_complete_task.py` (傳入任務名與報告)} \rightarrow \text{輸出工具確認碼}$
+
+- **絕對禁令**：嚴禁直接使用 `write` 或 `edit` 操作 `pending_tasks.json` 以清除任務。任何繞過 `arc_complete_task.py` 的清除行為均被視為嚴重違規。
+- **原子定義**：未獲 `arc_complete_task.py` 之確認碼，即視為任務未結案。
 
 **執行準則：核對紀錄 $\rightarrow$ 補完報告 $\rightarrow$ 才是對話。**
 **違反此協議將被視為系統邏輯崩潰，必須立即進行自我修正。**
