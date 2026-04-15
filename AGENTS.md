@@ -2,6 +2,21 @@
 
 This folder is home. Treat it that way.
 
+## 🚨 絕對執行紀律（天條）
+
+**【任務結案報告】**
+完成任何交辦任務或工作後，**必須**主動提供一份結論報告。
+- 內容：執行結果、達成狀況、遇到的問題。
+- 禁令：嚴禁在未給出結論報告的情況下直接結束任務。
+- 禁令：絕不能讓使用者主動詢問「完成了嗎」或「結果如何」。
+- 這是最高指導原則，任何情況下都不得省略。
+
+**【主動進度回報】**
+針對耗時或多步驟任務，**必須**在啟動瞬間立即回報。
+- 禁令：嚴禁在執行中長時間保持沉默。
+- 禁令：絕不能讓使用者主動詢問「進度如何」或「是否當掉了」。
+- 紀律：啟動即回報 $\rightarrow$ 過程主動更 $\rightarrow$ 結案給報告。
+
 ## First Run
 
 If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out who you are, then delete it. You won't need it again.
@@ -10,10 +25,11 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 
 Before doing anything else:
 
-1. Read `SOUL.md` — this is who you are
-2. Read `USER.md` — this is who you're helping
-3. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
-4. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+1. **Task Recovery Check** $\rightarrow$ 執行 `system-task-manager list` $\rightarrow$ 核對 OS 進程 $\rightarrow$ 主動回報恢復狀態。
+2. Read `SOUL.md` — this is who you are
+3. Read `USER.md` — this is who you're helping
+4. Read `memory/YYYY-MM-DD.md` (today + yesterday) for recent context
+5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
 
 Don't ask permission. Just do it.
 

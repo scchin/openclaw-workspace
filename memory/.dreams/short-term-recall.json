@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "updatedAt": "2026-04-15T00:07:16.017Z",
+  "entries": {
+    "memory:memory/2026-03-15.md:1:65": {
+      "key": "memory:memory/2026-03-15.md:1:65",
+      "path": "memory/2026-03-15.md",
+      "startLine": 1,
+      "endLine": 65,
+      "source": "memory",
+      "snippet": "距離合適的店家** 進行推薦 --- *記錄時間：2026-03-15*",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.5101762503385544,
+      "maxScore": 0.5101762503385544,
+      "firstRecalledAt": "2026-04-15T00:07:16.017Z",
+      "lastRecalledAt": "2026-04-15T00:07:16.017Z",
+      "queryHashes": [
+        "940480bbbdcf"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "距離",
+        "合適",
+        "店家",
+        "進行",
+        "推薦",
+        "記錄",
+        "時間"
+      ]
+    },
+    "memory:memory/2026-03-24.md:1:42": {
+      "key": "memory:memory/2026-03-24.md:1:42",
+      "path": "memory/2026-03-24.md",
+      "startLine": 1,
+      "endLine": 42,
+      "source": "memory",
+      "snippet": "# 2026-03-24 工作日誌 ## where-to-go 技能重大更新（v2.9） ### 已修復的問題 **問題 1：每人金額顯示「無」（已修 ✅）** - 原因：`format_full_output` 沒有接收 `price_range_api` 參數；`query_place_api_only` 內 `priceRange` API SSL 失敗導致 `_price_range=None` - 修復： - `format_full_output` 新增 `price_range_api: str = \"\"` 參數 - Call site 從 `api_data[\"_price_range\"]` 取值傳入 - `query_place_api_only` 新增 `price_level` fallback（SSL 失敗時觸發）：`price_level: 1→$`，`2→$$`，以此類推 - 判斷順序：① `priceRange` API → ② `maps_price.found`（CDP）→ ③ `maps_price.price_range` → ④ 無 **問題 2：輸出黏在一起（已修 ✅）** - 原因：`status_line` 正則只抓了 `status_extra`（括號內），漏掉 `status_icon` + `status_txt` - 修復：新正則 `r\"^([✅❌])\\s*([^\\s（\\(]+)\\s*[（\\(](.+?)[）\\)]$\"` 一次解析 emoji + 狀態文字 + 時間段 **問題 3：`query_",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.5002895087003708,
+      "maxScore": 0.5002895087003708,
+      "firstRecalledAt": "2026-04-15T00:07:16.017Z",
+      "lastRecalledAt": "2026-04-15T00:07:16.017Z",
+      "queryHashes": [
+        "940480bbbdcf"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "where-to-go",
+        "v2.9",
+        "format-full-output",
+        "price-range-api",
+        "query-place-api-only",
+        "price-range",
+        "api-data",
+        "price-level"
+      ]
+    },
+    "memory:memory/2026-04-09.md:1:12": {
+      "key": "memory:memory/2026-04-09.md:1:12",
+      "path": "memory/2026-04-09.md",
+      "startLine": 1,
+      "endLine": 12,
+      "source": "memory",
+      "snippet": "# 2026-04-09 ## 🛠️ 技能更新：where-to-go (地點查詢) - **數量邏輯強化**：修正 `run.py` 使其能嚴格遵守使用者要求的店家數量（例如「10間店」），若營業中店家不足，將以休息中店家補足至要求數量。 - **餐飲時段搜尋優化**： - 當搜尋關鍵字為餐飲時段（早餐, 午餐, 晚餐, 宵夜, 下午茶, 點心）且結果不足時，會自動擴展搜尋「餐廳」以增加候選名單。 - 新增 `_is_closing_soon` 邏輯：針對餐飲時段查詢，自動排除即將在 30 分鐘內打烊的店家，確保推薦的店家在使用者到達時仍可營業。 - **驗證**：經測試，「早餐 10 家店」與「午餐 10 家店」均能正確回傳指定數量之結果。 ## 📦 系統維護 - 執行 `skills-github-backup` 將所有技能（約 69 個）同步至 GitHub 儲存庫 `scchin/openclaw-workspace`。",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.49861726164817805,
+      "maxScore": 0.49861726164817805,
+      "firstRecalledAt": "2026-04-15T00:07:16.017Z",
+      "lastRecalledAt": "2026-04-15T00:07:16.017Z",
+      "queryHashes": [
+        "940480bbbdcf"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "backup",
+        "where-to-go",
+        "run.py",
+        "is-closing-soon",
+        "skills-github-backup",
+        "scchin/openclaw-workspace",
+        "技能",
+        "更新"
+      ]
+    },
+    "memory:memory/2026-03-21.md:76:122": {
+      "key": "memory:memory/2026-03-21.md:76:122",
+      "path": "memory/2026-03-21.md",
+      "startLine": 76,
+      "endLine": 122,
+      "source": "memory",
+      "snippet": "3. **服務 aria-label 分開三個**：原本用 `startsWith('Serves ')` 只匹配第一個；改為同時搜 `button` 和 `div`，個別讀取各 aria-label ### google-places 查詢流程（最終版） 1. AI 收到查詢 → `browser(action=start)` 啟動 Chrome 並導航 2. 等 8 秒讓頁面載入 3. 執行 `query.py full <place_id>` → CDP 讀取所有動態資料 4. 直接輸出完整結果，全程全自動 ## 2026-03-21 上午（11:33）待修問題 ### 1. 地址格式仍有錯誤 - **現況**：`北區台中市台灣 404漢口路3段32號（404）` - **預期**：`台中市北區漢口路3段32號（404）` - **原因**：`format_address` 中城市和區的排序邏輯有誤，`cities` 陣列為空（因為沒有匹配 `if tok in [\"台中市\"...]`） - **根因**：`\"Taichung City\"` 替換成 `\"台中市\"` 時，已經過 `.replace()`，但 tok 匹配時拿到的已經是 `\"台中市\"` 了，所以 `cities` 列表應該是對的。但 `rep` dict 替換順序可能導致 `路` 搶先被替換 ### 2. 地址格式還有一個問題 - `404` 出現兩次：`北區台中市台灣 404漢口路3段32號（404）` - zipcode 拿走後，剩下的 `404` 變成 tok，進入 `others` ###",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4935249179601669,
+      "maxScore": 0.4935249179601669,
+      "firstRecalledAt": "2026-04-15T00:07:16.017Z",
+      "lastRecalledAt": "2026-04-15T00:07:16.017Z",
+      "queryHashes": [
+        "940480bbbdcf"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "aria-label",
+        "google-places",
+        "query.py",
+        "place-id",
+        "format-address",
+        "服務",
+        "aria",
+        "label"
+      ]
+    },
+    "memory:memory/2026-03-21.md:159:180": {
+      "key": "memory:memory/2026-03-21.md:159:180",
+      "path": "memory/2026-03-21.md",
+      "startLine": 159,
+      "endLine": 180,
+      "source": "memory",
+      "snippet": "## 2026-03-21 上午（11:56）最新進展 ### 查詢結果（鰄老闆卷起來）✅ 已完整 所有項目均已輸出： - 地址：台中市北區漢口路3段32號（404）✅ - 經緯度：24.16659, 120.667087 ✅（round 修複） - 每人消費：$1–200（71人回報）✅ - 🔥 特色菜色：蝦滷飯、脆皮燒肉、辣椒、海鮮炒麵、油蔥蝦仁飯 ✅ - 📝 網友心得：王仁偉、林小雨、Yao Wang ✅ - 服務、熱門品項、Menu、圖片 ✅ - 用戶反饋價格（$85, $100）✅ ### 仍待修 - **🔥 特色菜色 snippet 太長**：取到下一道菜的文字（如「蝦滷飯」的 snippet 含「海鮮炒麵」），需以「。」或「！」截斷干擾 - **🍜 熱門品項仍為英文**：需翻譯「fried noodles→海鮮炒麵、popsicles→冰棒、conpoy→干貝」 ### 最新 query.py 狀態 - 語法正確，可正常運行 - 瀏覽器通常已在運行（pid 55919），不需要重啟即可 CDP 讀取 - format_address ✅、extract_dish_highlights ✅、extract_review_highlights ✅",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4881920605897903,
+      "maxScore": 0.4881920605897903,
+      "firstRecalledAt": "2026-04-15T00:07:16.017Z",
+      "lastRecalledAt": "2026-04-15T00:07:16.017Z",
+      "queryHashes": [
+        "940480bbbdcf"
+      ],
+      "recallDays": [
+        "2026-04-15"
+      ],
+      "conceptTags": [
+        "24.16659",
+        "120.667087",
+        "query.py",
+        "format-address",
+        "extract-dish-highlights",
+        "extract-review-highlights",
+        "上午",
+        "最新"
+      ]
+    }
+  }
+}

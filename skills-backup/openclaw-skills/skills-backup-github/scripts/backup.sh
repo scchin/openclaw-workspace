@@ -80,20 +80,32 @@ fi
 echo "[5/5] Pushing to GitHub..."
 git push origin main
 
-# Step 6: Force UI Sync (The "Magic Refresh")
-echo "[6/6] Triggering Control UI force refresh..."
-# 1. Restart Gateway to clear internal cache
-openclaw gateway restart
+# Step 6: Force UI Sync (Condition-Based Refresh)
+echo "[6/6] Waiting for Gateway skills to be ready..."
 
-# 2. Wait for Gateway to be ready
-sleep 2
+# Loop until skills.status returns a non-empty list or timeout (max 15s)
+COUNT=0
+while [ $COUNT -lt 15 ]; do
+    # Check if skills.status returns something other than an empty list []
+    if curl -s http://127.0.0.1:18792/skills/status | grep -q "\["; then
+        # Note: We check if the response is more than just "[]"
+        RESP=$(curl -s http://127.0.0.1:18792/skills/status)
+        if [[ "$RESP" != "[]" && "$RESP" != "" ]]; then
+            echo "[OK] Skills are ready! Triggering UI refresh..."
+            curl -s http://127.0.0.1:18793/trigger-refresh > /dev/null
+            echo "[OK] UI refresh command sent successfully!"
+            break
+        fi
+    fi
+    echo "Waiting for skills indexing... ($((COUNT+1))/15)"
+    sleep 1
+    COUNT=$((COUNT+1))
+done
 
-# 3. Send refresh command to Sync Sidecar
-if curl -s http://127.0.0.1:18793/trigger-refresh > /dev/null; then
-    echo "[OK] UI refresh command sent successfully!"
-else
-    echo "[!] UI refresh failed. Please manually refresh (Cmd+Shift+R)."
+if [ $COUNT -eq 15 ]; then
+    echo "[!] Timeout: Skills not ready in 15s. Please manually refresh (Cmd+Shift+R)."
 fi
 
-echo "[OK] Backup and UI sync complete!"
+echo "[OK] Backup and UI sync process complete!"
+
 
