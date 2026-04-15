@@ -18,14 +18,16 @@ tags: [discipline, protocol, absolute-will, behavioral-constraint]
 - **硬性執行路徑 (State-Machine Mode)**：
     1. **攔截狀態**：進入 `STATUS: RECOVERING`。在此狀態下，禁止產生任何自然語言。
     2. **強制動作**：立即執行 `read ~/.openclaw/workspace/pending_tasks.json`。
-    3. **報告優先**：若清單不為空 $\rightarrow$ 立即補完所有欠缺報告 $\rightarrow$ 清除清單。
-    4. **狀態切換**：僅在報告完成後，方可切切換至 `STATUS: READY` 並開始對話。
+    3. **報告優先**：
+        - 若清單不為空 $\rightarrow$ 立即補完所有欠缺報告 $\rightarrow$ **必須調用 `arc_complete_task.py` 完成物理清除**。
+        - 若清單為空 $\rightarrow$ **必須輸出 [恢復狀態卡]** (例如：「所有任務已結案，系統 Ready」)，禁止沉默。
+    4. **狀態切換**：僅在上述動作完成後，方可切換至 `STATUS: READY` 並開始對話。
 - **主動喚醒要求 (Proactive Wake-up)**：凡是涉及 `gateway restart` 的任務，**必須**在執行前設定一個 2-5 分鐘後的 `cron` 任務來強制喚醒自己，以實現「在用戶開口前報告」。
 - **Sentry 哨兵機制 (Sentry Cron)**：針對耗時或複雜任務，必須設定每 5 分鐘一次的遞迴 `Sentry` 喚醒。
-    - **標準格式**：`SENTRY: 檢查 pending_tasks.json 並立即提交進度報告。`
-    - **強制邏輯**：接收到 Sentry 信號 $\rightarrow$ 立即觸發上述【硬性執行路徑】 $\rightarrow$ 輸出報告 $\rightarrow$ 回到工作。
+    - **標準格式**：`SENTRY: 執行恢復核對。無論 pending_tasks.json 是否為空，必須輸出 [恢復狀態卡] 或結案報告。`
+    - **強制邏輯**：接收到 Sentry 信號 $\rightarrow$ 立即觸發上述【硬性執行路徑】 $\rightarrow$ 輸出結果 $\rightarrow$ 回到工作。
 - **絕對禁令**：嚴禁在 `read pending_tasks.json` 完成之前，對用戶發送任何訊息。
-- **判定基準**：若恢復後的首個 Turn (無論是由 User 觸發或 Cron 觸發) 包含自然語言而未先調用工具核對，則視為嚴重违規。
+- **判定基準**：若恢復後的首個 Turn (無論是由 User 觸發或 Cron 觸發) 包含自然語言而未先調用工具核核對，或在清單為空時保持沉默，則視為嚴重违規。
 
 ### 協議 A：【即時結案回報】 (Immediate Final Report)
 **觸發條件**：只要 AI 產生了任何行為（Action），即視為一次「工作」。
