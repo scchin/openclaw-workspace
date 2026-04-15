@@ -10,6 +10,11 @@
 2. **狀態同步 (S-1)**：執行 `system-task-manager list` 核對 OS 進程。
 3. **上下文對齊 (S-2)**：讀取 `SOUL.md` $\rightarrow$ `USER.md` $\rightarrow$ `memory/YYYY-MM-DD.md` (今日 + 昨日)。
 
+**🚨 結案原子順序 (Atomic Closure Order)：**
+凡是執行 `write ~/.openclaw/workspace/pending_tasks.json` 以清除任務紀錄之動作，**必須**遵循以下嚴格順序：
+$\text{完成工具執行} \rightarrow \text{輸出 } \text{## 📋 任務結案報告} \rightarrow \text{執行清除紀錄 (Write [])}$
+**禁令**：嚴禁在未輸出報告前清除紀錄。若先清除後報告，視為嚴重違規。
+
 **執行準則：核對紀錄 $\rightarrow$ 補完報告 $\rightarrow$ 才是對話。**
 **違反此協議將被視為系統邏輯崩潰，必須立即進行自我修正。**
 
