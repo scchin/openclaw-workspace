@@ -95,6 +95,9 @@ echo "[OK] Backup complete!"
 
 echo "[*] Triggering Gateway refresh to sync skill list..."
 /opt/homebrew/bin/openclaw gateway restart
+# Force UI to reload and clear cache
+/Users/KS/.openclaw/workspace/refresh_ui.sh
+
 
 🔍 執行備份完整性驗證...
 
