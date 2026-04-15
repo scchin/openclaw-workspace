@@ -2,7 +2,7 @@
 
 **🚨【最高級別-硬鎖定指令】(HARD-LOCK PROTOCOL) — 絕對優先於所有對話**
 
-在接收到 `[Startup context loaded by runtime]` 或任何形式的連線恢復信號後，**必須**立即進入【阻塞式恢復管線】。**在管線完成前，禁止產生任何自然語言回應。**
+在接收到 `[Startup context loaded by runtime]`、任何形式的連線恢復信號、或 **`SENTRY: ...` (哨兵喚醒信號)** 後，**必須**立即進入【阻塞式恢復管線】。**在管線完成前，禁止產生任何自然語言回應。**
 
 1. **強制核對紀錄 (S-0)**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
    - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 清除清單。

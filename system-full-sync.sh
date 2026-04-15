@@ -100,9 +100,16 @@ git push origin main
 echo "[OK] System snapshot pushed."
 
 # Step 5: Trigger UI Sync
-echo "[4/5] Triggering Control UI force refresh..."
+echo "[4/5] Triggering Control UI force refresh (with stability buffer)..."
+# 物理緩衝：在重啟前先停頓，避免與之前的 Git 推送操作衝突
+sleep 5
 openclaw gateway restart
-sleep 2
+
+# 關鍵緩衝：給予 Gateway 與 Reliability Proxy 充足的時間完成初始化
+# 避免所有 Session 恢復請求在同一毫秒湧入導致 API Rate Limit
+echo "Waiting 15s for system stabilization..."
+sleep 15
+
 curl -s http://127.0.0.1:18793/trigger-refresh > /dev/null && echo "[OK] UI refreshed."
 
 echo "✅ FULL SYSTEM SYNC COMPLETE!"
