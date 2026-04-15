@@ -24,10 +24,10 @@ create extension if not exists pg_stat_statements;
 
 -- Find slowest queries by total time
 select
-  calls,
-  round(total_exec_time::numeric, 2) as total_time_ms,
-  round(mean_exec_time::numeric, 2) as mean_time_ms,
-  query
+ calls,
+ round(total_exec_time::numeric, 2) as total_time_ms,
+ round(mean_exec_time::numeric, 2) as mean_time_ms,
+ query
 from pg_stat_statements
 order by total_exec_time desc
 limit 10;
@@ -48,7 +48,7 @@ Key metrics to monitor:
 -- Queries with high mean time (candidates for optimization)
 select query, mean_exec_time, calls
 from pg_stat_statements
-where mean_exec_time > 100  -- > 100ms average
+where mean_exec_time > 100 -- > 100ms average
 order by mean_exec_time desc;
 ```
 

@@ -3,23 +3,23 @@ name: blogwatcher
 description: Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.
 homepage: https://github.com/Hyaxia/blogwatcher
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "📰",
+    "requires": { "bins": ["blogwatcher"] ,
+    "install":
+     [
       {
-        "emoji": "📰",
-        "requires": { "bins": ["blogwatcher"] },
-        "install":
-          [
-            {
-              "id": "go",
-              "kind": "go",
-              "module": "github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest",
-              "bins": ["blogwatcher"],
-              "label": "Install blogwatcher (go)",
-            },
-          ],
-      },
-  }
+       "id": "go",
+       "kind": "go",
+       "module": "github.com/Hyaxia/blogwatcher/cmd/blogwatcher@latest",
+       "bins": ["blogwatcher"],
+       "label": "Install blogwatcher (go)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # blogwatcher
@@ -47,19 +47,19 @@ Common commands
 Example output
 
 ```
-$ blogwatcher blogs
+ blogwatcher blogs
 Tracked blogs (1):
 
-  xkcd
-    URL: https://xkcd.com
+ xkcd
+  URL: https://xkcd.com
 ```
 
 ```
-$ blogwatcher scan
+ blogwatcher scan
 Scanning 1 blog(s)...
 
-  xkcd
-    Source: RSS | Found: 4 | New: 4
+ xkcd
+  Source: RSS | Found: 4 | New: 4
 
 Found 4 new article(s) total!
 ```

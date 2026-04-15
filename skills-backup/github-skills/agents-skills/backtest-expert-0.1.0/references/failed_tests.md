@@ -14,7 +14,7 @@
 **Key insights**:
 - Failed tests save capital by preventing live implementation
 - Failure patterns reveal which assumptions don't hold
-- Understanding what doesn't work narrows the search space
+- Understanding what doesn't work n → s the search space
 - Failed tests build experience in recognizing fragile strategies
 
 ### Documentation Discipline
@@ -128,26 +128,26 @@ Use this framework when a backtest fails:
 
 #### 3. Test Results
 - **Basic metrics**:
-  - Total trades
-  - Win rate
-  - Average win/loss
-  - Max drawdown
-  - Annual returns by year
-  
+ - Total trades
+ - Win rate
+ - Average win/loss
+ - Max drawdown
+ - Annual returns by year
+ 
 - **Parameter sensitivity**:
-  - How results changed with parameter variations
-  - Whether "plateau" of stable performance existed
+ - How results changed with parameter variations
+ - Whether "plateau" of stable performance existed
 
 - **Regime analysis**:
-  - Performance in different market conditions
-  - Which regimes caused problems
+ - Performance in different market conditions
+ - Which regimes caused problems
 
 #### 4. Breaking Points
 - **What specifically caused the strategy to fail?**
-  - Slippage too high?
-  - Parameter sensitivity?
-  - Regime-specific?
-  - Insufficient sample size?
+ - Slippage too high?
+ - Parameter sensitivity?
+ - Regime-specific?
+ - Insufficient sample size?
 
 #### 5. Lessons Learned
 - **What assumptions were wrong?**
@@ -163,7 +163,7 @@ Tried to capture mean reversion after strong momentum moves. Hypothesis: Stocks 
 - Entry: Short when stock gaps up 5%+ on earnings at market open
 - Exit: Cover at 2% profit or 3% stop loss
 - Holding period: Maximum 3 days
-- Filters: Market cap >$2B, average volume >500K shares
+- Filters: Market cap >2B, average volume >500K shares
 
 #### 3. Test Results
 - 67 trades over 5 years

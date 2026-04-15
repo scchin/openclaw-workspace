@@ -72,12 +72,12 @@ After first login, credentials are cached — subsequent backups/restores are fu
 1. `gh` CLI installed: `brew install gh`
 2. GitHub authentication: `gh auth login`
 3. Run restore:
-   ```bash
-   bash /Users/KS/.openclaw/skills/skills-backup-github/scripts/restore.sh
-   ```
+  ```bash
+  bash /Users/KS/.openclaw/skills/skills-backup-github/scripts/restore.sh
+  ```
 
 Alternatively, if the skill itself hasn't been restored yet, clone the repo directly:
-   ```bash
-   git clone https://github.com/scchin/openclaw-workspace.git ~/.openclaw/workspace
-   bash ~/.openclaw/workspace/skills-backup/all-skills/openclaw-skills/skills-backup-github/scripts/restore.sh
-   ```
+  ```bash
+  git clone https://github.com/scchin/openclaw-workspace.git ~/.openclaw/workspace
+  bash ~/.openclaw/workspace/skills-backup/all-skills/openclaw-skills/skills-backup-github/scripts/restore.sh
+  ```

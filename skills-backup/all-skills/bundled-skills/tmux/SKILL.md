@@ -2,24 +2,24 @@
 name: tmux
 description: Remote-control tmux sessions for interactive CLIs by sending keystrokes and scraping pane output.
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "🧵",
+    "os": ["darwin", "linux"],
+    "requires": { "bins": ["tmux"] ,
+    "install":
+     [
       {
-        "emoji": "🧵",
-        "os": ["darwin", "linux"],
-        "requires": { "bins": ["tmux"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "tmux",
-              "bins": ["tmux"],
-              "label": "Install tmux (brew)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "tmux",
+       "bins": ["tmux"],
+       "label": "Install tmux (brew)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # tmux Session Control
@@ -48,10 +48,10 @@ Control tmux sessions by sending keystrokes and reading output. Essential for ma
 
 ## Example Sessions
 
-| Session                 | Purpose                     |
+| Session         | Purpose           |
 | ----------------------- | --------------------------- |
-| `shared`                | Primary interactive session |
-| `worker-2` - `worker-8` | Parallel worker sessions    |
+| `shared`        | Primary interactive session |
+| `worker-2` - `worker-8` | Parallel worker sessions  |
 
 ## Common Commands
 
@@ -87,9 +87,9 @@ tmux send-keys -t shared "y" Enter
 # Send special keys
 tmux send-keys -t shared Enter
 tmux send-keys -t shared Escape
-tmux send-keys -t shared C-c          # Ctrl+C
-tmux send-keys -t shared C-d          # Ctrl+D (EOF)
-tmux send-keys -t shared C-z          # Ctrl+Z (suspend)
+tmux send-keys -t shared C-c     # Ctrl+C
+tmux send-keys -t shared C-d     # Ctrl+D (EOF)
+tmux send-keys -t shared C-z     # Ctrl+Z (suspend)
 ```
 
 ### Window/Pane Navigation
@@ -151,8 +151,8 @@ tmux send-keys -t worker-3 '2' Enter
 
 ```bash
 for s in shared worker-2 worker-3 worker-4 worker-5 worker-6 worker-7 worker-8; do
-  echo "=== $s ==="
-  tmux capture-pane -t $s -p 2>/dev/null | tail -5
+ echo "=== s ==="
+ tmux capture-pane -t s -p 2>/dev/null | tail -5
 done
 ```
 

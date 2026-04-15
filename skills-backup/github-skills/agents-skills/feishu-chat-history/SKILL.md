@@ -1,12 +1,12 @@
 ---
 name: feishu-chat-history
 description: >
-  Fetch and summarize Feishu group chat history. Use when the user asks
-  to read, review, or summarize messages from a Feishu group chat.
-  Triggers: "看群聊记录", "群里聊了啥", "帮我看看这个群", "群消息历史",
-  "chat history", "what did the group discuss".
-  NOT for: sending messages (use message tool), reading documents
-  (use feishu-doc skill), or wiki operations (use feishu-wiki skill).
+ Fetch and summarize Feishu group chat history. Use when the user asks
+ to read, review, or summarize messages from a Feishu group chat.
+ Triggers: "看群聊记录", "群里聊了啥", "帮我看看这个群", "群消息历史",
+ "chat history", "what did the group discuss".
+ NOT for: sending messages (use message tool), reading documents
+ (use feishu-doc skill), or wiki operations (use feishu-wiki skill).
 ---
 
 # Feishu Chat History
@@ -26,7 +26,7 @@ Use the Feishu IM API directly via Python. See `references/api.md` for full deta
 **Quick summary:**
 1. Read credentials from config → `channels.feishu.appId` / `appSecret`
 2. Get `tenant_access_token` via `POST /auth/v3/tenant_access_token/internal`
-3. Fetch messages via `GET /im/v1/messages?container_id_type=chat&container_id={chat_id}&page_size=50`
+3. Fetch messages via `GET /im/v1/messages?container_id_type=chat&container_id={chat_id&page_size=50`
 
 ## Identifying the chat_id
 

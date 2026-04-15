@@ -19,8 +19,8 @@ assistant: 首先，我向您致以最誠摯的歉意！在處理複雜的腳本
 #### 1. 納入的「全量清單」
 我將在腳本中定義一個 `SYNC_MANIFEST` (同步清單)，包含：
 - **桌面指南**：
-    - `/Users/KS/Desktop/《OpenClaw 系統可靠性與 UI 同步增強 ：全量實作指南》.md`
-    - `/Users/KS/Desktop/google-reliability-guardian_Guide.md`
+  - `/Users/KS/Desktop/《OpenClaw 系統可靠性與 UI 同步增強 ：全量實作指南》.md`
+  - `/Users/KS/Desktop/google-reliability-guardian_Guide.md`
 - **守護進程**：`~/.openclaw/guardian/` (全目錄)
 - **啟動項**：`~/Library/LaunchAgents/ai.openclaw.*.plist` (所有相關 plist)
 - **記憶配置**：`~/.mempalace/mempalace.yaml`
@@ -40,28 +40,28 @@ assistant: 首先，我向您致以最誠摯的歉意！在處理複雜的腳本
 我將直接編寫這兩個核心腳本。
 
 
-assistant: 我已經完成了所有的實作。這次我沒有採取小修小補，而是直接為您構建了 **「全量同步 $\rightarrow$ 一鍵還原」** 的閉環體系。
+assistant: 我已經完成了所有的實作。這次我沒有採取小修小補，而是直接為您構建了 **「全量同步 \right → 一鍵還原」** 的閉環體系。
 
 ### 📋 最終實作結案報告
 
 #### 1. 新增功能：`system-full-sync.sh` (全量同步腳本)
 這是我為您設計的最高級別備份工具，它將原本分散的備份邏輯整合為一個單一流程。
 - **同步範圍 (100% 覆蓋)**：
-    - **靈魂層**：`workspace/` (含 `SOUL.md`, `USER.md`, 記憶文件)。
-    - **能力層**：`skills/` (包含自定義技能，且自動執行脫敏處理)。
-    - **基礎設施層 (新)**：將以下項目打包為 `system_snapshot.tar.gz` 並上傳：
-        - $\rightarrow$ **桌面指南**：包含 $\text{《全量實作指南》}$ 與 $\text{《google-reliability-guardian\_Guide》}$。
-        - $\rightarrow$ **守護進程**：`~/.openclaw/guardian/` 全目錄。
-        - $\rightarrow$ **啟動配置**：所有 `ai.openclaw.*.plist` 啟動項。
-        - $\rightarrow$ **記憶配置**：`~/.mempalace/mempalace.yaml`。
-        - $\rightarrow$ **任務狀態**：`~/.openclaw/runtime/active_tasks.json`。
-- **自動化觸發**：每次執行同步後，會自動執行 `Gateway 重啟` $\rightarrow$ `UI 強制刷新`，確保您看到的界面永遠是最新的。
+  - **靈魂層**：`workspace/` (含 `SOUL.md`, `USER.md`, 記憶文件)。
+  - **能力層**：`skills/` (包含自定義技能，且自動執行脫敏處理)。
+  - **基礎設施層 (新)**：將以下項目打包為 `system_snapshot.tar.gz` 並上傳：
+    - \right → **桌面指南**：包含 《全量實作指南》 與 《google-reliability-guardian\_Guide》。
+    - \right → **守護進程**：`~/.openclaw/guardian/` 全目錄。
+    - \right → **啟動配置**：所有 `ai.openclaw.*.plist` 啟動項。
+    - \right → **記憶配置**：`~/.mempalace/mempalace.yaml`。
+    - \right → **任務狀態**：`~/.openclaw/runtime/active_tasks.json`。
+- **自動化觸發**：每次執行同步後，會自動執行 `Gateway 重啟` \right → `UI 強制刷新`，確保您看到的界面永遠是最新的。
 
 #### 2. 新增功能：`restore.sh` (一鍵恢復腳本)
 為了實現您要求的「移植規劃」，我編寫了對應的還原腳本。在新電腦上，您只需：
 1. `git clone` 您的 Workspace。
 2. 執行 `bash restore.sh`。
-**結果**：腳本會自動解壓快照 $\rightarrow$ 還原所有配置 $\rightarrow$ 部署啟動項 $\rightarrow$ 恢復桌面指南，讓系統在幾秒鐘內恢復到與舊電腦完全一致的狀態。
+**結果**：腳本會自動解壓快照 \right → 還原所有配置 \right → 部署啟動項 \right → 恢復桌面指南，讓系統在幾秒鐘內恢復到與舊電腦完全一致的狀態。
 
 #### 3. 內部管理：`system-task-manager`
 - 已實作內部管理技能，將所有長時任務狀態持久化至 `active_tasks.json`。
@@ -81,9 +81,9 @@ bash /Users/KS/.openclaw/workspace/system-full-sync.sh
 user: Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 09:34 GMT+8] １．過深的思考而延遲了回報，造成溝通嚴重失效。現在需要將「進度回報」加入到我的天條當中。
@@ -111,8 +111,8 @@ assistant: ---
 #### 2. 技能備份 (Skills Backup)
 - **上傳位置**：`skills-backup/github-skills/`
 - **子目錄**：
-    - `agents-skills/` $\rightarrow$ 存放 `~/.agents/skills` 的脫敏版本。
-    - `openclaw-skills/` $\rightarrow$ 存放 `~/.openclaw/skills` 的脫敏版本。
+  - `agents-skills/` \right → 存放 `~/.agents/skills` 的脫敏版本。
+  - `openclaw-skills/` \right → 存放 `~/.openclaw/skills` 的脫敏版本。
 
 #### 3. 靈魂與記憶 (Soul & Memory)
 - **上傳位置**：儲存庫的所有其他路徑 (例如 `memory/`, `SOUL.md`, `USER.md` 等)。
@@ -123,9 +123,9 @@ assistant: ---
 user: Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 09:57 GMT+8] １．如果未來我再次執行system-full-sync.sh，會把現有的system_snapshot.tar.gz檔案給直接覆蓋掉對嗎？
@@ -135,26 +135,26 @@ assistant: 針對您的兩個疑問，解答如下：
 ### 1. 關於 `system_snapshot.tar.gz` 的覆蓋問題
 **是的，本地檔案會被直接覆蓋，但 GitHub 會保留歷史紀錄。**
 
-*   **本地端 (Local)**：每次執行 `system-full-sync.sh` 時，`tar -czf` 指令會創建一個新的壓縮檔並取代掉舊的 `system_snapshot.tar.gz`。因此，您的本地磁碟上永遠只會有一個最新版本的快照。
-*   **雲端端 (GitHub)**：因為這個檔案是被納入 Git 版本管理中的。每次覆蓋後執行 `git commit` $\rightarrow$ `git push`，GitHub 就會記錄一次新的提交。
-*   **這意味著**：如果您發現今天的設定搞砸了，想要回到三天前的狀態，您可以透過 Git 的 **History (提交歷史)** 找回之前的 `system_snapshot.tar.gz` 版本。
+*  **本地端 (Local)**：每次執行 `system-full-sync.sh` 時，`tar -czf` 指令會創建一個新的壓縮檔並取代掉舊的 `system_snapshot.tar.gz`。因此，您的本地磁碟上永遠只會有一個最新版本的快照。
+*  **雲端端 (GitHub)**：因為這個檔案是被納入 Git 版本管理中的。每次覆蓋後執行 `git commit` \right → `git push`，GitHub 就會記錄一次新的提交。
+*  **這意味著**：如果您發現今天的設定搞砸了，想要回到三天前的狀態，您可以透過 Git 的 **History (提交歷史)** 找回之前的 `system_snapshot.tar.gz` 版本。
 
 ### 2. 關於技能備份路徑的一致性
 **是的，完全一樣。**
 
 `system-full-sync.sh` 在處理技能部分時，直接沿用了您之前 `skills-backup-github` 技能的邏輯與路徑。
 
-*   **同步來源**：同樣是 $\text{`~/.agents/skills`}$ 與 $\text{`~/.openclaw/skills`}$。
-*   **同步目標**：同樣是 $\text{`skills-backup/github-skills/`}$。
-*   **處理方式**：同樣執行「rsync 同步 $\rightarrow$ 遞迴脫敏 (移除 API Key) $\rightarrow$ Git 上傳」。
+*  **同步來源**：同樣是 `~/.agents/skills` 與 `~/.openclaw/skills`。
+*  **同步目標**：同樣是 `skills-backup/github-skills/`。
+*  **處理方式**：同樣執行「rsync 同步 \right → 遞迴脫敏 (移除 API Key) \right → Git 上傳」。
 
 **簡單來說：** `system-full-sync.sh` 就像是一個「超級容器」，它把原有的「技能備份」功能直接封裝進來，並在它的基礎上額外增加了「系統快照 (Snapshot)」與「靈魂同步 (Workspace Sync)」的功能。您不需要再單獨執行舊的技能備份，只要執行 `system-full-sync.sh` 就能一次完成所有工作。
 user: Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 10:21 GMT+8] １．現在把這個system-full-sync.sh所有相關的報告，內容資料，操作方法和在新電腦中回復的詳細操作說明，全部寫成一份完整的指南，一樣是markdown的格式，然後存在桌面上。
@@ -169,7 +169,7 @@ assistant: 我已經為您完成了這份完整的指南。
 
 ### 📄 指南核心內容摘要：
 1. **黃金三角備份法**：詳細定義了三層同步路徑，解決了「安全性 (脫敏)」與「完整性 (快照)」的矛盾。
-2. **`system-full-sync.sh` 操作說明**：解釋了如何一次性完成 Git 同步 $\rightarrow$ 技能脫敏 $\rightarrow$ 系統快照 $\rightarrow$ UI 強制刷新。
+2. **`system-full-sync.sh` 操作說明**：解釋了如何一次性完成 Git 同步 \right → 技能脫敏 \right → 系統快照 \right → UI 強制刷新。
 3. **`restore.sh` 遷移路徑**：提供了一套標準的 4 步驟遷移流程，確保在新電腦上能 100% 還原所有設定（包含桌面指南、守護進程與啟動項）。
 4. **任務恢復機制**：記錄了 `system-task-manager` 如何在重啟後主動承接未完成任務的邏輯。
 
@@ -177,9 +177,9 @@ assistant: 我已經為您完成了這份完整的指南。
 user: Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 10:33 GMT+8] 1. 目前更新了mempalace和MemPalace for OpenClaw 技能，另外一個幫忙安裝的Install-MemPalace-on-OpenClaw技能是否也要更新？請仔細研究後給出分析報告。
@@ -187,22 +187,22 @@ assistant: 針對您的疑問，我對 `Install-MemPalace-on-OpenClaw`、`mempal
 
 ### 🔍 核心分析：三者的關係圖譜
 
-為了方便理解，您可以將這三者想像成：**安裝包 $\rightarrow$ 引擎 $\rightarrow$ 駕駛室**。
+為了方便理解，您可以將這三者想像成：**安裝包 \right → 引擎 \right → 駕駛室**。
 
-1.  **`Install-MemPalace-on-OpenClaw` (安裝包/指南)**
-    - **性質**：它是一個**一次性**或**低頻次**的安裝腳本與 SOP 指南。
-    - **作用**：負責把 Python 庫下載下來 $\rightarrow$ 設定路徑 $\rightarrow$ 部署 Hook $\rightarrow$ 配置 MCP。
-    - **依賴**：它依賴於當時的安裝路徑與版本號。
+1. **`Install-MemPalace-on-OpenClaw` (安裝包/指南)**
+  - **性質**：它是一個**一次性**或**低頻次**的安裝腳本與 SOP 指南。
+  - **作用**：負責把 Python 庫下載下來 \right → 設定路徑 \right → 部署 Hook \right → 配置 MCP。
+  - **依賴**：它依賴於當時的安裝路徑與版本號。
 
-2.  **`mempalace` (底層引擎)**
-    - **性質**：這是一個 Python 庫 (pip package)。
-    - **作用**：處理所有底層的向量儲存 (ChromaDB)、知識圖譜 (SQLite) 以及 BM25 搜尋算法。
-    - **更新點**：最近更新到了 v3.1.0，引入了混合搜尋與 Closet 索引。
+2. **`mempalace` (底層引擎)**
+  - **性質**：這是一個 Python 庫 (pip package)。
+  - **作用**：處理所有底層的向量儲存 (ChromaDB)、知識圖譜 (SQLite) 以及 BM25 搜尋算法。
+  - **更新點**：最近更新到了 v3.1.0，引入了混合搜尋與 Closet 索引。
 
-3.  **`MemPalace for OpenClaw` (駕駛室/橋接技能)**
-    - **性質**：這是一個 OpenClaw 技能 (SKILL.md + 工具集)。
-    - **作用**：將底層引擎的功能封裝成 AI 可以調用的工具 (如 `mempalace_search`)，並定義了 Phase 4 的 Hybrid 邏輯。
-    - **更新點**：目前已進化至 **Phase 4 (Hybrid Edition)**，增加了事實檢查、跨翼隧道等高階功能。
+3. **`MemPalace for OpenClaw` (駕駛室/橋接技能)**
+  - **性質**：這是一個 OpenClaw 技能 (SKILL.md + 工具集)。
+  - **作用**：將底層引擎的功能封裝成 AI 可以調用的工具 (如 `mempalace_search`)，並定義了 Phase 4 的 Hybrid 邏輯。
+  - **更新點**：目前已進化至 **Phase 4 (Hybrid Edition)**，增加了事實檢查、跨翼隧道等高階功能。
 
 ---
 
@@ -221,22 +221,22 @@ assistant: 針對您的疑問，我對 `Install-MemPalace-on-OpenClaw`、`mempal
 
 ### 🔍 核心分析：三者的關係圖譜
 
-為了方便理解，您可以將這三者想像成：**安裝包 $\rightarrow$ 引擎 $\rightarrow$ 駕駛室**。
+為了方便理解，您可以將這三者想像成：**安裝包 \right → 引擎 \right → 駕駛室**。
 
-1.  **`Install-MemPalace-on-OpenClaw` (安裝包/指南)**
-    - **性質**：它是一個**一次性**或**低頻次**的安裝腳本與 SOP 指南。
-    - **作用**：負責把 Python 庫下載下來 $\rightarrow$ 設定路徑 $\rightarrow$ 部署 Hook $\rightarrow$ 配置 MCP。
-    - **依賴**：它依賴於當時的安裝路徑與版本號。
+1. **`Install-MemPalace-on-OpenClaw` (安裝包/指南)**
+  - **性質**：它是一個**一次性**或**低頻次**的安裝腳本與 SOP 指南。
+  - **作用**：負責把 Python 庫下載下來 \right → 設定路徑 \right → 部署 Hook \right → 配置 MCP。
+  - **依賴**：它依賴於當時的安裝路徑與版本號。
 
-2.  **`mempalace` (底層引擎)**
-    - **性質**：這是一個 Python 庫 (pip package)。
-    - **作用**：處理所有底層的向量儲存 (ChromaDB)、知識圖譜 (SQLite) 以及 BM25 搜尋算法。
-    - **更新點**：最近更新到了 v3.1.0，引入了混合搜尋與 Closet 索引。
+2. **`mempalace` (底層引擎)**
+  - **性質**：這是一個 Python 庫 (pip package)。
+  - **作用**：處理所有底層的向量儲存 (ChromaDB)、知識圖譜 (SQLite) 以及 BM25 搜尋算法。
+  - **更新點**：最近更新到了 v3.1.0，引入了混合搜尋與 Closet 索引。
 
-3.  **`MemPalace for OpenClaw` (駕駛室/橋接技能)**
-    - **性質**：這是一個 OpenClaw 技能 (SKILL.md + 工具集)。
-    - **作用**：將底層引擎的功能封裝成 AI 可以調用的工具 (如 `mempalace_search`)，並定義了 Phase 4 的 Hybrid 邏輯。
-    - **更新點**：目前已進化至 **Phase 4 (Hybrid Edition)**，增加了事實檢查、跨翼隧道等高階功能。
+3. **`MemPalace for OpenClaw` (駕駛室/橋接技能)**
+  - **性質**：這是一個 OpenClaw 技能 (SKILL.md + 工具集)。
+  - **作用**：將底層引擎的功能封裝成 AI 可以調用的工具 (如 `mempalace_search`)，並定義了 Phase 4 的 Hybrid 邏輯。
+  - **更新點**：目前已進化至 **Phase 4 (Hybrid Edition)**，增加了事實檢查、跨翼隧道等高階功能。
 
 ---
 
@@ -254,9 +254,9 @@ assistant: 針對您的疑問，我對 `Install-MemPalace-on-OpenClaw`、`mempal
 user: Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 10:33 GMT+8] 1. 目前更新了mempalace和MemPalace for OpenClaw 技能，另外一個幫忙安裝的Install-MemPalace-on-OpenClaw技能是否也要更新？請仔細研究後給出分析報告。
@@ -264,9 +264,9 @@ user: [Queued user message that arrived while the previous turn was still active
 Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 10:33 GMT+8] 1. 目前更新了mempalace和MemPalace for OpenClaw 技能，另外一個幫忙安裝的Install-MemPalace-on-OpenClaw技能是否也要更新？請仔細研究後給出分析報告。
@@ -274,9 +274,9 @@ Sender (untrusted metadata):
 Sender (untrusted metadata):
 ```json
 {
-  "label": "openclaw-control-ui",
-  "id": "openclaw-control-ui"
-}
+ "label": "openclaw-control-ui",
+ "id": "openclaw-control-ui"
+
 ```
 
 [Wed 2026-04-15 10:44 GMT+8] 回答錯誤：“ 路徑風險：目前的指南中- l l- la l- l- la l- l- l- l- la l- l- l- la l- l- la l- l- la l- l- l l- l- l- l l- l- l l- l- l l- l l l l l- l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l ”

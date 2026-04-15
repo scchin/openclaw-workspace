@@ -101,9 +101,9 @@ Follow up: "What would make it worth 2x that price?"
 
 | Competitor | Pricing Model | Entry Price | Mid-tier | Enterprise |
 |------------|--------------|-------------|----------|------------|
-| Competitor A | Per seat | $15/mo | $45/mo | Custom |
-| Competitor B | Usage-based | $0.01/call | $0.008/call | Volume discounts |
-| Competitor C | Flat rate | $99/mo | $299/mo | $999/mo |
+| Competitor A | Per seat | 15/mo | 45/mo | Custom |
+| Competitor B | Usage-based | 0.01/call | 0.008/call | Volume discounts |
+| Competitor C | Flat rate | 99/mo | 299/mo | 999/mo |
 
 Position your pricing based on:
 - Value delivered vs alternatives

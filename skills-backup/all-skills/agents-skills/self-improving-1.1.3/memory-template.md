@@ -20,8 +20,8 @@ Copy this structure to `~/self-improving/memory.md` on first use.
 Create on first activation:
 
 ```bash
-mkdir -p ~/self-improving/{projects,domains,archive}
-touch ~/self-improving/{memory.md,index.md,corrections.md}
+mkdir -p ~/self-improving/{projects,domains,archive
+touch ~/self-improving/{memory.md,index.md,corrections.md
 ```
 
 ## Index Template
@@ -53,8 +53,8 @@ For `~/self-improving/corrections.md`:
 <!-- Format:
 ## YYYY-MM-DD
 - [HH:MM] Changed X → Y
-  Type: format|technical|communication|project
-  Context: where correction happened
-  Confirmed: pending (N/3) | yes | no
+ Type: format|technical|communication|project
+ Context: where correction happened
+ Confirmed: pending (N/3) | yes | no
 -->
 ```

@@ -130,8 +130,8 @@ Two acceptable styles:
 ```
 I. INTRODUCTION
 II. RELATED WORK
-   A. Context Modeling
-   B. Adaptation Techniques
+  A. Context Modeling
+  B. Adaptation Techniques
 III. PROPOSED APPROACH
 ```
 
@@ -139,8 +139,8 @@ III. PROPOSED APPROACH
 ```
 1. INTRODUCTION
 2. RELATED WORK
-   2.1 Context Modeling
-   2.2 Adaptation Techniques
+  2.1 Context Modeling
+  2.2 Adaptation Techniques
 3. PROPOSED APPROACH
 ```
 
@@ -152,7 +152,7 @@ III. PROPOSED APPROACH
 ## Special Elements
 
 ### Equations
-- **Inline**: Use inline math for simple expressions: $x + y = z$
+- **Inline**: Use inline math for simple expressions: x + y = z
 - **Display**: Center important equations on separate line
 - **Numbering**: Right-aligned equation number in parentheses
 - **Spacing**: 6pt before and after
@@ -160,7 +160,7 @@ III. PROPOSED APPROACH
 
 Example:
 ```
-                    E = mc²                    (1)
+          E = mc²          (1)
 ```
 
 ### Algorithms and Code
@@ -222,10 +222,10 @@ Example:
 TABLE I
 PERFORMANCE COMPARISON
 
-Method          Accuracy    Time (ms)
+Method     Accuracy  Time (ms)
 ───────────────────────────────────
-Baseline        87.3%       145
-Proposed        94.2%       132
+Baseline    87.3%    145
+Proposed    94.2%    132
 ───────────────────────────────────
 ```
 
@@ -275,14 +275,14 @@ Examples:
 **Journal article:**
 ```
 [1] A. Author, B. Author, and C. Author, "Title of paper,"
-    Journal Name, vol. X, no. Y, pp. ZZZ-ZZZ, Month Year.
+  Journal Name, vol. X, no. Y, pp. ZZZ-ZZZ, Month Year.
 ```
 
 **Conference paper:**
 ```
 [2] A. Author and B. Author, "Title of paper," in Proc.
-    Conference Name (CONF 'YY), City, Country, Year,
-    pp. XXX-XXX.
+  Conference Name (CONF 'YY), City, Country, Year,
+  pp. XXX-XXX.
 ```
 
 **Book:**
@@ -293,19 +293,19 @@ Examples:
 **Book chapter:**
 ```
 [4] A. Author, "Chapter title," in Book Title, B. Editor, Ed.
-    City: Publisher, Year, pp. XXX-XXX.
+  City: Publisher, Year, pp. XXX-XXX.
 ```
 
 **Technical report:**
 ```
 [5] A. Author, "Title," Company/Institution, City, State,
-    Country, Tech. Rep. Number, Year.
+  Country, Tech. Rep. Number, Year.
 ```
 
 **Website:**
 ```
 [6] A. Author. "Page title." Website Name. Accessed: Month
-    Day, Year. [Online]. Available: http://url
+  Day, Year. [Online]. Available: http://url
 ```
 
 **Rules:**
@@ -371,7 +371,7 @@ Examples:
 ### LaTeX
 Use IEEE conference/journal template:
 ```latex
-\documentclass[conference]{IEEEtran}
+\documentclass[conference]{IEEEtran
 ```
 
 ### Microsoft Word

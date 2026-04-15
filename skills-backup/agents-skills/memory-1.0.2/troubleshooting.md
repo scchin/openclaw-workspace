@@ -12,7 +12,7 @@
 |-------|-------|-----|
 | Not indexed | `grep -l "topic" ~/memory/*/INDEX.md` | Add to relevant INDEX |
 | Wrong category | Check other categories | Move to correct place |
-| Search too narrow | Try different keywords | Add keywords to file header |
+| Search too n → | Try different keywords | Add keywords to file header |
 | In built-in, not here | Check agent's MEMORY.md | Sync if needed |
 
 **Quick search:**
@@ -43,8 +43,8 @@ wc -l ~/memory/*/INDEX.md
 2. **Split large categories:**
 ```
 Before: projects/INDEX.md (150 entries)
-After:  projects/active/INDEX.md (30 entries)
-        projects/archived/INDEX.md (120 entries)
+After: projects/active/INDEX.md (30 entries)
+    projects/archived/INDEX.md (120 entries)
 ```
 
 3. **Archive old content:**
@@ -68,8 +68,8 @@ mv ~/memory/projects/old.md ~/memory/archive/
 
 1. **Never modify built-in memory** from this skill
 2. **Check locations:**
-   - Built-in: workspace `MEMORY.md`, workspace `memory/`
-   - This skill: `~/memory/` (home directory)
+  - Built-in: workspace `MEMORY.md`, workspace `memory/`
+  - This skill: `~/memory/` (home directory)
 3. **If duplicates:** Keep detailed version here, summary in built-in
 
 ---
@@ -91,10 +91,10 @@ ls ~/memory/
 2. **No files in root:**
 ```
 ~/memory/
-├── config.md     # OK (system file)
-├── INDEX.md      # OK (root index)
-├── projects/     # OK (category)
-├── random.md     # BAD - put in a category
+├── config.md   # OK (system file)
+├── INDEX.md   # OK (root index)
+├── projects/   # OK (category)
+├── random.md   # BAD - put in a category
 ```
 
 3. **Use inbox for unsorted:**
@@ -119,10 +119,10 @@ cat ~/memory/config.md | grep sync
 ```
 
 2. **Manual sync:**
-   - Read from agent's MEMORY.md
-   - Extract relevant sections
-   - Write to ~/memory/sync/
-   - Update ~/memory/sync/INDEX.md with date
+  - Read from agent's MEMORY.md
+  - Extract relevant sections
+  - Write to ~/memory/sync/
+  - Update ~/memory/sync/INDEX.md with date
 
 3. **Remember:** Sync is manual, not automatic. Re-sync periodically.
 
@@ -152,13 +152,13 @@ ls ~/memory/
 ```bash
 # Check for unlisted files
 for f in ~/memory/projects/*.md; do
-  name=$(basename "$f")
-  grep -q "$name" ~/memory/projects/INDEX.md || echo "Not indexed: $name"
+ name=(basename "f")
+ grep -q "name" ~/memory/projects/INDEX.md || echo "Not indexed: name"
 done
 
 # Check for dead links
 grep -oE '[a-z]+\.md' ~/memory/projects/INDEX.md | while read f; do
-  [ ! -f ~/memory/projects/"$f" ] && echo "Missing: $f"
+ [ ! -f ~/memory/projects/"f" ] && echo "Missing: f"
 done
 ```
 
@@ -166,8 +166,8 @@ done
 ```bash
 # Generate new index from existing files
 ls ~/memory/projects/*.md | while read f; do
-  name=$(basename "$f" .md)
-  echo "| $name | ? | $(date +%Y-%m-%d) | $name.md |"
+ name=(basename "f" .md)
+ echo "| name | ? | (date +%Y-%m-%d) | name.md |"
 done
 ```
 
@@ -179,22 +179,22 @@ done
 
 ```
 Is it about a specific project?
-  → projects/
+ → projects/
 
 Is it about a person?
-  → people/
+ → people/
 
 Is it a decision with reasoning?
-  → decisions/
+ → decisions/
 
 Is it reference/learning material?
-  → knowledge/
+ → knowledge/
 
 Is it a list of things you collect?
-  → collections/
+ → collections/
 
 None of the above?
-  → inbox/ (sort later)
+ → inbox/ (sort later)
 ```
 
 ---
@@ -214,14 +214,14 @@ echo "=== Memory Health Check ==="
 echo ""
 echo "Category indices:"
 for dir in ~/memory/*/; do
-  name=$(basename "$dir")
-  [ -f "$dir/INDEX.md" ] && echo "  ✓ $name/INDEX.md" || echo "  ✗ $name/INDEX.md missing"
+ name=(basename "dir")
+ [ -f "dir/INDEX.md" ] && echo " ✓ name/INDEX.md" || echo " ✗ name/INDEX.md missing"
 done
 
 # Count total files
-total=$(find ~/memory -name "*.md" | wc -l)
+total=(find ~/memory -name "*.md" | wc -l)
 echo ""
-echo "Total files: $total"
+echo "Total files: total"
 
 echo "=== Done ==="
 ```

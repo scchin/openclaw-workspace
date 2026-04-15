@@ -52,10 +52,10 @@ python scripts/query.py search "火鍋" --lat 24.16659 --lng 120.667087 --radius
 🔗 Google Maps：https://www.google.com/maps/place/?q=place_id:ChIJs9ZwdXQXaTQRa5LL3bcnLq4
 🍽️ Menu：https://store.dudooeat.com/order/store/f7a3eee9f71f4c2cb24ba41cc1bc1178
 
-💵 每人消費：$1–200（71人回報）
-   ▓▓▓▓░░░░░░  $1–200  ～34人（48%）
-   ▓▓▓▓░░░░░░  $200–400  ～30人（42%）
-   ░░░░░░░░░░  $400–600  ～3人（4%）
+💵 每人消費：1–200（71人回報）
+  ▓▓▓▓░░░░░░ 1–200 ～34人（48%）
+  ▓▓▓▓░░░░░░ 200–400 ～30人（42%）
+  ░░░░░░░░░░ 400–600 ～3人（4%）
 
 📌 服務：內用、外帶、外送
 🍜 熱門品項：空間（7則）｜調酒（7則）｜聚餐（4則）｜唱歌（3則）
@@ -68,8 +68,8 @@ python scripts/query.py search "火鍋" --lat 24.16659 --lng 120.667087 --radius
 Yao Wang：蝦子有幫忙剝殼大加分
 
 💬 用戶反饋價格（6個月內）：
-· LISON（5⭐，44天前）提及：$85, $100
-  「一切還好，海鮮粥，干貝嗎？有炙燒滿酷的！…」
+· LISON（5⭐，44天前）提及：85, 100
+ 「一切還好，海鮮粥，干貝嗎？有炙燒滿酷的！…」
 ==================================================
 ```
 
@@ -91,32 +91,32 @@ Yao Wang：蝦子有幫忙剝殼大加分
 
 ```
 query.py full / search
-  │
-  ├─ goplaces details + get_reviews()
-  │     → 基本資料、6個月內評論（含用戶價格反饋）
-  │
-  ├─ Google Places API v1 / priceRange
-  │     → "$1–200"
-  │
-  └─ CDP 直連 OpenClaw 瀏覽器
-       │
-       ├─ Phase 1：取得 Maps 分頁 WS URL（健康檢查 ping）
-       │         → 若無 Maps 分頁，建立新分頁
-       │         → 導航到目標店家（嚴格載入驗證）
-       │
-       ├─ Phase 2：點擊「菜單」「評論」「總覽」標籤讀取各類資訊
-       │         → 「菜單」：抓取 Menu URL（支援 Instagram / Dudooeat /
-       │                      inline_menu / UberEats / Foodpanda / Chope 等）
-       │         → 「評論」：抓取熱門品項（支援舊版 role=radio[aria-label*=mentioned]
-       │                      以及新版 radiogroup > radio 格式）
-       │         → 「總覽」：抓取每人消費、服務（從 DOM 關鍵字動態解析）
-       │         → 最多 8 輪滾動輪詢，連續 3 輪內容不增加時提前結束
-       │
-       └─ Phase 3：點擊「平均每人」右側箭頭按鈕（而非整個文字區塊）
-                  → 四種解析策略：table aria-label / aria-live /
-                  →   people+%$ div / dialog histogram
-                  → 等 popup 彈出（4.0 秒）
-                  → 百分比 → 人數估算
+ │
+ ├─ goplaces details + get_reviews()
+ │   → 基本資料、6個月內評論（含用戶價格反饋）
+ │
+ ├─ Google Places API v1 / priceRange
+ │   → "1–200"
+ │
+ └─ CDP 直連 OpenClaw 瀏覽器
+    │
+    ├─ Phase 1：取得 Maps 分頁 WS URL（健康檢查 ping）
+    │     → 若無 Maps 分頁，建立新分頁
+    │     → 導航到目標店家（嚴格載入驗證）
+    │
+    ├─ Phase 2：點擊「菜單」「評論」「總覽」標籤讀取各類資訊
+    │     → 「菜單」：抓取 Menu URL（支援 Instagram / Dudooeat /
+    │           inline_menu / UberEats / Foodpanda / Chope 等）
+    │     → 「評論」：抓取熱門品項（支援舊版 role=radio[aria-label*=mentioned]
+    │           以及新版 radiogroup > radio 格式）
+    │     → 「總覽」：抓取每人消費、服務（從 DOM 關鍵字動態解析）
+    │     → 最多 8 輪滾動輪詢，連續 3 輪內容不增加時提前結束
+    │
+    └─ Phase 3：點擊「平均每人」右側箭頭按鈕（而非整個文字區塊）
+         → 四種解析策略：table aria-label / aria-live /
+         →  people+% div / dialog histogram
+         → 等 popup 彈出（4.0 秒）
+         → 百分比 → 人數估算
 ```
 
 ---

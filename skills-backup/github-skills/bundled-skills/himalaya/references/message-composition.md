@@ -157,7 +157,7 @@ Defines a message part.
 
 ### Interactive compose
 
-Opens your `$EDITOR`:
+Opens your `EDITOR`:
 
 ```bash
 himalaya message write
@@ -167,7 +167,7 @@ himalaya message write
 
 ```bash
 himalaya message reply 42
-himalaya message reply 42 --all  # reply-all
+himalaya message reply 42 --all # reply-all
 ```
 
 ### Forward
@@ -186,9 +186,9 @@ cat message.txt | himalaya template send
 
 ```bash
 himalaya message write \
-  -H "To:recipient@example.com" \
-  -H "Subject:Quick Message" \
-  "Message body here"
+ -H "To:recipient@example.com" \
+ -H "Subject:Quick Message" \
+ "Message body here"
 ```
 
 ## Tips

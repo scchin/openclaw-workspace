@@ -2,30 +2,30 @@
 name: xurl
 description: A CLI tool for making authenticated requests to the X (Twitter) API. Use this skill when you need to post tweets, reply, quote, search, read posts, manage followers, send DMs, upload media, or interact with any X API v2 endpoint.
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "🐦",
+    "requires": { "bins": ["xurl"] ,
+    "install":
+     [
       {
-        "emoji": "🐦",
-        "requires": { "bins": ["xurl"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "xdevplatform/tap/xurl",
-              "bins": ["xurl"],
-              "label": "Install xurl (brew)",
-            },
-            {
-              "id": "npm",
-              "kind": "npm",
-              "package": "@xdevplatform/xurl",
-              "bins": ["xurl"],
-              "label": "Install xurl (npm)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "xdevplatform/tap/xurl",
+       "bins": ["xurl"],
+       "label": "Install xurl (brew)",
+      ,
+      {
+       "id": "npm",
+       "kind": "npm",
+       "package": "@xdevplatform/xurl",
+       "bins": ["xurl"],
+       "label": "Install xurl (npm)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # xurl — Agent Skill Reference
@@ -93,9 +93,9 @@ xurl auth oauth2
 For multiple pre-configured apps, switch between them:
 
 ```bash
-xurl auth default prod-app          # set default app
-xurl auth default prod-app alice    # set default app + user
-xurl --app dev-app /2/users/me      # one-off override
+xurl auth default prod-app     # set default app
+xurl auth default prod-app alice  # set default app + user
+xurl --app dev-app /2/users/me   # one-off override
 ```
 
 ### Other auth methods
@@ -108,47 +108,47 @@ Tokens are persisted to `~/.xurl` in YAML format. Each app has its own isolated 
 
 ## Quick Reference
 
-| Action                    | Command                                               |
+| Action          | Command                        |
 | ------------------------- | ----------------------------------------------------- |
-| Post                      | `xurl post "Hello world!"`                            |
-| Reply                     | `xurl reply POST_ID "Nice post!"`                     |
-| Quote                     | `xurl quote POST_ID "My take"`                        |
-| Delete a post             | `xurl delete POST_ID`                                 |
-| Read a post               | `xurl read POST_ID`                                   |
-| Search posts              | `xurl search "QUERY" -n 10`                           |
-| Who am I                  | `xurl whoami`                                         |
-| Look up a user            | `xurl user @handle`                                   |
-| Home timeline             | `xurl timeline -n 20`                                 |
-| Mentions                  | `xurl mentions -n 10`                                 |
-| Like                      | `xurl like POST_ID`                                   |
-| Unlike                    | `xurl unlike POST_ID`                                 |
-| Repost                    | `xurl repost POST_ID`                                 |
-| Undo repost               | `xurl unrepost POST_ID`                               |
-| Bookmark                  | `xurl bookmark POST_ID`                               |
-| Remove bookmark           | `xurl unbookmark POST_ID`                             |
-| List bookmarks            | `xurl bookmarks -n 10`                                |
-| List likes                | `xurl likes -n 10`                                    |
-| Follow                    | `xurl follow @handle`                                 |
-| Unfollow                  | `xurl unfollow @handle`                               |
-| List following            | `xurl following -n 20`                                |
-| List followers            | `xurl followers -n 20`                                |
-| Block                     | `xurl block @handle`                                  |
-| Unblock                   | `xurl unblock @handle`                                |
-| Mute                      | `xurl mute @handle`                                   |
-| Unmute                    | `xurl unmute @handle`                                 |
-| Send DM                   | `xurl dm @handle "message"`                           |
-| List DMs                  | `xurl dms -n 10`                                      |
-| Upload media              | `xurl media upload path/to/file.mp4`                  |
-| Media status              | `xurl media status MEDIA_ID`                          |
-| **App Management**        |                                                       |
-| Register app              | Manual, outside agent (do not pass secrets via agent) |
-| List apps                 | `xurl auth apps list`                                 |
-| Update app creds          | Manual, outside agent (do not pass secrets via agent) |
-| Remove app                | `xurl auth apps remove NAME`                          |
-| Set default (interactive) | `xurl auth default`                                   |
-| Set default (command)     | `xurl auth default APP_NAME [USERNAME]`               |
-| Use app per-request       | `xurl --app NAME /2/users/me`                         |
-| Auth status               | `xurl auth status`                                    |
+| Post           | `xurl post "Hello world!"`              |
+| Reply           | `xurl reply POST_ID "Nice post!"`           |
+| Quote           | `xurl quote POST_ID "My take"`            |
+| Delete a post       | `xurl delete POST_ID`                 |
+| Read a post        | `xurl read POST_ID`                  |
+| Search posts       | `xurl search "QUERY" -n 10`              |
+| Who am I         | `xurl whoami`                     |
+| Look up a user      | `xurl user @handle`                  |
+| Home timeline       | `xurl timeline -n 20`                 |
+| Mentions         | `xurl mentions -n 10`                 |
+| Like           | `xurl like POST_ID`                  |
+| Unlike          | `xurl unlike POST_ID`                 |
+| Repost          | `xurl repost POST_ID`                 |
+| Undo repost        | `xurl unrepost POST_ID`                |
+| Bookmark         | `xurl bookmark POST_ID`                |
+| Remove bookmark      | `xurl unbookmark POST_ID`               |
+| List bookmarks      | `xurl bookmarks -n 10`                |
+| List likes        | `xurl likes -n 10`                  |
+| Follow          | `xurl follow @handle`                 |
+| Unfollow         | `xurl unfollow @handle`                |
+| List following      | `xurl following -n 20`                |
+| List followers      | `xurl followers -n 20`                |
+| Block           | `xurl block @handle`                 |
+| Unblock          | `xurl unblock @handle`                |
+| Mute           | `xurl mute @handle`                  |
+| Unmute          | `xurl unmute @handle`                 |
+| Send DM          | `xurl dm @handle "message"`              |
+| List DMs         | `xurl dms -n 10`                   |
+| Upload media       | `xurl media upload path/to/file.mp4`         |
+| Media status       | `xurl media status MEDIA_ID`             |
+| **App Management**    |                            |
+| Register app       | Manual, outside agent (do not pass secrets via agent) |
+| List apps         | `xurl auth apps list`                 |
+| Update app creds     | Manual, outside agent (do not pass secrets via agent) |
+| Remove app        | `xurl auth apps remove NAME`             |
+| Set default (interactive) | `xurl auth default`                  |
+| Set default (command)   | `xurl auth default APP_NAME [USERNAME]`        |
+| Use app per-request    | `xurl --app NAME /2/users/me`             |
+| Auth status        | `xurl auth status`                  |
 
 > **Post IDs vs URLs:** Anywhere `POST_ID` appears above you can also paste a full post URL (e.g. `https://x.com/user/status/1234567890`) — xurl extracts the ID automatically.
 
@@ -165,7 +165,7 @@ Tokens are persisted to `~/.xurl` in YAML format. Each app has its own isolated 
 xurl post "Hello world!"
 
 # Post with media (upload first, then attach)
-xurl media upload photo.jpg          # → note the media_id from response
+xurl media upload photo.jpg     # → note the media_id from response
 xurl post "Check this out" --media-id MEDIA_ID
 
 # Multiple media
@@ -288,10 +288,10 @@ xurl media upload --media-type image/jpeg --category tweet_image photo.jpg
 
 # Check processing status (videos need server‑side processing)
 xurl media status MEDIA_ID
-xurl media status --wait MEDIA_ID    # poll until done
+xurl media status --wait MEDIA_ID  # poll until done
 
 # Full workflow: upload then post
-xurl media upload meme.png           # response includes media id
+xurl media upload meme.png      # response includes media id
 xurl post "lol" --media-id MEDIA_ID
 ```
 
@@ -301,13 +301,13 @@ xurl post "lol" --media-id MEDIA_ID
 
 These flags work on every command:
 
-| Flag         | Short | Description                                                        |
+| Flag     | Short | Description                            |
 | ------------ | ----- | ------------------------------------------------------------------ |
-| `--app`      |       | Use a specific registered app for this request (overrides default) |
-| `--auth`     |       | Force auth type: `oauth1`, `oauth2`, or `app`                      |
-| `--username` | `-u`  | Which OAuth2 account to use (if you have multiple)                 |
-| `--verbose`  | `-v`  | Forbidden in agent/LLM sessions (can leak auth headers/tokens)     |
-| `--trace`    | `-t`  | Add `X-B3-Flags: 1` trace header                                   |
+| `--app`   |    | Use a specific registered app for this request (overrides default) |
+| `--auth`   |    | Force auth type: `oauth1`, `oauth2`, or `app`           |
+| `--username` | `-u` | Which OAuth2 account to use (if you have multiple)         |
+| `--verbose` | `-v` | Forbidden in agent/LLM sessions (can leak auth headers/tokens)   |
+| `--trace`  | `-t` | Add `X-B3-Flags: 1` trace header                  |
 
 ---
 
@@ -320,7 +320,7 @@ The shortcut commands cover the most common operations. For anything else, use x
 xurl /2/users/me
 
 # POST with JSON body
-xurl -X POST /2/tweets -d '{"text":"Hello world!"}'
+xurl -X POST /2/tweets -d '{"text":"Hello world!"'
 
 # PUT, PATCH, DELETE
 xurl -X DELETE /2/tweets/1234567890
@@ -359,24 +359,24 @@ All commands return **JSON** to stdout, pretty‑printed with syntax highlightin
 
 ```json
 {
-  "data": {
-    "id": "1234567890",
-    "text": "Hello world!"
-  }
-}
+ "data": {
+  "id": "1234567890",
+  "text": "Hello world!"
+ 
+
 ```
 
 Errors are also returned as JSON:
 
 ```json
 {
-  "errors": [
-    {
-      "message": "Not authorized",
-      "code": 403
-    }
-  ]
-}
+ "errors": [
+  {
+   "message": "Not authorized",
+   "code": 403
+  
+ ]
+
 ```
 
 ---
@@ -429,14 +429,14 @@ xurl timeline -n 20
 # App credentials must already be configured manually outside agent/LLM context.
 # Authenticate users on each pre-configured app
 xurl auth default prod
-xurl auth oauth2                       # authenticates on prod app
+xurl auth oauth2            # authenticates on prod app
 
 xurl auth default staging
-xurl auth oauth2                       # authenticates on staging app
+xurl auth oauth2            # authenticates on staging app
 
 # Switch between them
-xurl auth default prod alice           # prod app, alice user
-xurl --app staging /2/users/me         # one-off request against staging
+xurl auth default prod alice      # prod app, alice user
+xurl --app staging /2/users/me     # one-off request against staging
 ```
 
 ---

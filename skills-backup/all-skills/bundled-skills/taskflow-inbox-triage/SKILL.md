@@ -1,7 +1,7 @@
 ---
 name: taskflow-inbox-triage
 description: Example TaskFlow authoring pattern for inbox triage. Use when messages need different treatment based on intent, with some routes notifying immediately, some waiting on outside answers, and others rolling into a later summary.
-metadata: { "openclaw": { "emoji": "📥" } }
+metadata: { "openclaw": { "emoji": "📥" 
 ---
 
 # TaskFlow inbox triage
@@ -29,20 +29,20 @@ Triage inbox items with one owner flow:
 
 ```json
 {
-  "businessThreads": [],
-  "personalItems": [],
-  "eodSummary": []
-}
+ "businessThreads": [],
+ "personalItems": [],
+ "eodSummary": []
+
 ```
 
 Suggested `waitJson` when blocked on Slack:
 
 ```json
 {
-  "kind": "reply",
-  "channel": "slack",
-  "threadKey": "slack:thread-1"
-}
+ "kind": "reply",
+ "channel": "slack",
+ "threadKey": "slack:thread-1"
+
 ```
 
 ## Minimal runtime calls
@@ -51,67 +51,67 @@ Suggested `waitJson` when blocked on Slack:
 const taskFlow = api.runtime.tasks.flow.fromToolContext(ctx);
 
 const created = taskFlow.createManaged({
-  controllerId: "my-plugin/inbox-triage",
-  goal: "triage inbox",
-  currentStep: "classify",
-  stateJson: {
-    businessThreads: [],
-    personalItems: [],
-    eodSummary: [],
-  },
-});
+ controllerId: "my-plugin/inbox-triage",
+ goal: "triage inbox",
+ currentStep: "classify",
+ stateJson: {
+  businessThreads: [],
+  personalItems: [],
+  eodSummary: [],
+ ,
+);
 
 const child = taskFlow.runTask({
-  flowId: created.flowId,
-  runtime: "acp",
-  childSessionKey: "agent:main:subagent:classifier",
-  task: "Classify inbox messages",
-  status: "running",
-  startedAt: Date.now(),
-  lastEventAt: Date.now(),
-});
+ flowId: created.flowId,
+ runtime: "acp",
+ childSessionKey: "agent:main:subagent:classifier",
+ task: "Classify inbox messages",
+ status: "running",
+ startedAt: Date.now(),
+ lastEventAt: Date.now(),
+);
 
 if (!child.created) {
-  throw new Error(child.reason);
-}
+ throw new Error(child.reason);
+
 
 const waiting = taskFlow.setWaiting({
-  flowId: created.flowId,
-  expectedRevision: created.revision,
-  currentStep: "await_business_reply",
-  stateJson: {
-    businessThreads: ["slack:thread-1"],
-    personalItems: [],
-    eodSummary: [],
-  },
-  waitJson: {
-    kind: "reply",
-    channel: "slack",
-    threadKey: "slack:thread-1",
-  },
-});
+ flowId: created.flowId,
+ expectedRevision: created.revision,
+ currentStep: "await_business_reply",
+ stateJson: {
+  businessThreads: ["slack:thread-1"],
+  personalItems: [],
+  eodSummary: [],
+ ,
+ waitJson: {
+  kind: "reply",
+  channel: "slack",
+  threadKey: "slack:thread-1",
+ ,
+);
 
 if (!waiting.applied) {
-  throw new Error(waiting.code);
-}
+ throw new Error(waiting.code);
+
 
 const resumed = taskFlow.resume({
-  flowId: waiting.flow.flowId,
-  expectedRevision: waiting.flow.revision,
-  status: "running",
-  currentStep: "route_items",
-  stateJson: waiting.flow.stateJson,
-});
+ flowId: waiting.flow.flowId,
+ expectedRevision: waiting.flow.revision,
+ status: "running",
+ currentStep: "route_items",
+ stateJson: waiting.flow.stateJson,
+);
 
 if (!resumed.applied) {
-  throw new Error(resumed.code);
-}
+ throw new Error(resumed.code);
+
 
 taskFlow.finish({
-  flowId: resumed.flow.flowId,
-  expectedRevision: resumed.flow.revision,
-  stateJson: resumed.flow.stateJson,
-});
+ flowId: resumed.flow.flowId,
+ expectedRevision: resumed.flow.revision,
+ stateJson: resumed.flow.stateJson,
+);
 ```
 
 ## Related example

@@ -13,7 +13,7 @@ Poorly written RLS policies can cause severe performance issues. Use subqueries 
 
 ```sql
 create policy orders_policy on orders
-  using (auth.uid() = user_id);  -- auth.uid() called per row!
+ using (auth.uid() = user_id); -- auth.uid() called per row!
 
 -- With 1M rows, auth.uid() is called 1M times
 ```
@@ -22,7 +22,7 @@ create policy orders_policy on orders
 
 ```sql
 create policy orders_policy on orders
-  using ((select auth.uid()) = user_id);  -- Called once, cached
+ using ((select auth.uid()) = user_id); -- Called once, cached
 
 -- 100x+ faster on large tables
 ```
@@ -36,16 +36,16 @@ returns boolean
 language sql
 security definer
 set search_path = ''
-as $$
-  select exists (
-    select 1 from public.team_members
-    where team_id = $1 and user_id = (select auth.uid())
-  );
-$$;
+as 
+ select exists (
+  select 1 from public.team_members
+  where team_id = 1 and user_id = (select auth.uid())
+ );
+;
 
 -- Use in policy (indexed lookup, not per-row check)
 create policy team_orders_policy on orders
-  using ((select is_team_member(team_id)));
+ using ((select is_team_member(team_id)));
 ```
 
 Always add indexes on columns used in RLS policies:

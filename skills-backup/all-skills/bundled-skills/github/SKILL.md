@@ -2,30 +2,30 @@
 name: github
 description: "GitHub operations via `gh` CLI: issues, PRs, CI runs, code review, API queries. Use when: (1) checking PR status or CI, (2) creating/commenting on issues, (3) listing/filtering PRs or issues, (4) viewing run logs. NOT for: complex web UI interactions requiring manual browser flows (use browser tooling when available), bulk operations across many repos (script with gh api), or when gh auth is not configured."
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "🐙",
+    "requires": { "bins": ["gh"] ,
+    "install":
+     [
       {
-        "emoji": "🐙",
-        "requires": { "bins": ["gh"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "gh",
-              "bins": ["gh"],
-              "label": "Install GitHub CLI (brew)",
-            },
-            {
-              "id": "apt",
-              "kind": "apt",
-              "package": "gh",
-              "bins": ["gh"],
-              "label": "Install GitHub CLI (apt)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "gh",
+       "bins": ["gh"],
+       "label": "Install GitHub CLI (brew)",
+      ,
+      {
+       "id": "apt",
+       "kind": "apt",
+       "package": "gh",
+       "bins": ["gh"],
+       "label": "Install GitHub CLI (apt)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # GitHub Skill
@@ -123,7 +123,7 @@ gh api repos/owner/repo/pulls/55 --jq '.title, .state, .user.login'
 gh api repos/owner/repo/labels --jq '.[].name'
 
 # Get repo stats
-gh api repos/owner/repo --jq '{stars: .stargazers_count, forks: .forks_count}'
+gh api repos/owner/repo --jq '{stars: .stargazers_count, forks: .forks_count'
 ```
 
 ## JSON Output
@@ -142,10 +142,10 @@ gh pr list --json number,title,state,mergeable --jq '.[] | select(.mergeable == 
 ```bash
 # Get PR overview for review
 PR=55 REPO=owner/repo
-echo "## PR #$PR Summary"
-gh pr view $PR --repo $REPO --json title,body,author,additions,deletions,changedFiles \
-  --jq '"**\(.title)** by @\(.author.login)\n\n\(.body)\n\n📊 +\(.additions) -\(.deletions) across \(.changedFiles) files"'
-gh pr checks $PR --repo $REPO
+echo "## PR #PR Summary"
+gh pr view PR --repo REPO --json title,body,author,additions,deletions,changedFiles \
+ --jq '"**\(.title)** by @\(.author.login)\n\n\(.body)\n\n📊 +\(.additions) -\(.deletions) across \(.changedFiles) files"'
+gh pr checks PR --repo REPO
 ```
 
 ### Issue Triage
@@ -153,7 +153,7 @@ gh pr checks $PR --repo $REPO
 ```bash
 # Quick issue triage view
 gh issue list --repo owner/repo --state open --json number,title,labels,createdAt \
-  --jq '.[] | "[\(.number)] \(.title) - \([.labels[].name] | join(", ")) (\(.createdAt[:10]))"'
+ --jq '.[] | "[\(.number)] \(.title) - \([.labels[].name] | join(", ")) (\(.createdAt[:10]))"'
 ```
 
 ## Notes

@@ -67,10 +67,10 @@ When the draft is complete (even if not yet finalized), publish to the TS Notes 
 **Example Notion API call properties:**
 ```json
 {
-  "Note": "Blog Post Title Here",
-  "Type": "Writing",
-  "Project(s)": "[\"https://www.notion.so/2a5b4629bb3780189199f3c496980c0c\"]"
-}
+ "Note": "Blog Post Title Here",
+ "Type": "Writing",
+ "Project(s)": "[\"https://www.notion.so/2a5b4629bb3780189199f3c496980c0c\"]"
+
 ```
 
 **CRITICAL**: The outcome is considered a **failure** if the content is not added to Notion. Always publish to Notion as part of the workflow, even for drafts.
@@ -80,14 +80,14 @@ When the draft is complete (even if not yet finalized), publish to the TS Notes 
 When the user confirms the draft is **final**:
 
 1. Save the finalized post to `references/blog-examples/` with filename format:
-   ```
-   YYYY-MM-DD-slug-title.md
-   ```
-   Example: `2025-11-25-why-ai-art-is-useless.md`
+  ```
+  YYYY-MM-DD-slug-title.md
+  ```
+  Example: `2025-11-25-why-ai-art-is-useless.md`
 
 2. Check the examples library count:
-   - If exceeding 20 examples, ask user permission to remove the 5 oldest
-   - Sort by filename date prefix to identify oldest files
+  - If exceeding 20 examples, ask user permission to remove the 5 oldest
+  - Sort by filename date prefix to identify oldest files
 
 The post-outcome is considered **successful** when the final draft is saved to the skill folder.
 

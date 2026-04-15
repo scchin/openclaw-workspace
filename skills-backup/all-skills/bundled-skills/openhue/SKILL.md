@@ -3,23 +3,23 @@ name: openhue
 description: Control Philips Hue lights and scenes via the OpenHue CLI.
 homepage: https://www.openhue.io/cli
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "💡",
+    "requires": { "bins": ["openhue"] ,
+    "install":
+     [
       {
-        "emoji": "💡",
-        "requires": { "bins": ["openhue"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "openhue/cli/openhue-cli",
-              "bins": ["openhue"],
-              "label": "Install OpenHue CLI (brew)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "openhue/cli/openhue-cli",
+       "bins": ["openhue"],
+       "label": "Install OpenHue CLI (brew)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # OpenHue CLI
@@ -51,9 +51,9 @@ Use `openhue` to control Philips Hue lights and scenes via a Hue Bridge.
 ### List Resources
 
 ```bash
-openhue get light       # List all lights
-openhue get room        # List all rooms
-openhue get scene       # List all scenes
+openhue get light    # List all lights
+openhue get room    # List all rooms
+openhue get scene    # List all scenes
 ```
 
 ### Control Lights

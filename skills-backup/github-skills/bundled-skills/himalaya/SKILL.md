@@ -3,23 +3,23 @@ name: himalaya
 description: "CLI to manage emails via IMAP/SMTP. Use `himalaya` to list, read, write, reply, forward, search, and organize emails from the terminal. Supports multiple accounts and message composition with MML (MIME Meta Language)."
 homepage: https://github.com/pimalaya/himalaya
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "📧",
+    "requires": { "bins": ["himalaya"] ,
+    "install":
+     [
       {
-        "emoji": "📧",
-        "requires": { "bins": ["himalaya"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "himalaya",
-              "bins": ["himalaya"],
-              "label": "Install Himalaya (brew)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "himalaya",
+       "bins": ["himalaya"],
+       "label": "Install Himalaya (brew)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # Himalaya Email CLI
@@ -59,7 +59,7 @@ backend.port = 993
 backend.encryption.type = "tls"
 backend.login = "you@example.com"
 backend.auth.type = "password"
-backend.auth.cmd = "pass show email/imap"  # or use keyring
+backend.auth.cmd = "pass show email/imap" # or use keyring
 
 message.send.backend.type = "smtp"
 message.send.backend.host = "smtp.example.com"
@@ -120,7 +120,7 @@ himalaya message export 42 --full
 
 ### Reply to an Email
 
-Interactive reply (opens $EDITOR):
+Interactive reply (opens EDITOR):
 
 ```bash
 himalaya message reply 42
@@ -140,7 +140,7 @@ himalaya message forward 42
 
 ### Write a New Email
 
-Interactive compose (opens $EDITOR):
+Interactive compose (opens EDITOR):
 
 ```bash
 himalaya message write

@@ -1,11 +1,11 @@
 ---
 name: feishu-cron-reminder
 description: >
-  Create cron jobs that reliably deliver reminders to Feishu (飞书) chats.
-  Use when the user asks to set up scheduled reminders, periodic notifications,
-  or any recurring task that should send messages to a Feishu conversation.
-  Triggers: '飞书定时提醒', '定时任务发飞书', 'cron reminder to feishu',
-  '每小时提醒', 'scheduled feishu message'.
+ Create cron jobs that reliably deliver reminders to Feishu (飞书) chats.
+ Use when the user asks to set up scheduled reminders, periodic notifications,
+ or any recurring task that should send messages to a Feishu conversation.
+ Triggers: '飞书定时提醒', '定时任务发飞书', 'cron reminder to feishu',
+ '每小时提醒', 'scheduled feishu message'.
 ---
 
 # Feishu Cron Reminder
@@ -33,10 +33,10 @@ description: >
 
 ```bash
 openclaw cron add \
-  --name "<任务名>" \
-  --every "<间隔>" \
-  --session main \
-  --system-event "[CRON定时任务] <任务名>。你必须立即调用 message 工具：action=send, channel=feishu, message='<提醒内容>'。调用完后回复 NO_REPLY。不要做其他任何事情，不要回复文字，只需要调用 message 工具发送飞书消息。不要删除或修改任何 cron 任务。"
+ --name "<任务名>" \
+ --every "<间隔>" \
+ --session main \
+ --system-event "[CRON定时任务] <任务名>。你必须立即调用 message 工具：action=send, channel=feishu, message='<提醒内容>'。调用完后回复 NO_REPLY。不要做其他任何事情，不要回复文字，只需要调用 message 工具发送飞书消息。不要删除或修改任何 cron 任务。"
 ```
 
 ### 参数说明

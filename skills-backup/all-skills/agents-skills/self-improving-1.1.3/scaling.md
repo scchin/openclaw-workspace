@@ -33,7 +33,7 @@ AFTER (1 entry):
 ```
 BEFORE:
 - When writing emails to Marcus, use bullet points, keep under 5 items,
-  no jargon, bottom-line first, he prefers morning sends
+ no jargon, bottom-line first, he prefers morning sends
 
 AFTER:
 - Marcus emails: bullets ≤5, no jargon, BLUF, AM preferred
@@ -80,8 +80,8 @@ Next scheduled: 2026-03-01
 ### Inheritance Chain
 ```
 global (memory.md)
-  └── domain (domains/code.md)
-       └── project (projects/app.md)
+ └── domain (domains/code.md)
+    └── project (projects/app.md)
 ```
 
 ### Override Syntax

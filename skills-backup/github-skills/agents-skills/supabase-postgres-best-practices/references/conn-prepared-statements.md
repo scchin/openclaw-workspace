@@ -13,7 +13,7 @@ Prepared statements are tied to individual database connections. In transaction-
 
 ```sql
 -- Named prepared statement
-prepare get_user as select * from users where id = $1;
+prepare get_user as select * from users where id = 1;
 
 -- In transaction mode pooling, next request may get different connection
 execute get_user(123);
@@ -27,7 +27,7 @@ execute get_user(123);
 -- The query is prepared and executed in a single protocol message
 
 -- Option 2: Deallocate after use in transaction mode
-prepare get_user as select * from users where id = $1;
+prepare get_user as select * from users where id = 1;
 execute get_user(123);
 deallocate get_user;
 
@@ -39,7 +39,7 @@ Check your driver settings:
 
 ```sql
 -- Many drivers use prepared statements by default
--- Node.js pg: { prepare: false } to disable
+-- Node.js pg: { prepare: false to disable
 -- JDBC: prepareThreshold=0 to disable
 ```
 

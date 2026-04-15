@@ -28,15 +28,15 @@
 | Format | "Use bullets not prose" | global |
 | Technical | "SQLite not Postgres" | domain/code |
 | Communication | "Shorter messages" | global |
-| Project-specific | "This repo uses Tailwind" | projects/{name} |
+| Project-specific | "This repo uses Tailwind" | projects/{name |
 | Person-specific | "Marcus wants BLUF" | domains/comms |
 
 ### By Scope
 ```
 Global: applies everywhere
-  └── Domain: applies to category (code, writing, comms)
-       └── Project: applies to specific context
-            └── Temporary: applies to this session only
+ └── Domain: applies to category (code, writing, comms)
+    └── Project: applies to specific context
+      └── Temporary: applies to this session only
 ```
 
 ## Confirmation Flow
@@ -44,16 +44,16 @@ Global: applies everywhere
 After 3 similar corrections:
 ```
 Agent: "I've noticed you prefer X over Y (corrected 3 times).
-        Should I always do this?
-        - Yes, always
-        - Only in [context]
-        - No, case by case"
+    Should I always do this?
+    - Yes, always
+    - Only in [context]
+    - No, case by case"
 
 User: "Yes, always"
 
 Agent: → Moves to Confirmed Preferences
-       → Removes from correction counter
-       → Cites source on future use
+    → Removes from correction counter
+    → Cites source on future use
 ```
 
 ## Pattern Evolution
@@ -102,5 +102,5 @@ Agent:
 ### Bad Learning
 - Inferred from silence
 - Contradicts recent behavior
-- Only works in narrow context
+- Only works in n → context
 - User never confirmed

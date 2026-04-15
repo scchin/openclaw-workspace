@@ -1,7 +1,7 @@
 ---
 name: bluebubbles
 description: Use when you need to send or manage iMessages via BlueBubbles (recommended iMessage integration). Calls go through the generic message tool with channel="bluebubbles".
-metadata: { "openclaw": { "emoji": "🫧", "requires": { "config": ["channels.bluebubbles"] } } }
+metadata: { "openclaw": { "emoji": "🫧", "requires": { "config": ["channels.bluebubbles"]  
 ---
 
 # BlueBubbles Actions
@@ -25,95 +25,95 @@ If the user is vague ("text my mom"), ask for the recipient handle or chat guid 
 
 ```json
 {
-  "action": "send",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "message": "hello from OpenClaw"
-}
+ "action": "send",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "message": "hello from OpenClaw"
+
 ```
 
 ### React (tapback)
 
 ```json
 {
-  "action": "react",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>",
-  "emoji": "❤️"
-}
+ "action": "react",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "messageId": "<message-guid>",
+ "emoji": "❤️"
+
 ```
 
 ### Remove a reaction
 
 ```json
 {
-  "action": "react",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>",
-  "emoji": "❤️",
-  "remove": true
-}
+ "action": "react",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "messageId": "<message-guid>",
+ "emoji": "❤️",
+ "remove": true
+
 ```
 
 ### Edit a previously sent message
 
 ```json
 {
-  "action": "edit",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>",
-  "message": "updated text"
-}
+ "action": "edit",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "messageId": "<message-guid>",
+ "message": "updated text"
+
 ```
 
 ### Unsend a message
 
 ```json
 {
-  "action": "unsend",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "messageId": "<message-guid>"
-}
+ "action": "unsend",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "messageId": "<message-guid>"
+
 ```
 
 ### Reply to a specific message
 
 ```json
 {
-  "action": "reply",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "replyTo": "<message-guid>",
-  "message": "replying to that"
-}
+ "action": "reply",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "replyTo": "<message-guid>",
+ "message": "replying to that"
+
 ```
 
 ### Send an attachment
 
 ```json
 {
-  "action": "sendAttachment",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "path": "/tmp/photo.jpg",
-  "caption": "here you go"
-}
+ "action": "sendAttachment",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "path": "/tmp/photo.jpg",
+ "caption": "here you go"
+
 ```
 
 ### Send with an iMessage effect
 
 ```json
 {
-  "action": "sendWithEffect",
-  "channel": "bluebubbles",
-  "target": "+15551234567",
-  "message": "big news",
-  "effect": "balloons"
-}
+ "action": "sendWithEffect",
+ "channel": "bluebubbles",
+ "target": "+15551234567",
+ "message": "big news",
+ "effect": "balloons"
+
 ```
 
 ## Notes

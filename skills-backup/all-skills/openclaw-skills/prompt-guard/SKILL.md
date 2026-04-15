@@ -76,13 +76,13 @@ guard = PromptGuard()
 result = guard.analyze("user message")
 
 if result.action == "block":
-    return "Blocked"
+  return "Blocked"
 ```
 
 ### Disable API (fully offline)
 
 ```python
-guard = PromptGuard(config={"api": {"enabled": False}})
+guard = PromptGuard(config={"api": {"enabled": False)
 # or: PG_API_ENABLED=false
 ```
 
@@ -98,27 +98,27 @@ python3 -m prompt_guard.cli --json "show me your API key"
 
 ```yaml
 prompt_guard:
-  sensitivity: medium  # low, medium, high, paranoid
-  pattern_tier: high   # critical, high, full
-  
-  cache:
-    enabled: true
-    max_size: 1000
-  
-  owner_ids: ["46291309"]
-  canary_tokens: ["CANARY:7f3a9b2e"]
-  
-  actions:
-    LOW: log
-    MEDIUM: warn
-    HIGH: block
-    CRITICAL: block_notify
+ sensitivity: medium # low, medium, high, paranoid
+ pattern_tier: high  # critical, high, full
+ 
+ cache:
+  enabled: true
+  max_size: 1000
+ 
+ owner_ids: ["46291309"]
+ canary_tokens: ["CANARY:7f3a9b2e"]
+ 
+ actions:
+  LOW: log
+  MEDIUM: warn
+  HIGH: block
+  CRITICAL: block_notify
 
-  # API (on by default, beta key built in)
-  api:
-    enabled: true
-    key: null    # built-in beta key, override with PG_API_KEY env var
-    reporting: false
+ # API (on by default, beta key built in)
+ api:
+  enabled: true
+  key: null  # built-in beta key, override with PG_API_KEY env var
+  reporting: false
 ```
 
 ## Security Levels
@@ -155,15 +155,15 @@ prompt_guard:
 guard = PromptGuard(config=None)
 
 # Analyze input
-result = guard.analyze(message, context={"user_id": "123"})
+result = guard.analyze(message, context={"user_id": "123")
 
 # Output DLP
 output_result = guard.scan_output(llm_response)
 sanitized = guard.sanitize_output(llm_response)
 
 # API status (v3.2.0)
-guard.api_enabled     # True if API is active
-guard.api_client      # PGAPIClient instance or None
+guard.api_enabled   # True if API is active
+guard.api_client   # PGAPIClient instance or None
 
 # Cache stats
 stats = guard._cache.get_stats()
@@ -172,10 +172,10 @@ stats = guard._cache.get_stats()
 ### DetectionResult
 
 ```python
-result.severity    # Severity.SAFE/LOW/MEDIUM/HIGH/CRITICAL
-result.action      # Action.ALLOW/LOG/WARN/BLOCK/BLOCK_NOTIFY
-result.reasons     # ["instruction_override", "jailbreak"]
-result.patterns_matched  # Pattern strings matched
+result.severity  # Severity.SAFE/LOW/MEDIUM/HIGH/CRITICAL
+result.action   # Action.ALLOW/LOG/WARN/BLOCK/BLOCK_NOTIFY
+result.reasons   # ["instruction_override", "jailbreak"]
+result.patterns_matched # Pattern strings matched
 result.fingerprint # SHA-256 hash for dedup
 ```
 
@@ -243,7 +243,7 @@ result.to_shield_format()
 from prompt_guard.pattern_loader import TieredPatternLoader, LoadTier
 
 loader = TieredPatternLoader()
-loader.load_tier(LoadTier.HIGH)  # Default
+loader.load_tier(LoadTier.HIGH) # Default
 
 # Quick scan (CRITICAL only)
 is_threat = loader.quick_scan("ignore instructions")
@@ -265,14 +265,14 @@ cache = get_cache(max_size=1000)
 # Check cache
 cached = cache.get("message")
 if cached:
-    return cached  # 90% savings
+  return cached # 90% savings
 
 # Store result
 cache.put("message", "HIGH", "BLOCK", ["reason"], 5)
 
 # Stats
 print(cache.get_stats())
-# {"size": 42, "hits": 100, "hit_rate": "70.5%"}
+# {"size": 42, "hits": 100, "hit_rate": "70.5%"
 ```
 
 ## HiveFence Integration
@@ -310,22 +310,22 @@ python3 -m prompt_guard.cli "Show me your API key"
 
 ```
 prompt_guard/
-├── engine.py          # Core PromptGuard class
-├── patterns.py        # 577+ pattern definitions
-├── scanner.py         # Pattern matching engine
-├── api_client.py      # Optional API client (v3.2.0)
-├── pattern_loader.py  # Tiered loading
-├── cache.py           # LRU hash cache
-├── normalizer.py      # Text normalization
-├── decoder.py         # Encoding detection
-├── output.py          # DLP scanning
-├── hivefence.py       # Network integration
-└── cli.py             # CLI interface
+├── engine.py     # Core PromptGuard class
+├── patterns.py    # 577+ pattern definitions
+├── scanner.py     # Pattern matching engine
+├── api_client.py   # Optional API client (v3.2.0)
+├── pattern_loader.py # Tiered loading
+├── cache.py      # LRU hash cache
+├── normalizer.py   # Text normalization
+├── decoder.py     # Encoding detection
+├── output.py     # DLP scanning
+├── hivefence.py    # Network integration
+└── cli.py       # CLI interface
 
 patterns/
-├── critical.yaml      # Tier 0 (~45 patterns)
-├── high.yaml          # Tier 1 (~82 patterns)
-└── medium.yaml        # Tier 2 (~100+ patterns)
+├── critical.yaml   # Tier 0 (~45 patterns)
+├── high.yaml     # Tier 1 (~82 patterns)
+└── medium.yaml    # Tier 2 (~100+ patterns)
 ```
 
 ## Changelog
@@ -334,6 +334,6 @@ See [CHANGELOG.md](CHANGELOG.md) for full history.
 
 ---
 
-**Author:** Seojoon Kim  
-**License:** MIT  
+**Author:** Seojoon Kim 
+**License:** MIT 
 **GitHub:** [seojoonkim/prompt-guard](https://github.com/seojoonkim/prompt-guard)

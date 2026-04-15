@@ -1,11 +1,11 @@
 ---
 name: autoglm-websearch
 description: >
-  使用 AutoGLM Web Search 接口进行网络信息搜索。当用户需要联网搜索、查询最新资讯、检索网页内容或获取实时信息时使用此 skill。
-  Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
+ 使用 AutoGLM Web Search 接口进行网络信息搜索。当用户需要联网搜索、查询最新资讯、检索网页内容或获取实时信息时使用此 skill。
+ Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
 compatibility:
-  requires:
-    - Python 3、hashlib（内置）
+ requires:
+  - Python 3、hashlib（内置）
 ---
 
 # AutoGLM WebSearch Skill
@@ -34,7 +34,7 @@ compatibility:
 |------|------|
 | 地址 | `https://autoglm-api.zhipuai.cn/agentdr/v1/assistant/skills/web-search` |
 | 方式 | POST |
-| 请求体 | `{"queries": [{"query": "<搜索词>"}]}` |
+| 请求体 | `{"queries": [{"query": "<搜索词>"]` |
 
 **签名 Headers（每次动态生成）：**
 
@@ -60,24 +60,24 @@ python websearch.py "搜索关键词"
 
 ```json
 {
-  "code": 0,
-  "msg": "SUCCESS",
-  "data": {
-    "results": [
+ "code": 0,
+ "msg": "SUCCESS",
+ "data": {
+  "results": [
+   {
+    "webPages": {
+     "value": [
       {
-        "webPages": {
-          "value": [
-            {
-              "name": "页面标题",
-              "url": "页面链接",
-              "snippet": "摘要内容"
-            }
-          ]
-        }
-      }
-    ]
-  }
-}
+       "name": "页面标题",
+       "url": "页面链接",
+       "snippet": "摘要内容"
+      
+     ]
+    
+   
+  ]
+ 
+
 ```
 
 ### 输出要求

@@ -3,30 +3,30 @@ name: ordercli
 description: Foodora-only CLI for checking past orders and active order status (Deliveroo WIP).
 homepage: https://ordercli.sh
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "🛵",
+    "requires": { "bins": ["ordercli"] ,
+    "install":
+     [
       {
-        "emoji": "🛵",
-        "requires": { "bins": ["ordercli"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/ordercli",
-              "bins": ["ordercli"],
-              "label": "Install ordercli (brew)",
-            },
-            {
-              "id": "go",
-              "kind": "go",
-              "module": "github.com/steipete/ordercli/cmd/ordercli@latest",
-              "bins": ["ordercli"],
-              "label": "Install ordercli (go)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "steipete/tap/ordercli",
+       "bins": ["ordercli"],
+       "label": "Install ordercli (brew)",
+      ,
+      {
+       "id": "go",
+       "kind": "go",
+       "module": "github.com/steipete/ordercli/cmd/ordercli@latest",
+       "bins": ["ordercli"],
+       "label": "Install ordercli (go)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # ordercli
@@ -58,7 +58,7 @@ Reorder (adds to cart)
 Cloudflare / bot protection
 
 - Browser login: `ordercli foodora login --email you@example.com --password-stdin --browser`
-- Reuse profile: `--browser-profile "$HOME/Library/Application Support/ordercli/browser-profile"`
+- Reuse profile: `--browser-profile "HOME/Library/Application Support/ordercli/browser-profile"`
 - Import Chrome cookies: `ordercli foodora cookies chrome --profile "Default"`
 
 Session import (no password)

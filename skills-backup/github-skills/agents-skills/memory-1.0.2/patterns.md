@@ -41,8 +41,8 @@ Organized by when things happened:
 ```
 ~/memory/
 ├── 2026/
-│   ├── q1/
-│   └── q2/
+│  ├── q1/
+│  └── q2/
 ├── 2025/
 └── archive/
 ```
@@ -57,15 +57,15 @@ Mix of categories and time:
 
 ```
 ~/memory/
-├── active/           # Current focus
-│   ├── projects/
-│   └── people/
-├── reference/        # Always relevant
-│   ├── knowledge/
-│   └── preferences/
-└── archive/          # Historical
-    ├── 2025/
-    └── 2024/
+├── active/      # Current focus
+│  ├── projects/
+│  └── people/
+├── reference/    # Always relevant
+│  ├── knowledge/
+│  └── preferences/
+└── archive/     # Historical
+  ├── 2025/
+  └── 2024/
 ```
 
 **Best for:** People who need both current and historical context.
@@ -78,19 +78,19 @@ When a category gets big, split it:
 
 **Before (100+ entries):**
 ```
-~/memory/projects/INDEX.md  # Too long
+~/memory/projects/INDEX.md # Too long
 ```
 
 **After (split by status):**
 ```
 ~/memory/projects/
-├── INDEX.md          # Just points to subdirs
+├── INDEX.md     # Just points to subdirs
 ├── active/
-│   └── INDEX.md      # 20 entries
+│  └── INDEX.md   # 20 entries
 ├── paused/
-│   └── INDEX.md      # 15 entries
+│  └── INDEX.md   # 15 entries
 └── archived/
-    └── INDEX.md      # 100+ entries (OK, rarely accessed)
+  └── INDEX.md   # 100+ entries (OK, rarely accessed)
 ```
 
 ---
@@ -102,8 +102,8 @@ If user wants to copy info from agent's built-in memory:
 ```
 ~/memory/sync/
 ├── INDEX.md
-├── preferences.md    # Copied from MEMORY.md
-└── key-decisions.md  # Copied from MEMORY.md
+├── preferences.md  # Copied from MEMORY.md
+└── key-decisions.md # Copied from MEMORY.md
 ```
 
 **Sync process:**
@@ -123,7 +123,7 @@ For fast entry without thinking about structure:
 ```
 ~/memory/
 ├── inbox/
-│   └── INDEX.md      # Unsorted items
+│  └── INDEX.md   # Unsorted items
 ├── projects/
 └── ...
 ```

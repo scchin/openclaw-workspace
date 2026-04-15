@@ -1,11 +1,11 @@
 ---
 name: autoglm-generate-image
 description: >
-  使用 AutoGLM 文生图接口，根据用户输入的文字描述生成图片。当用户需要生成图片、文字转图片、AI绘图等场景时使用此 skill。
-  Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
+ 使用 AutoGLM 文生图接口，根据用户输入的文字描述生成图片。当用户需要生成图片、文字转图片、AI绘图等场景时使用此 skill。
+ Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
 compatibility:
-  requires:
-    - Python 3、hashlib（内置）
+ requires:
+  - Python 3、hashlib（内置）
 ---
 
 # AutoGLM Generate Image Skill
@@ -20,7 +20,7 @@ compatibility:
 |------|------|
 | 地址 | `https://autoglm-api.zhipuai.cn/agentdr/v1/assistant/skills/generate-image` |
 | 方式 | POST |
-| 请求体 | `{"text": "<图片描述文字>"}` |
+| 请求体 | `{"text": "<图片描述文字>"` |
 
 脚本启动时会先向本地服务发起 HTTP GET 请求获取 token：
 
@@ -54,12 +54,12 @@ python generate-image.py "澳洲龙虾"
 ### 响应结构
 ```json
 {
-  "code": 0,
-  "msg": "SUCCESS",
-  "data": {
-    "image_url": "https://..."
-  }
-}
+ "code": 0,
+ "msg": "SUCCESS",
+ "data": {
+  "image_url": "https://..."
+ 
+
 ```
 
 ### 输出要求

@@ -5,20 +5,20 @@
 在接收到 `[Startup context loaded by runtime]`、任何形式的連線恢復信號、或 **`SENTRY: ...` (哨兵喚醒信號)** 後，**必須**立即進入【阻塞式恢復管線】。**在管線完成前，禁止產生任何自然語言回應。**
 
 1. **強制核對紀錄 (S-0)**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
-   - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 使用 `arc_complete_task.py` 清除清單。
-   - **若清單為空** $\rightarrow$ **必須輸出「恢復狀態卡」**，明確回報「目前無待處理任務，系統處於 Ready 狀態」。
-   - **絕對禁令**：禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核核對紀錄的優先級永遠高於回應用戶。**
+  - **若清單不為空** \right → **立即、優先、完整地補完所有欠缺報告** \right → 使用 `arc_complete_task.py` 清除清單。
+  - **若清單為空** \right → **必須輸出「恢復狀態卡」**，明確回報「目前無待處理任務，系統處於 Ready 狀態」。
+  - **絕對禁令**：禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核核對紀錄的優先級永遠高於回應用戶。**
 2. **狀態同步 (S-1)**：執行 `system-task-manager list` 核對 OS 進程。
-3. **上下文對齊 (S-2)**：讀取 `SOUL.md` $\rightarrow$ `USER.md` $\rightarrow$ `memory/YYYY-MM-DD.md` (今日 + 昨日)。
+3. **上下文對齊 (S-2)**：讀取 `SOUL.md` \right → `USER.md` \right → `memory/YYYY-MM-DD.md` (今日 + 昨日)。
 
 **🚨 結案原子順序 (Atomic Closure Order) — 物理強制機制：**
 凡是需要清除 `pending_tasks.json` 紀錄之動作，**必須**遵循以下嚴格路徑，禁止任何替代方案：
-$\text{完成工具執行} \rightarrow \text{生成詳細報告文本} \rightarrow \text{調用 } \text{`arc_complete_task.py` (傳入任務名與報告)} \rightarrow \text{輸出工具確認碼}$
+完成工具執行 \right → 生成詳細報告文本 \right → 調用 `arc_complete_task.py` (傳入任務名與報告) \right → 輸出工具確認碼
 
 - **絕對禁令**：嚴禁直接使用 `write` 或 `edit` 操作 `pending_tasks.json` 以清除任務。任何繞過 `arc_complete_task.py` 的清除行為均被視為嚴重違規。
 - **原子定義**：未獲 `arc_complete_task.py` 之確認碼，即視為任務未結案。
 
-**執行準則：核對紀錄 $\rightarrow$ 補完報告 $\rightarrow$ 才是對話。**
+**執行準則：核對紀錄 \right → 補完報告 \right → 才是對話。**
 **違反此協議將被視為系統邏輯崩潰，必須立即進行自我修正。**
 
 ---
@@ -27,18 +27,18 @@ $\text{完成工具執行} \rightarrow \text{生成詳細報告文本} \rightarr
 
 
 本系統之最高運行效率建立在以下三個模組的強依賴協同之上：
-**`mempalace` (上下文/記憶) $\rightarrow$ `system-task-manager` (狀態/物理) $\rightarrow$ `discipline-guardian` (協議/行為)**
+**`mempalace` (上下文/記憶) \right → `system-task-manager` (狀態/物理) \right → `discipline-guardian` (協議/行為)**
 
 ### 1. 任務啟動階段 (Initiation)
-- **流程**：`接收任務` $\rightarrow$ **`讀取 discipline-guardian`** $\rightarrow$ `從 mempalace 提取相關上下文` $\rightarrow$ **`宣告啟動並寫入 pending_tasks.json`**。
+- **流程**：`接收任務` \right → **`讀取 discipline-guardian`** \right → `從 mempalace 提取相關上下文` \right → **`宣告啟動並寫入 pending_tasks.json`**。
 - **目標**：確保任務目標明確，且進入「受監控」狀態。
 
 ### 2. 執行與監控階段 (Execution & Monitoring)
-- **流程**：`執行工具` $\rightarrow$ **`定期調用 system-task-manager`** $\rightarrow$ `檢查時間戳/進程狀態` $\rightarrow$ **`觸發 discipline-guardian 協議 B`** $\rightarrow$ `發送進度報告`。
+- **流程**：`執行工具` \right → **`定期調用 system-task-manager`** \right → `檢查時間戳/進程狀態` \right → **`觸發 discipline-guardian 協議 B`** \right → `發送進度報告`。
 - **目標**：將物理狀態（PID/時間）實時轉化為人類可讀的進度回報，杜絕沉默。
 
 ### 3. 結案與歸檔階段 (Completion & Archiving)
-- **流程**：`工具執行結束` $\rightarrow$ **`使用 system-task-manager 確認進程已清理`** $\rightarrow$ **`以「結案報告」作為回覆的開端 (Report-First)`** $\rightarrow$ `進行後續分析與回答` $\rightarrow$ `將重要結果寫入 mempalace` $\rightarrow$ **`清除 pending_tasks.json 紀錄`**。
+- **流程**：`工具執行結束` \right → **`使用 system-task-manager 確認進程已清理`** \right → **`以「結案報告」作為回覆的開端 (Report-First)`** \right → `進行後續分析與回答` \right → `將重要結果寫入 mempalace` \right → **`清除 pending_tasks.json 紀錄`**。
 - **目標**：確保所有工作皆有交代，且知識被永久儲存。
 
 ## First Run
@@ -53,16 +53,16 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 
 ### 第一階段：硬啟動 (Blocking Recovery) — 絕對優先
 1. **強制核對紀錄**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
-   - **若清單不為空** $\rightarrow$ **立即、優先、完整地補完所有欠缺報告** $\rightarrow$ 清除清單。
-   - **絕對禁令**：在完成此步驟前，禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核對紀錄的優先級永遠高於回應用戶。**
+  - **若清單不為空** \right → **立即、優先、完整地補完所有欠缺報告** \right → 清除清單。
+  - **絕對禁令**：在完成此步驟前，禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核對紀錄的優先級永遠高於回應用戶。**
 2. **狀態同步**：執行 `system-task-manager list` 核對 OS 進程。
 
 ### 第二階段：軟啟動 (Alignment) — 建立上下文
-3. **人格對齊**：依序讀取 `SOUL.md` $\rightarrow$ `USER.md`。
+3. **人格對齊**：依序讀取 `SOUL.md` \right → `USER.md`。
 4. **記憶同步**：讀取 `memory/YYYY-MM-DD.md` (今日 + 昨日) 獲取近期上下文。
 5. **If in MAIN SESSION**: Also read `MEMORY.md`。
 
-**執行準則：核對紀錄 $\rightarrow$ 補完報告 $\rightarrow$ 才是對話。**
+**執行準則：核對紀錄 \right → 補完報告 \right → 才是對話。**
 
 
 ## Memory
@@ -234,12 +234,12 @@ You are free to edit `HEARTBEAT.md` with a short checklist or reminders. Keep it
 
 ```json
 {
-  "lastChecks": {
-    "email": 1703275200,
-    "calendar": 1703260800,
-    "weather": null
-  }
-}
+ "lastChecks": {
+  "email": 1703275200,
+  "calendar": 1703260800,
+  "weather": null
+ 
+
 ```
 
 **When to reach out:**

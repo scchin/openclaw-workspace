@@ -1,6 +1,6 @@
 # Token Optimizer for OpenClaw
 
-**Reduce your AI costs by 97% - From $1,500+/month to under $50/month**
+**Reduce your AI costs by 97% - From 1,500+/month to under 50/month**
 
 [![Version](https://img.shields.io/badge/version-1.0.18-blue.svg)](https://github.com/smartpeopleconnected/openclaw-token-optimizer)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -37,9 +37,9 @@ Token Optimizer applies four key optimizations that work together to slash your 
 
 | Time Period | Before | After |
 |-------------|--------|-------|
-| Daily | $2-3 | **$0.10** |
-| Monthly | $70-90 | **$3-5** |
-| Yearly | $800+ | **$40-60** |
+| Daily | 2-3 | **0.10** |
+| Monthly | 70-90 | **3-5** |
+| Yearly | 800+ | **40-60** |
 
 ## What This Tool Modifies
 
@@ -88,7 +88,7 @@ Sets Haiku as the default model with easy aliases for switching:
 Routes heartbeat checks to a local LLM (llama3.2:3b) instead of paid API:
 - Zero API calls for status checks
 - No impact on rate limits
-- Saves $5-15/month automatically
+- Saves 5-15/month automatically
 
 ### 3. Lean Session Management
 Optimized context loading rules that reduce startup context from 50KB to 8KB:
@@ -133,10 +133,10 @@ Applies all optimizations: model routing, heartbeat, caching, rate limits, works
 
 ### Apply Specific Optimizations
 ```bash
-python cli.py optimize --apply --mode routing    # Model routing only
-python cli.py optimize --apply --mode heartbeat  # Heartbeat only
-python cli.py optimize --apply --mode caching    # Prompt caching only
-python cli.py optimize --apply --mode limits     # Rate limits only
+python cli.py optimize --apply --mode routing  # Model routing only
+python cli.py optimize --apply --mode heartbeat # Heartbeat only
+python cli.py optimize --apply --mode caching  # Prompt caching only
+python cli.py optimize --apply --mode limits   # Rate limits only
 ```
 
 ### Quick Health Check
@@ -161,8 +161,8 @@ python cli.py setup-heartbeat --provider groq --fallback ollama --apply
 
 ### Rollback Configuration
 ```bash
-python cli.py rollback --list            # List available backups
-python cli.py rollback --to <filename>   # Restore a specific backup
+python cli.py rollback --list      # List available backups
+python cli.py rollback --to <filename>  # Restore a specific backup
 ```
 
 ### Verify Setup
@@ -210,28 +210,28 @@ ollama serve
 Or use the CLI to configure a different provider:
 ```bash
 python cli.py setup-heartbeat --provider lmstudio
-python cli.py setup-heartbeat --provider none  # disable heartbeat
+python cli.py setup-heartbeat --provider none # disable heartbeat
 ```
 
 ## File Structure
 
 ```
 token-optimizer/
-+-- skill.json                 # Skill manifest
-+-- README.md                  # This file
++-- skill.json         # Skill manifest
++-- README.md         # This file
 +-- src/
-|   +-- __init__.py            # Version (single source of truth)
-|   +-- colors.py              # Shared ANSI colors
-|   +-- analyzer.py            # Analyzes current config
-|   +-- optimizer.py           # Applies optimizations
-|   +-- verify.py              # Verifies setup
+|  +-- __init__.py      # Version (single source of truth)
+|  +-- colors.py       # Shared ANSI colors
+|  +-- analyzer.py      # Analyzes current config
+|  +-- optimizer.py      # Applies optimizations
+|  +-- verify.py       # Verifies setup
 +-- templates/
-|   +-- openclaw-config-optimized.json
-|   +-- SOUL.md
-|   +-- USER.md
-|   +-- OPTIMIZATION-RULES.md
+|  +-- openclaw-config-optimized.json
+|  +-- SOUL.md
+|  +-- USER.md
+|  +-- OPTIMIZATION-RULES.md
 +-- test/
-    +-- simulation_test.py     # Simulation tests
+  +-- simulation_test.py   # Simulation tests
 ```
 
 ## Troubleshooting

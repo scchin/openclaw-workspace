@@ -5,7 +5,7 @@ version: 1.1.3
 homepage: https://clawic.com/skills/self-improving
 description: Self-reflection + Self-criticism + learning from corrections. Agent evaluates its own work, catches mistakes, and improves permanently.
 changelog: Fixed skill title display.
-metadata: {"clawdbot":{"emoji":"🧠","requires":{"bins":[]},"os":["linux","darwin","win32"],"configPaths":["~/self-improving/"]}}
+metadata: {"clawdbot":{"emoji":"🧠","requires":{"bins":[],"os":["linux","darwin","win32"],"configPaths":["~/self-improving/"]
 ---
 
 ## When to Use
@@ -18,12 +18,12 @@ Memory lives in `~/self-improving/` with tiered structure. See `memory-template.
 
 ```
 ~/self-improving/
-├── memory.md          # HOT: ≤100 lines, always loaded
-├── index.md           # Topic index with line counts
-├── projects/          # Per-project learnings
-├── domains/           # Domain-specific (code, writing, comms)
-├── archive/           # COLD: decayed patterns
-└── corrections.md     # Last 50 corrections log
+├── memory.md     # HOT: ≤100 lines, always loaded
+├── index.md      # Topic index with line counts
+├── projects/     # Per-project learnings
+├── domains/      # Domain-specific (code, writing, comms)
+├── archive/      # COLD: decayed patterns
+└── corrections.md   # Last 50 corrections log
 ```
 
 ## Quick Reference
@@ -41,7 +41,7 @@ Memory lives in `~/self-improving/` with tiered structure. See `memory-template.
 
 All data stored in `~/self-improving/`. Create on first use:
 ```bash
-mkdir -p ~/self-improving/{projects,domains,archive}
+mkdir -p ~/self-improving/{projects,domains,archive
 ```
 
 ## Detection Triggers
@@ -112,7 +112,7 @@ Self-reflection entries follow the same promotion rules: 3x applied successfully
 | "What do you know about X?" | Search all tiers for X |
 | "What have you learned?" | Show last 10 from `corrections.md` |
 | "Show my patterns" | List `memory.md` (HOT) |
-| "Show [project] patterns" | Load `projects/{name}.md` |
+| "Show [project] patterns" | Load `projects/{name.md` |
 | "What's in warm storage?" | List files in `projects/` + `domains/` |
 | "Memory stats" | Show counts per tier |
 | "Forget X" | Remove from all tiers (confirm first) |
@@ -126,19 +126,19 @@ On "memory stats" request, report:
 📊 Self-Improving Memory
 
 HOT (always loaded):
-  memory.md: X entries
+ memory.md: X entries
 
 WARM (load on demand):
-  projects/: X files
-  domains/: X files
+ projects/: X files
+ domains/: X files
 
 COLD (archived):
-  archive/: X files
+ archive/: X files
 
 Recent activity (7 days):
-  Corrections logged: X
-  Promotions to HOT: X
-  Demotions to WARM: X
+ Corrections logged: X
+ Promotions to HOT: X
+ Demotions to WARM: X
 ```
 
 ## Core Rules
@@ -163,7 +163,7 @@ Recent activity (7 days):
 - Never delete without asking
 
 ### 4. Namespace Isolation
-- Project patterns stay in `projects/{name}.md`
+- Project patterns stay in `projects/{name.md`
 - Global preferences in HOT tier (memory.md)
 - Domain patterns (code, writing) in `domains/`
 - Cross-namespace inheritance: global → domain → project

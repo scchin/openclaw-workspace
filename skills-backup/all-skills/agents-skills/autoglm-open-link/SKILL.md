@@ -1,8 +1,8 @@
 ---
 name: autoglm-open-link
 description: >
-  使用 AutoGLM Open Link 接口打开指定网页并提取页面正文内容。当用户需要读取某个网页详情、提取文章全文、抓取页面正文做摘要或分析时使用此 skill。
-  Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
+ 使用 AutoGLM Open Link 接口打开指定网页并提取页面正文内容。当用户需要读取某个网页详情、提取文章全文、抓取页面正文做摘要或分析时使用此 skill。
+ Token 通过本地服务 http://127.0.0.1:53699/get_token 自动获取，无需手动配置环境变量。
 ---
 
 # Autoglm Open Link
@@ -17,7 +17,7 @@ description: >
 |------|------|
 | 地址 | `https://autoglm-api.zhipuai.cn/agentdr/v1/assistant/skills/open-link` |
 | 方式 | POST |
-| 请求体 | `{"url": "<页面链接>"}` |
+| 请求体 | `{"url": "<页面链接>"` |
 | 返回 | `data.text` → 页面正文内容 |
 
 脚本启动时会先向本地服务发起 HTTP GET 请求获取 token：
@@ -50,12 +50,12 @@ python open-link.py "https://example.com"
 
 ```json
 {
-  "code": 0,
-  "msg": "SUCCESS",
-  "data": {
-    "text": "页面正文内容"
-  }
-}
+ "code": 0,
+ "msg": "SUCCESS",
+ "data": {
+  "text": "页面正文内容"
+ 
+
 ```
 
 ### 输出要求

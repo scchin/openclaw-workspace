@@ -19,9 +19,9 @@ MemPalace 已完全取代舊的記憶系統：
 MemPalace 現已與 `google-reliability-guardian` 深度聯動，根據系統健康度自動調整檢索深度，以優化 Token 成本與響應速度。
 
 **聯動邏輯：**
-- **Normal (健康)** $\rightarrow$ `MP_LIMIT = 5` $\rightarrow$ 完整模式 (深度認知)
-- **Warning (警示)** $\rightarrow$ `MP_LIMIT = 3` $\rightarrow$ 精簡模式 (速度優先)
-- **Critical (臨界)** $\rightarrow$ `MP_LIMIT = 1` $\rightarrow$ 極簡模式 (生存模式，極速減壓)
+- **Normal (健康)** \right → `MP_LIMIT = 5` \right → 完整模式 (深度認知)
+- **Warning (警示)** \right → `MP_LIMIT = 3` \right → 精簡模式 (速度優先)
+- **Critical (臨界)** \right → `MP_LIMIT = 1` \right → 極簡模式 (生存模式，極速減壓)
 
 **調用路徑：**
 建議優先使用 `/Users/KS/.openclaw/workspace/mp_dynamic.py` 進行查詢，該工具會自動與 Guardian 同步狀態並設定最優 Limit。
@@ -32,18 +32,18 @@ MemPalace 現已與 `google-reliability-guardian` 深度聯動，根據系統健
 
 ```
 KingSeanKS 的大腦
-    ↓ 每個重要事件
+  ↓ 每個重要事件
 MemPalace (ChromaDB + SQLite)
-    ├── Wing: ks-system
-    │   ├── knowledge（核心原則、系統知識）
-    │   ├── skills（自建技能、輸出模板）
-    │   ├── decisions（重要決定）
-    │   └── general（一般記憶、日記）
-    ├── Wing: openclaw-workspace
-    │   ├── memory（OpenClaw 日誌）
-    │   └── skills（技能文件）
-    └── Wing: wing_kingseanks
-        └── diary（KingSeanKS 日記）
+  ├── Wing: ks-system
+  │  ├── knowledge（核心原則、系統知識）
+  │  ├── skills（自建技能、輸出模板）
+  │  ├── decisions（重要決定）
+  │  └── general（一般記憶、日記）
+  ├── Wing: openclaw-workspace
+  │  ├── memory（OpenClaw 日誌）
+  │  └── skills（技能文件）
+  └── Wing: wing_kingseanks
+    └── diary（KingSeanKS 日記）
 ```
 
 **總 drawers：20,561 筆（持續增加中）**
@@ -115,7 +115,7 @@ python3 ~/.openclaw/hooks/mempalace-memory/wakeup.py -f
 | 維度 | Phase 1-2 | Phase 3+ |
 |------|-----------|---------|
 | Session 啟動 Token | ~2500 | ~280 |
-| 歷史搜尋 | 關鍵字找檔案 | 語意搜尋 $\rightarrow$ **動態深度調整** |
+| 歷史搜尋 | 關鍵字找檔案 | 語意搜尋 \right → **動態深度調整** |
 | 記憶保存 | 檔案系統 | ChromaDB 向量 + SQLite |
 | 跨 session 理解 | 需重述背景 | 自動上下文補充 |
 | 日記 | 手動寫入 | Hook 自動寫入 |
@@ -138,9 +138,9 @@ mempalace repair
 ```python
 from mempalace.mcp_server import tool_add_drawer
 tool_add_drawer(
-    content="你的內容",
-    wing="ks-system",
-    room="general",
-    source_file="manual-2026-04-11"
+  content="你的內容",
+  wing="ks-system",
+  room="general",
+  source_file="manual-2026-04-11"
 )
 ```

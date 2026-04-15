@@ -2,24 +2,24 @@
 name: model-usage
 description: Use CodexBar CLI local cost usage to summarize per-model usage for Codex or Claude, including the current (most recent) model or a full model breakdown. Trigger when asked for model-level usage/cost data from codexbar, or when you need a scriptable per-model summary from codexbar cost JSON.
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "📊",
+    "os": ["darwin"],
+    "requires": { "bins": ["codexbar"] ,
+    "install":
+     [
       {
-        "emoji": "📊",
-        "os": ["darwin"],
-        "requires": { "bins": ["codexbar"] },
-        "install":
-          [
-            {
-              "id": "brew-cask",
-              "kind": "brew",
-              "formula": "steipete/tap/codexbar",
-              "bins": ["codexbar"],
-              "label": "Install CodexBar (brew cask)",
-            },
-          ],
-      },
-  }
+       "id": "brew-cask",
+       "kind": "brew",
+       "formula": "steipete/tap/codexbar",
+       "bins": ["codexbar"],
+       "label": "Install CodexBar (brew cask)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # Model usage
@@ -36,9 +36,9 @@ TODO: add Linux CLI support guidance once CodexBar CLI install path is documente
 2. Use the bundled script to summarize by model.
 
 ```bash
-python {baseDir}/scripts/model_usage.py --provider codex --mode current
-python {baseDir}/scripts/model_usage.py --provider codex --mode all
-python {baseDir}/scripts/model_usage.py --provider claude --mode all --format json --pretty
+python {baseDir/scripts/model_usage.py --provider codex --mode current
+python {baseDir/scripts/model_usage.py --provider codex --mode all
+python {baseDir/scripts/model_usage.py --provider claude --mode all --format json --pretty
 ```
 
 ## Current model logic
@@ -55,8 +55,8 @@ python {baseDir}/scripts/model_usage.py --provider claude --mode all --format js
 
 ```bash
 codexbar cost --provider codex --format json > /tmp/cost.json
-python {baseDir}/scripts/model_usage.py --input /tmp/cost.json --mode all
-cat /tmp/cost.json | python {baseDir}/scripts/model_usage.py --input - --mode current
+python {baseDir/scripts/model_usage.py --input /tmp/cost.json --mode all
+cat /tmp/cost.json | python {baseDir/scripts/model_usage.py --input - --mode current
 ```
 
 ## Output

@@ -21,15 +21,15 @@ author: King Sean of KS
 - **路徑確認**：確認技能資料夾位於 `~/.openclaw/skills/<skill-name>/` 或 `~/.agents/skills/<skill-name>/`。
 - **識別文件**：確認資料夾內必須包含 `SKILL.md`。
 - **⚠️ 絕對匹配檢查 (Critical)**：**必須確保 `SKILL.md` 內 YAML frontmatter 的 `name` 欄位值，與該技能的「目錄名稱」完全一致（區分大小寫，無多餘空格）。**
-  - *錯誤示例*：目錄名為 `backup-github` $\rightarrow$ `name: skills-backup-github` (❌ 導致 UI 消失)
-  - *正確示例*：目錄名為 `backup-github` $\rightarrow$ `name: backup-github` (✅ 正常顯示)
+ - *錯誤示例*：目錄名為 `backup-github` \right → `name: skills-backup-github` (❌ 導致 UI 消失)
+ - *正確示例*：目錄名為 `backup-github` \right → `name: backup-github` (✅ 正常顯示)
 - **格式校驗**：檢查 `SKILL.md` 開頭是否具有正確的 YAML frontmatter 格式：
-  ```yaml
-  ---
-  name: <技能名稱>
-  description: <描述>
-  ---
-  ```
+ ```yaml
+ ---
+ name: <技能名稱>
+ description: <描述>
+ ---
+ ```
 - **權限檢查**：確保檔案權限為可讀取（如 `chmod 644 SKILL.md`）。
 
 ### 2. 配置註冊 (Configuration)
@@ -49,7 +49,7 @@ author: King Sean of KS
 
 ### A. 排除目錄名稱衝突與過濾
 部分系統可能會過濾特定關鍵字或長度過長的目錄名。
-- **方案**：嘗試將目錄重命名為較簡短的名稱（例如 `skills-backup-github` $\rightarrow$ `backup-github`），並同步更新 `openclaw.json`。
+- **方案**：嘗試將目錄重命名為較簡短的名稱（例如 `skills-backup-github` \right → `backup-github`），並同步更新 `openclaw.json`。
 
 ### B. 清理不可見字符 (Invisible Characters)
 從網頁複製內容時，可能會帶入 BOM 或非標準空格，導致 YAML 解析失敗。
@@ -58,8 +58,8 @@ author: King Sean of KS
 ### C. 驗證 API 回傳
 使用 `curl` 直接呼叫 Gateway API 檢查後端是否已認可該技能：
 - 指令：`curl -H "Authorization: Bearer <TOKEN>" "http://127.0.0.1:18789/skills/status"`
-- 若 API 回傳包含該技能但 UI 不顯示 $\rightarrow$ **前端緩存問題**（請 Hard Refresh 瀏覽器）。
-- 若 API 不回傳 $\rightarrow$ **後端加載失敗**（檢查 `SKILL.md` 格式及名稱匹配度）。
+- 若 API 回傳包含該技能但 UI 不顯示 \right → **前端緩存問題**（請 Hard Refresh 瀏覽器）。
+- 若 API 不回傳 \right → **後端加載失敗**（檢查 `SKILL.md` 格式及名稱匹配度）。
 
 ---
 

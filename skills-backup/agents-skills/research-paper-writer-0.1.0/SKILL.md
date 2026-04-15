@@ -16,16 +16,16 @@ This skill guides the creation of formal academic research papers that meet publ
 When asked to write a research paper:
 
 1. **Clarify the topic and scope** with the user:
-   - What is the main research question or contribution?
-   - What is the target audience (conference, journal, general academic)?
-   - What is the desired length (page count or word count)?
-   - Are there specific sections required?
-   - What formatting standard to use (IEEE or ACM)?
+  - What is the main research question or contribution?
+  - What is the target audience (conference, journal, general academic)?
+  - What is the desired length (page count or word count)?
+  - Are there specific sections required?
+  - What formatting standard to use (IEEE or ACM)?
 
 2. **Gather context** if needed:
-   - Review any provided research materials, data, or references
-   - Understand the domain and technical background
-   - Identify key related work or existing research to reference
+  - Review any provided research materials, data, or references
+  - Understand the domain and technical background
+  - Identify key related work or existing research to reference
 
 ### 2. Paper Structure
 
@@ -33,50 +33,50 @@ Follow this standard academic paper structure:
 
 ```
 1. Title and Abstract
-   - Concise title reflecting the main contribution
-   - Abstract: 150-250 words summarizing purpose, methods, results, conclusions
+  - Concise title reflecting the main contribution
+  - Abstract: 150-250 words summarizing purpose, methods, results, conclusions
 
 2. Introduction
-   - Motivation and problem statement
-   - Research gap and significance
-   - Main contributions (typically 3-5 bullet points)
-   - Paper organization paragraph
+  - Motivation and problem statement
+  - Research gap and significance
+  - Main contributions (typically 3-5 bullet points)
+  - Paper organization paragraph
 
 3. Related Work / Background
-   - Literature review of relevant research
-   - Comparison with existing approaches
-   - Positioning of current work
+  - Literature review of relevant research
+  - Comparison with existing approaches
+  - Positioning of current work
 
 4. Methodology / Approach / System Design
-   - Detailed description of proposed method/system
-   - Architecture diagrams if applicable
-   - Algorithms or procedures
-   - Design decisions and rationale
+  - Detailed description of proposed method/system
+  - Architecture diagrams if applicable
+  - Algorithms or procedures
+  - Design decisions and rationale
 
 5. Implementation (if applicable)
-   - Technical details
-   - Tools and technologies used
-   - Challenges and solutions
+  - Technical details
+  - Tools and technologies used
+  - Challenges and solutions
 
 6. Evaluation / Experiments / Results
-   - Experimental setup
-   - Datasets or test scenarios
-   - Performance metrics
-   - Results presentation (tables, graphs)
-   - Analysis and interpretation
+  - Experimental setup
+  - Datasets or test scenarios
+  - Performance metrics
+  - Results presentation (tables, graphs)
+  - Analysis and interpretation
 
 7. Discussion
-   - Implications of results
-   - Limitations and threats to validity
-   - Lessons learned
+  - Implications of results
+  - Limitations and threats to validity
+  - Lessons learned
 
 8. Conclusion and Future Work
-   - Summary of contributions
-   - Impact and significance
-   - Future research directions
+  - Summary of contributions
+  - Impact and significance
+  - Future research directions
 
 9. References
-   - Comprehensive bibliography in proper citation format
+  - Comprehensive bibliography in proper citation format
 ```
 
 ### 3. Academic Writing Style
@@ -135,11 +135,11 @@ Apply these writing conventions from scholarly research:
 - Margins: Top 19mm, Bottom 43mm, Left/Right 14.32mm
 - Two-column layout with 4.22mm column separation
 - Font: Times New Roman throughout
-  - Title: 24pt bold
-  - Author names: 11pt
-  - Section headings: 10pt bold, numbered (1., 1.1, 1.1.1)
-  - Body text: 10pt
-  - Figure/Table captions: 8pt
+ - Title: 24pt bold
+ - Author names: 11pt
+ - Section headings: 10pt bold, numbered (1., 1.1, 1.1.1)
+ - Body text: 10pt
+ - Figure/Table captions: 8pt
 - Line spacing: Single
 - Paragraph: No indentation, 3pt spacing between paragraphs
 - Figures: Centered, with captions below
@@ -176,29 +176,29 @@ Apply these writing conventions from scholarly research:
 **Step-by-step approach:**
 
 1. **Create outline**
-   - Develop detailed section-by-section outline
-   - Define key points for each section
-   - Identify where figures/tables are needed
+  - Develop detailed section-by-section outline
+  - Define key points for each section
+  - Identify where figures/tables are needed
 
 2. **Draft sections iteratively**
-   - Start with methodology (core contribution)
-   - Then introduction (now that contribution is clear)
-   - Related work (to position the contribution)
-   - Results and evaluation
-   - Discussion and conclusion
-   - Abstract last (summary of complete paper)
+  - Start with methodology (core contribution)
+  - Then introduction (now that contribution is clear)
+  - Related work (to position the contribution)
+  - Results and evaluation
+  - Discussion and conclusion
+  - Abstract last (summary of complete paper)
 
 3. **Add citations**
-   - Reference related work throughout
-   - Support claims with evidence from literature
-   - Create comprehensive reference list
+  - Reference related work throughout
+  - Support claims with evidence from literature
+  - Create comprehensive reference list
 
 4. **Review and refine**
-   - Check logical flow between sections
-   - Ensure consistency in terminology
-   - Verify all figures/tables are referenced in text
-   - Confirm abstract matches content
-   - Validate citation completeness
+  - Check logical flow between sections
+  - Ensure consistency in terminology
+  - Verify all figures/tables are referenced in text
+  - Confirm abstract matches content
+  - Validate citation completeness
 
 ## Examples
 
@@ -208,17 +208,17 @@ User: "Write a research paper surveying recent advances in context-aware systems
 
 Response:
 1. Clarify scope: "I'll create a survey paper on context-aware systems. A few questions:
-   - Should I focus on specific aspects (e.g., requirements engineering, implementation techniques)?
-   - What time period for 'recent' (last 5 years, 10 years)?
-   - Target length: 10-15 pages, or 20-30 pages comprehensive survey?
-   - IEEE or ACM format?"
+  - Should I focus on specific aspects (e.g., requirements engineering, implementation techniques)?
+  - What time period for 'recent' (last 5 years, 10 years)?
+  - Target length: 10-15 pages, or 20-30 pages comprehensive survey?
+  - IEEE or ACM format?"
 
 2. After clarification, create outline showing:
-   - Taxonomy of context-aware systems
-   - Survey methodology
-   - Classification scheme
-   - Section-by-section coverage of different aspects
-   - Trends and future directions
+  - Taxonomy of context-aware systems
+  - Survey methodology
+  - Classification scheme
+  - Section-by-section coverage of different aspects
+  - Trends and future directions
 
 3. Draft paper following survey structure with extensive related work coverage
 ```
@@ -229,19 +229,19 @@ User: "Write a paper about my new algorithm for detecting hallucinations in visi
 
 Response:
 1. Gather details about:
-   - Algorithm approach and novelty
-   - Experimental setup and datasets used
-   - Results and metrics
-   - Comparison baselines
+  - Algorithm approach and novelty
+  - Experimental setup and datasets used
+  - Results and metrics
+  - Comparison baselines
 
 2. Structure as experimental paper:
-   - Introduction: motivation for hallucination detection
-   - Related work: existing detection methods
-   - Proposed method: detailed algorithm description
-   - Experiments: datasets, metrics, setup
-   - Results: quantitative comparison with baselines
-   - Analysis: ablation studies, error analysis
-   - Conclusion: contributions and future work
+  - Introduction: motivation for hallucination detection
+  - Related work: existing detection methods
+  - Proposed method: detailed algorithm description
+  - Experiments: datasets, metrics, setup
+  - Results: quantitative comparison with baselines
+  - Analysis: ablation studies, error analysis
+  - Conclusion: contributions and future work
 
 3. Emphasize reproducibility and empirical validation
 ```

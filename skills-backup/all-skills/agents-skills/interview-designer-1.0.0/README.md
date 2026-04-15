@@ -19,17 +19,17 @@ Use this skill when:
 
 ## Methodology: Scorecard → Forensic → Future
 
-| Phase           | Expert        | What You Define                                                                 |
+| Phase      | Expert    | What You Define                                 |
 |-----------------|---------------|-----------------------------------------------------------------------------------|
-| **1. Scorecard**| Geoff Smart   | Mission, Outcomes, Competencies — *before* looking at any resume                 |
+| **1. Scorecard**| Geoff Smart  | Mission, Outcomes, Competencies — *before* looking at any resume         |
 | **2. Forensic Scan** | Smart + Domain | Resume gaps vs. highlights; "Too Good To Be True" / "Driver vs Passenger" heuristics |
-| **3. Future Simulation** | Lou Adler  | Performance problems the candidate would face in your context; week-one scenarios |
+| **3. Future Simulation** | Lou Adler | Performance problems the candidate would face in your context; week-one scenarios |
 
 ---
 
 ## What You Get
 
-| Output            | Template                           | Purpose                                              |
+| Output      | Template              | Purpose                       |
 |-------------------|------------------------------------|------------------------------------------------------|
 | **Interview Guide** | `templates/interview_guide_template.md` | Scorecard + Red Flags/Green Signals + Pressure Tests + Future Scenarios |
 
@@ -47,11 +47,11 @@ The guide includes both concerns (**Red Flags**) and highlight verification (**G
 
 ## Quick Reference
 
-| Interview Goal      | Question Type       | Example                                                                 |
+| Interview Goal   | Question Type    | Example                                 |
 |---------------------|---------------------|-------------------------------------------------------------------------|
 | Validate past claims| Pressure Test (STAR) | "Walk me through the specific metrics you tracked and how you used them." |
-| Predict future fit  | Future Simulation   | "Here's our Q1 challenge. How would you approach it in your first week?" |
-| Detect blind spots  | Trade-off Question  | "Speed vs. quality — which would you sacrifice here, and why?"         |
+| Predict future fit | Future Simulation  | "Here's our Q1 challenge. How would you approach it in your first week?" |
+| Detect blind spots | Trade-off Question | "Speed vs. quality — which would you sacrifice here, and why?"     |
 
 ---
 

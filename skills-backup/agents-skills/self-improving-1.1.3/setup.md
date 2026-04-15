@@ -5,7 +5,7 @@
 ### 1. Create Memory Structure
 
 ```bash
-mkdir -p ~/self-improving/{projects,domains,archive}
+mkdir -p ~/self-improving/{projects,domains,archive
 ```
 
 ### 2. Initialize Core Files
@@ -62,14 +62,14 @@ Run "memory stats" to confirm setup:
 📊 Self-Improving Memory
 
 🔥 HOT (always loaded):
-   memory.md: 0 entries
+  memory.md: 0 entries
 
 🌡️ WARM (load on demand):
-   projects/: 0 files
-   domains/: 0 files
+  projects/: 0 files
+  domains/: 0 files
 
 ❄️ COLD (archived):
-   archive/: 0 files
+  archive/: 0 files
 
 ⚙️ Mode: Passive
 ```

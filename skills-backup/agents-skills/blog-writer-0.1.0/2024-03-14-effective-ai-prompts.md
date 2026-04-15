@@ -18,7 +18,7 @@ Interacting with ChatGPT should mimic a conversation with a colleague. This appr
 
 ### Context Is Key
 
-Providing ChatGPT with clear context is vital. It narrows down the AI's focus to your specific subject, leading to more accurate and useful responses. Contextualized prompts require more details but offer more refined outputs.
+Providing ChatGPT with clear context is vital. It n → s down the AI's focus to your specific subject, leading to more accurate and useful responses. Contextualized prompts require more details but offer more refined outputs.
 
 ### Assuming Identities and Professions
 

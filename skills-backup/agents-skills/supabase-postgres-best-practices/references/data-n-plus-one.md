@@ -13,7 +13,7 @@ N+1 queries execute one query per item in a loop. Batch them into a single query
 
 ```sql
 -- First query: get all users
-select id from users where active = true;  -- Returns 100 IDs
+select id from users where active = true; -- Returns 100 IDs
 
 -- Then N queries, one per user
 select * from orders where user_id = 1;
@@ -43,10 +43,10 @@ Application pattern:
 
 ```sql
 -- Instead of looping in application code:
--- for user in users: db.query("SELECT * FROM orders WHERE user_id = $1", user.id)
+-- for user in users: db.query("SELECT * FROM orders WHERE user_id = 1", user.id)
 
 -- Pass array parameter:
-select * from orders where user_id = any($1::bigint[]);
+select * from orders where user_id = any(1::bigint[]);
 -- Application passes: [1, 2, 3, 4, 5, ...]
 ```
 

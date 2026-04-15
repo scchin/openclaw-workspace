@@ -41,7 +41,7 @@ Determine (in order):
 7. Deployment context (local mac app, headless gateway host, remote gateway, container/CI).
 8. Disk encryption status (FileVault/LUKS/BitLocker).
 9. OS automatic security updates status.
-   Note: these are not blocking items, but are highly recommended, especially if OpenClaw can access sensitive data.
+  Note: these are not blocking items, but are highly recommended, especially if OpenClaw can access sensitive data.
 10. Usage mode for a personal assistant with full access (local workstation vs headless/remote vs other).
 
 First ask once for permission to run read-only checks. If granted, run them by default and only ask questions for items you cannot infer or verify. Do not ask for information already visible in runtime or command output. Keep the permission ask as a single sentence, and list follow-up info needed as an unordered list (not numbered) unless you are presenting selectable choices.
@@ -55,11 +55,11 @@ If you must ask, use non-technical prompts:
 - “Is disk encryption turned on (FileVault/BitLocker/LUKS)?”
 - “Are automatic security updates enabled?”
 - “How do you use this machine?”
-  Examples:
-  - Personal machine shared with the assistant
-  - Dedicated local machine for the assistant
-  - Dedicated remote machine/server accessed remotely (always on)
-  - Something else?
+ Examples:
+ - Personal machine shared with the assistant
+ - Dedicated local machine for the assistant
+ - Dedicated remote machine/server accessed remotely (always on)
+ - Something else?
 
 Only ask for the risk profile after system context is known.
 
@@ -67,11 +67,11 @@ If the user grants read-only permission, run the OS-appropriate checks by defaul
 
 1. OS: `uname -a`, `sw_vers`, `cat /etc/os-release`.
 2. Listening ports:
-   - Linux: `ss -ltnup` (or `ss -ltnp` if `-u` unsupported).
-   - macOS: `lsof -nP -iTCP -sTCP:LISTEN`.
+  - Linux: `ss -ltnup` (or `ss -ltnp` if `-u` unsupported).
+  - macOS: `lsof -nP -iTCP -sTCP:LISTEN`.
 3. Firewall status:
-   - Linux: `ufw status`, `firewall-cmd --state`, `nft list ruleset` (pick what is installed).
-   - macOS: `/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate` and `pfctl -s info`.
+  - Linux: `ufw status`, `firewall-cmd --state`, `nft list ruleset` (pick what is installed).
+  - macOS: `/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate` and `pfctl -s info`.
 4. Backups (macOS): `tmutil status` (if Time Machine is used).
 
 ### 2) Run OpenClaw security audits (read-only)

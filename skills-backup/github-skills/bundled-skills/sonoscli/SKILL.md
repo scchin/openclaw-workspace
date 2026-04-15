@@ -3,23 +3,23 @@ name: sonoscli
 description: Control Sonos speakers (discover/status/play/volume/group).
 homepage: https://sonoscli.sh
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "🔊",
+    "requires": { "bins": ["sonos"] ,
+    "install":
+     [
       {
-        "emoji": "🔊",
-        "requires": { "bins": ["sonos"] },
-        "install":
-          [
-            {
-              "id": "go",
-              "kind": "go",
-              "module": "github.com/steipete/sonoscli/cmd/sonos@latest",
-              "bins": ["sonos"],
-              "label": "Install sonoscli (go)",
-            },
-          ],
-      },
-  }
+       "id": "go",
+       "kind": "go",
+       "module": "github.com/steipete/sonoscli/cmd/sonos@latest",
+       "bins": ["sonos"],
+       "label": "Install sonoscli (go)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # Sonos CLI
@@ -51,12 +51,12 @@ Use `sonos` to control Sonos speakers on the local network.
 ### `sonos discover` - `no route to host`
 
 - On error `Error: write udp4 0.0.0.0:64326->239.255.255.250:1900: sendto: no route to host (Command exited with code 1)`
-  - Note that the port number after `0.0.0.0:` is ephemeral and will change and the netmask may not match exactly either
-  - The `sendto: no route to host` should stay consistent
+ - Note that the port number after `0.0.0.0:` is ephemeral and will change and the netmask may not match exactly either
+ - The `sendto: no route to host` should stay consistent
 - Advise the user that in `direct` (no Docker sandbox) mode on Mac OS that Settings -> Privacy & Security -> Local Network will need to be enabled for the top-level host parent process of the Gateway
-  - `node` if running via `launchd`
-  - `Terminal` if running the gateway directly in the terminal
-  - `Visual Studio Code` if running via terminal in VS Code
+ - `node` if running via `launchd`
+ - `Terminal` if running the gateway directly in the terminal
+ - `Visual Studio Code` if running via terminal in VS Code
 - An alternative option is to use `sandbox` (docker container) with network access allowed for that sandbox
 
 ### `sonos discover` - `bind: operation not permitted`

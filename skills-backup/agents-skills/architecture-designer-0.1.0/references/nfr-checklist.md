@@ -63,7 +63,7 @@
 
 | Question | Considerations |
 |----------|----------------|
-| Infrastructure budget? | $/month, $/user, $/request |
+| Infrastructure budget? | /month, /user, /request |
 | Operational budget? | FTE for maintenance |
 | Cost optimization? | Reserved instances, spot instances |
 | Cost alerts? | Thresholds for notification |
@@ -109,4 +109,4 @@
 | Availability | Uptime percentage |
 | Reliability | RPO, RTO |
 | Security | Compliance requirements |
-| Cost | $/month budget |
+| Cost | /month budget |

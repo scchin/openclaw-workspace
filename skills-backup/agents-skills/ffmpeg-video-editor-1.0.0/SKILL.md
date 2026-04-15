@@ -32,13 +32,13 @@ ffmpeg -y -hide_banner -i "INPUT" -ss START_TIME -to END_TIME -c copy "OUTPUT"
 
 **Examples:**
 - Cut from 1:21 to 1:35:
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -ss 00:01:21 -to 00:01:35 -c copy "video_trimmed.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -ss 00:01:21 -to 00:01:35 -c copy "video_trimmed.mp4"
+ ```
 - Extract first 2 minutes:
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -ss 00:00:00 -to 00:02:00 -c copy "video_clip.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -ss 00:00:00 -to 00:02:00 -c copy "video_clip.mp4"
+ ```
 
 ---
 
@@ -90,17 +90,17 @@ ffmpeg -y -hide_banner -i "INPUT" -vf "scale=WIDTH:HEIGHT:force_original_aspect_
 
 **Examples:**
 - 16:9 for YouTube:
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black" -c:a copy "video_16x9.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -vf "scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2:black" -c:a copy "video_16x9.mp4"
+ ```
 - Square for Instagram:
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -vf "scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black" -c:a copy "video_square.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -vf "scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2:black" -c:a copy "video_square.mp4"
+ ```
 - Vertical for TikTok:
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black" -c:a copy "video_vertical.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black" -c:a copy "video_vertical.mp4"
+ ```
 
 ---
 
@@ -144,17 +144,17 @@ ffmpeg -y -hide_banner -i "INPUT" -c:v libx264 -crf CRF_VALUE -preset medium -c:
 
 **Examples:**
 - Balanced compression (CRF 23):
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k "video_compressed.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -c:v libx264 -crf 23 -preset medium -c:a aac -b:a 128k "video_compressed.mp4"
+ ```
 - High compression/smaller file (CRF 28):
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -c:v libx264 -crf 28 -preset fast -c:a aac -b:a 96k "video_small.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -c:v libx264 -crf 28 -preset fast -c:a aac -b:a 96k "video_small.mp4"
+ ```
 - High quality (CRF 18):
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -c:v libx264 -crf 18 -preset slow -c:a aac -b:a 192k "video_hq.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -c:v libx264 -crf 18 -preset slow -c:a aac -b:a 192k "video_hq.mp4"
+ ```
 
 ---
 
@@ -224,13 +224,13 @@ ffmpeg -y -hide_banner -i "INPUT" -filter_complex "[0:v]setpts=2.0*PTS[v];[0:a]a
 
 **Examples:**
 - 2x speed:
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" "video_2x.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -filter_complex "[0:v]setpts=0.5*PTS[v];[0:a]atempo=2.0[a]" -map "[v]" -map "[a]" "video_2x.mp4"
+ ```
 - Half speed (slow motion):
-  ```bash
-  ffmpeg -y -hide_banner -i "video.mp4" -filter_complex "[0:v]setpts=2.0*PTS[v];[0:a]atempo=0.5[a]" -map "[v]" -map "[a]" "video_slowmo.mp4"
-  ```
+ ```bash
+ ffmpeg -y -hide_banner -i "video.mp4" -filter_complex "[0:v]setpts=2.0*PTS[v];[0:a]atempo=0.5[a]" -map "[v]" -map "[a]" "video_slowmo.mp4"
+ ```
 
 ---
 

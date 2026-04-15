@@ -1,7 +1,7 @@
 ---
 name: slack
 description: Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.
-metadata: { "openclaw": { "emoji": "💬", "requires": { "config": ["channels.slack"] } } }
+metadata: { "openclaw": { "emoji": "💬", "requires": { "config": ["channels.slack"]  
 ---
 
 # Slack Actions
@@ -22,120 +22,120 @@ Message context lines include `slack message id` and `channel` fields you can re
 
 ### Action groups
 
-| Action group | Default | Notes                  |
+| Action group | Default | Notes         |
 | ------------ | ------- | ---------------------- |
-| reactions    | enabled | React + list reactions |
-| messages     | enabled | Read/send/edit/delete  |
-| pins         | enabled | Pin/unpin/list         |
-| memberInfo   | enabled | Member info            |
-| emojiList    | enabled | Custom emoji list      |
+| reactions  | enabled | React + list reactions |
+| messages   | enabled | Read/send/edit/delete |
+| pins     | enabled | Pin/unpin/list     |
+| memberInfo  | enabled | Member info      |
+| emojiList  | enabled | Custom emoji list   |
 
 ### React to a message
 
 ```json
 {
-  "action": "react",
-  "channelId": "C123",
-  "messageId": "1712023032.1234",
-  "emoji": "✅"
-}
+ "action": "react",
+ "channelId": "C123",
+ "messageId": "1712023032.1234",
+ "emoji": "✅"
+
 ```
 
 ### List reactions
 
 ```json
 {
-  "action": "reactions",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
-}
+ "action": "reactions",
+ "channelId": "C123",
+ "messageId": "1712023032.1234"
+
 ```
 
 ### Send a message
 
 ```json
 {
-  "action": "sendMessage",
-  "to": "channel:C123",
-  "content": "Hello from OpenClaw"
-}
+ "action": "sendMessage",
+ "to": "channel:C123",
+ "content": "Hello from OpenClaw"
+
 ```
 
 ### Edit a message
 
 ```json
 {
-  "action": "editMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234",
-  "content": "Updated text"
-}
+ "action": "editMessage",
+ "channelId": "C123",
+ "messageId": "1712023032.1234",
+ "content": "Updated text"
+
 ```
 
 ### Delete a message
 
 ```json
 {
-  "action": "deleteMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
-}
+ "action": "deleteMessage",
+ "channelId": "C123",
+ "messageId": "1712023032.1234"
+
 ```
 
 ### Read recent messages
 
 ```json
 {
-  "action": "readMessages",
-  "channelId": "C123",
-  "limit": 20
-}
+ "action": "readMessages",
+ "channelId": "C123",
+ "limit": 20
+
 ```
 
 ### Pin a message
 
 ```json
 {
-  "action": "pinMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
-}
+ "action": "pinMessage",
+ "channelId": "C123",
+ "messageId": "1712023032.1234"
+
 ```
 
 ### Unpin a message
 
 ```json
 {
-  "action": "unpinMessage",
-  "channelId": "C123",
-  "messageId": "1712023032.1234"
-}
+ "action": "unpinMessage",
+ "channelId": "C123",
+ "messageId": "1712023032.1234"
+
 ```
 
 ### List pinned items
 
 ```json
 {
-  "action": "listPins",
-  "channelId": "C123"
-}
+ "action": "listPins",
+ "channelId": "C123"
+
 ```
 
 ### Member info
 
 ```json
 {
-  "action": "memberInfo",
-  "userId": "U123"
-}
+ "action": "memberInfo",
+ "userId": "U123"
+
 ```
 
 ### Emoji list
 
 ```json
 {
-  "action": "emojiList"
-}
+ "action": "emojiList"
+
 ```
 
 ## Ideas to try

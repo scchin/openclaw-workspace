@@ -63,7 +63,7 @@ Last maintenance: 2026-02-15
 Active: 5 | Paused: 3 | Archived: 20
 ```
 
-**Entry: `~/memory/projects/{name}.md`**
+**Entry: `~/memory/projects/{name.md`**
 ```markdown
 # Project: [Name]
 
@@ -116,7 +116,7 @@ Stack: [technologies]
 Total: 45 contacts
 ```
 
-**Entry: `~/memory/people/{name}.md`**
+**Entry: `~/memory/people/{name.md`**
 ```markdown
 # [Name]
 
@@ -163,7 +163,7 @@ Last contact: YYYY-MM-DD
 | Personal | 37 | personal.md |
 ```
 
-**Entry: `~/memory/decisions/{category}.md` or `{year}.md`**
+**Entry: `~/memory/decisions/{category.md` or `{year.md`**
 ```markdown
 # Decisions — [Category/Year]
 
@@ -196,7 +196,7 @@ Last contact: YYYY-MM-DD
 | Finance | Reference | 2025-12 | finance.md |
 ```
 
-**Entry: `~/memory/knowledge/{topic}.md`**
+**Entry: `~/memory/knowledge/{topic.md`**
 ```markdown
 # [Topic]
 
@@ -282,11 +282,11 @@ Note: This is one-way sync. Built-in memory is not modified.
 **Splitting example:**
 ```
 projects/
-├── INDEX.md              # "See active/, archived/"
+├── INDEX.md       # "See active/, archived/"
 ├── active/
-│   ├── INDEX.md          # Active projects
-│   └── ...
+│  ├── INDEX.md     # Active projects
+│  └── ...
 └── archived/
-    ├── INDEX.md          # Archived projects
-    └── ...
+  ├── INDEX.md     # Archived projects
+  └── ...
 ```

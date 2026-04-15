@@ -15,11 +15,11 @@ The canvas tool lets you present web content on any connected node's canvas view
 ### Architecture
 
 ```
-┌─────────────────┐     ┌──────────────────┐     ┌─────────────┐
-│  Canvas Host    │────▶│   Node Bridge    │────▶│  Node App   │
-│  (HTTP Server)  │     │  (TCP Server)    │     │ (Mac/iOS/   │
-│  Port 18793     │     │  Port 18790      │     │  Android)   │
-└─────────────────┘     └──────────────────┘     └─────────────┘
+┌─────────────────┐   ┌──────────────────┐   ┌─────────────┐
+│ Canvas Host  │────▶│  Node Bridge  │────▶│ Node App  │
+│ (HTTP Server) │   │ (TCP Server)  │   │ (Mac/iOS/  │
+│ Port 18793   │   │ Port 18790   │   │ Android)  │
+└─────────────────┘   └──────────────────┘   └─────────────┘
 ```
 
 1. **Canvas Host Server**: Serves static HTML/CSS/JS files from `canvasHost.root` directory
@@ -30,12 +30,12 @@ The canvas tool lets you present web content on any connected node's canvas view
 
 The canvas host server binds based on `gateway.bind` setting:
 
-| Bind Mode  | Server Binds To     | Canvas URL Uses            |
+| Bind Mode | Server Binds To   | Canvas URL Uses      |
 | ---------- | ------------------- | -------------------------- |
-| `loopback` | 127.0.0.1           | localhost (local only)     |
-| `lan`      | LAN interface       | LAN IP address             |
-| `tailnet`  | Tailscale interface | Tailscale hostname         |
-| `auto`     | Best available      | Tailscale > LAN > loopback |
+| `loopback` | 127.0.0.1      | localhost (local only)   |
+| `lan`   | LAN interface    | LAN IP address       |
+| `tailnet` | Tailscale interface | Tailscale hostname     |
+| `auto`   | Best available   | Tailscale > LAN > loopback |
 
 **Key insight:** The `canvasHostHostForBridge` is derived from `bridgeHost`. When bound to Tailscale, nodes receive URLs like:
 
@@ -47,30 +47,30 @@ This is why localhost URLs don't work - the node receives the Tailscale hostname
 
 ## Actions
 
-| Action     | Description                          |
+| Action   | Description             |
 | ---------- | ------------------------------------ |
-| `present`  | Show canvas with optional target URL |
-| `hide`     | Hide the canvas                      |
-| `navigate` | Navigate to a new URL                |
-| `eval`     | Execute JavaScript in the canvas     |
-| `snapshot` | Capture screenshot of canvas         |
+| `present` | Show canvas with optional target URL |
+| `hide`   | Hide the canvas           |
+| `navigate` | Navigate to a new URL        |
+| `eval`   | Execute JavaScript in the canvas   |
+| `snapshot` | Capture screenshot of canvas     |
 
 ## Configuration
 
-In the active OpenClaw config file (`$OPENCLAW_CONFIG_PATH`, default `~/.openclaw/openclaw.json`):
+In the active OpenClaw config file (`OPENCLAW_CONFIG_PATH`, default `~/.openclaw/openclaw.json`):
 
 ```json
 {
-  "canvasHost": {
-    "enabled": true,
-    "port": 18793,
-    "root": "/Users/you/clawd/canvas",
-    "liveReload": true
-  },
-  "gateway": {
-    "bind": "auto"
-  }
-}
+ "canvasHost": {
+  "enabled": true,
+  "port": 18793,
+  "root": "/Users/you/clawd/canvas",
+  "liveReload": true
+ ,
+ "gateway": {
+  "bind": "auto"
+ 
+
 ```
 
 ### Live Reload
@@ -95,7 +95,7 @@ cat > ~/clawd/canvas/my-game.html << 'HTML'
 <html>
 <head><title>My Game</title></head>
 <body>
-  <h1>Hello Canvas!</h1>
+ <h1>Hello Canvas!</h1>
 </body>
 </html>
 HTML
@@ -106,8 +106,8 @@ HTML
 Check how your gateway is bound:
 
 ```bash
-CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-${OPENCLAW_STATE_DIR:-$HOME/.openclaw}/openclaw.json}"
-cat "$CONFIG_PATH" | jq '.gateway.bind'
+CONFIG_PATH="{OPENCLAW_CONFIG_PATH:-{OPENCLAW_STATE_DIR:-HOME/.openclaw/openclaw.json"
+cat "CONFIG_PATH" | jq '.gateway.bind'
 ```
 
 Then construct the URL:
@@ -118,7 +118,7 @@ Then construct the URL:
 Find your Tailscale hostname:
 
 ```bash
-tailscale status --json | jq -r '.Self.DNSName' | sed 's/\.$//'
+tailscale status --json | jq -r '.Self.DNSName' | sed 's/\.//'
 ```
 
 ### 3. Find connected nodes
@@ -157,7 +157,7 @@ canvas action:hide node:<node-id>
 
 **Debug steps:**
 
-1. Check server bind: `CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-${OPENCLAW_STATE_DIR:-$HOME/.openclaw}/openclaw.json}"; cat "$CONFIG_PATH" | jq '.gateway.bind'`
+1. Check server bind: `CONFIG_PATH="{OPENCLAW_CONFIG_PATH:-{OPENCLAW_STATE_DIR:-HOME/.openclaw/openclaw.json"; cat "CONFIG_PATH" | jq '.gateway.bind'`
 2. Check what port canvas is on: `lsof -i :18793`
 3. Test URL directly: `curl http://<hostname>:18793/__openclaw__/canvas/<file>.html`
 
@@ -184,7 +184,7 @@ If live reload isn't working:
 The canvas host serves from `/__openclaw__/canvas/` prefix:
 
 ```
-http://<host>:18793/__openclaw__/canvas/index.html  → ~/clawd/canvas/index.html
+http://<host>:18793/__openclaw__/canvas/index.html → ~/clawd/canvas/index.html
 http://<host>:18793/__openclaw__/canvas/games/snake.html → ~/clawd/canvas/games/snake.html
 ```
 

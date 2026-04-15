@@ -215,15 +215,15 @@ In this guide, you'll discover:
 
 ### [Option A] Pricing
 
-- [Tier 1]: $[X]/month - [What's included]
-- [Tier 2]: $[X]/month - [What's included]
-- [Tier 3]: $[X]/month - [What's included]
+- [Tier 1]: [X]/month - [What's included]
+- [Tier 2]: [X]/month - [What's included]
+- [Tier 3]: [X]/month - [What's included]
 
 ### [Option B] Pricing
 
-- [Tier 1]: $[X]/month - [What's included]
-- [Tier 2]: $[X]/month - [What's included]
-- [Tier 3]: $[X]/month - [What's included]
+- [Tier 1]: [X]/month - [What's included]
+- [Tier 2]: [X]/month - [What's included]
+- [Tier 3]: [X]/month - [What's included]
 
 **Value winner**: [Which offers better value and why]
 
@@ -597,9 +597,9 @@ After using [Product] for [timeframe], here's my honest assessment of whether it
 
 | Plan | Price | What's Included |
 |------|-------|-----------------|
-| [Tier 1] | $[X]/month | [Features] |
-| [Tier 2] | $[X]/month | [Features] |
-| [Tier 3] | $[X]/month | [Features] |
+| [Tier 1] | [X]/month | [Features] |
+| [Tier 2] | [X]/month | [Features] |
+| [Tier 3] | [X]/month | [Features] |
 
 **Value assessment**: [Whether pricing is justified]
 

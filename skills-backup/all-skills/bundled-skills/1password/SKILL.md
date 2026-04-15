@@ -3,23 +3,23 @@ name: 1password
 description: Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.
 homepage: https://developer.1password.com/docs/cli/get-started/
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "🔐",
+    "requires": { "bins": ["op"] ,
+    "install":
+     [
       {
-        "emoji": "🔐",
-        "requires": { "bins": ["op"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "1password-cli",
-              "bins": ["op"],
-              "label": "Install 1Password CLI (brew)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "1password-cli",
+       "bins": ["op"],
+       "label": "Install 1Password CLI (brew)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # 1Password CLI
@@ -48,17 +48,17 @@ The shell tool uses a fresh TTY per command. To avoid re-prompts and failures, a
 Example (see `tmux` skill for socket conventions, do not reuse old session names):
 
 ```bash
-SOCKET_DIR="${OPENCLAW_TMUX_SOCKET_DIR:-${TMPDIR:-/tmp}/openclaw-tmux-sockets}"
-mkdir -p "$SOCKET_DIR"
-SOCKET="$SOCKET_DIR/openclaw-op.sock"
-SESSION="op-auth-$(date +%Y%m%d-%H%M%S)"
+SOCKET_DIR="{OPENCLAW_TMUX_SOCKET_DIR:-{TMPDIR:-/tmp/openclaw-tmux-sockets"
+mkdir -p "SOCKET_DIR"
+SOCKET="SOCKET_DIR/openclaw-op.sock"
+SESSION="op-auth-(date +%Y%m%d-%H%M%S)"
 
-tmux -S "$SOCKET" new -d -s "$SESSION" -n shell
-tmux -S "$SOCKET" send-keys -t "$SESSION":0.0 -- "op signin --account my.1password.com" Enter
-tmux -S "$SOCKET" send-keys -t "$SESSION":0.0 -- "op whoami" Enter
-tmux -S "$SOCKET" send-keys -t "$SESSION":0.0 -- "op vault list" Enter
-tmux -S "$SOCKET" capture-pane -p -J -t "$SESSION":0.0 -S -200
-tmux -S "$SOCKET" kill-session -t "$SESSION"
+tmux -S "SOCKET" new -d -s "SESSION" -n shell
+tmux -S "SOCKET" send-keys -t "SESSION":0.0 -- "op signin --account my.1password.com" Enter
+tmux -S "SOCKET" send-keys -t "SESSION":0.0 -- "op whoami" Enter
+tmux -S "SOCKET" send-keys -t "SESSION":0.0 -- "op vault list" Enter
+tmux -S "SOCKET" capture-pane -p -J -t "SESSION":0.0 -S -200
+tmux -S "SOCKET" kill-session -t "SESSION"
 ```
 
 ## Guardrails

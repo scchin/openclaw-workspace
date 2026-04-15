@@ -17,7 +17,7 @@ Systematic approach to backtesting trading strategies based on professional meth
 
 Use this skill when:
 - Developing or validating systematic trading strategies
-- Evaluating whether a trading idea is robust enough for live implementation  
+- Evaluating whether a trading idea is robust enough for live implementation 
 - Troubleshooting why a backtest might be misleading
 - Learning proper backtesting methodology
 - Avoiding common pitfalls (curve-fitting, look-ahead bias, survivorship bias)
@@ -39,7 +39,7 @@ If you can't articulate the edge clearly, don't proceed to testing.
 Define with complete specificity:
 - **Entry**: Exact conditions, timing, price type
 - **Exit**: Stop loss, profit target, time-based exit
-- **Position sizing**: Fixed $$, % of portfolio, volatility-adjusted
+- **Position sizing**: Fixed , % of portfolio, volatility-adjusted
 - **Filters**: Market cap, volume, sector, volatility conditions
 - **Universe**: What instruments are eligible
 
@@ -60,9 +60,9 @@ This is where 80% of testing time should be spent.
 
 **Parameter sensitivity**:
 - Test stop loss at 50%, 75%, 100%, 125%, 150% of baseline
-- Test profit target at 80%, 90%, 100%, 110%, 120% of baseline  
+- Test profit target at 80%, 90%, 100%, 110%, 120% of baseline 
 - Vary entry/exit timing by ±15-30 minutes
-- Look for "plateaus" of stable performance, not narrow spikes
+- Look for "plateaus" of stable performance, not n → spikes
 
 **Execution friction**:
 - Increase slippage to 1.5-2x typical estimates
@@ -128,7 +128,7 @@ Look for parameter ranges where performance is stable, not optimal values that c
 **Good**: Strategy profitable with stop loss anywhere from 1.5% to 3.0%
 **Bad**: Strategy only works with stop loss at exactly 2.13%
 
-Stable performance indicates genuine edge; narrow optima suggest curve-fitting.
+Stable performance indicates genuine edge; n → optima suggest curve-fitting.
 
 ### Test All Cases, Not Cherry-Picked Examples
 
@@ -149,7 +149,7 @@ Never let attachment to an idea influence interpretation of test results.
 Recognize these patterns early to save time:
 
 1. **Parameter sensitivity**: Only works with exact parameter values
-2. **Regime-specific**: Great in some years, terrible in others  
+2. **Regime-specific**: Great in some years, terrible in others 
 3. **Slippage sensitivity**: Unprofitable when realistic costs added
 4. **Small sample**: Too few trades for statistical confidence
 5. **Look-ahead bias**: "Too good to be true" results
@@ -166,7 +166,7 @@ See `references/failed_tests.md` for detailed examples and diagnostic framework.
 
 **Contents**:
 - Stress testing methods
-- Parameter sensitivity analysis  
+- Parameter sensitivity analysis 
 - Slippage and friction modeling
 - Sample size requirements
 - Market regime classification
@@ -199,7 +199,7 @@ See `references/failed_tests.md` for detailed examples and diagnostic framework.
 
 This skill focuses on **systematic/quantitative** backtesting where:
 - All rules are codified in advance
-- No discretion or "feel" in execution  
+- No discretion or "feel" in execution 
 - Testing happens on all historical examples, not cherry-picked cases
 - Context (news, macro) is deliberately stripped out
 

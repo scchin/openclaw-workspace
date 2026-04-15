@@ -24,7 +24,7 @@ select * from articles where lower(content) like '%postgresql%';
 ```sql
 -- Add tsvector column and index
 alter table articles add column search_vector tsvector
-  generated always as (to_tsvector('english', coalesce(title,'') || ' ' || coalesce(content,''))) stored;
+ generated always as (to_tsvector('english', coalesce(title,'') || ' ' || coalesce(content,''))) stored;
 
 create index articles_search_idx on articles using gin (search_vector);
 

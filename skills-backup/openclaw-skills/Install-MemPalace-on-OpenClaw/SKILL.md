@@ -68,9 +68,9 @@ mempalace init --path ~/.mempalace --name KingSeanKS --agent KingSeanKS
 **更新 `mcporter.json`：**
 ```json
 "mempalace": {
-  "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
-  "args": ["-m", "mempalace.mcp_server", "--palace", "/Users/[username]/.mempalace"]
-}
+ "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
+ "args": ["-m", "mempalace.mcp_server", "--palace", "/Users/[username]/.mempalace"]
+
 ```
 
 ---

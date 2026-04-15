@@ -13,7 +13,7 @@ Idle connections waste resources. Configure timeouts to automatically reclaim th
 
 ```sql
 -- No timeout configured
-show idle_in_transaction_session_timeout;  -- 0 (disabled)
+show idle_in_transaction_session_timeout; -- 0 (disabled)
 
 -- Connections stay open forever, even when idle
 select pid, state, state_change, query

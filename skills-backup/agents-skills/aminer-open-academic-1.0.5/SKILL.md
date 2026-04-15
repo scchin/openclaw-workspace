@@ -1,10 +1,10 @@
 ---
 name: aminer-data-search
 description: >
-  使用 AMiner 开放平台 API 进行学术数据查询与分析。当用户需要查询学者信息、论文详情、机构数据、期刊内容或专利信息时使用此 skill。
-  触发场景：提到 AMiner、学术数据查询、查论文/学者/机构/期刊/专利、学术问答搜索、引用分析、科研机构分析、学者画像、论文引用链、期刊投稿分析等。
-  支持 6 大组合工作流（学者全景分析、论文深度挖掘、机构研究力分析、期刊论文监控、学术智能问答、专利链分析）以及 28 个独立 API 的直接调用。
-  即使用户只说"帮我查一下 XXX 学者"或"找找关于 XXX 的论文"，也应主动使用此 skill。
+ 使用 AMiner 开放平台 API 进行学术数据查询与分析。当用户需要查询学者信息、论文详情、机构数据、期刊内容或专利信息时使用此 skill。
+ 触发场景：提到 AMiner、学术数据查询、查论文/学者/机构/期刊/专利、学术问答搜索、引用分析、科研机构分析、学者画像、论文引用链、期刊投稿分析等。
+ 支持 6 大组合工作流（学者全景分析、论文深度挖掘、机构研究力分析、期刊论文监控、学术智能问答、专利链分析）以及 28 个独立 API 的直接调用。
+ 即使用户只说"帮我查一下 XXX 学者"或"找找关于 XXX 的论文"，也应主动使用此 skill。
 ---
 
 # AMiner 开放平台学术数据查询
@@ -56,7 +56,7 @@ python scripts/aminer_client.py --token <TOKEN> --action patent_search --query "
 也可以直接调用单个 API：
 ```bash
 python scripts/aminer_client.py --token <TOKEN> --action raw \
-  --api paper_search --params '{"title": "BERT", "page": 0, "size": 5}'
+ --api paper_search --params '{"title": "BERT", "page": 0, "size": 5'
 ```
 
 ---
@@ -66,18 +66,18 @@ python scripts/aminer_client.py --token <TOKEN> --action raw \
 客户端 `scripts/aminer_client.py` 内置了请求重试与降级策略，用于减少网络抖动和短暂服务异常对结果的影响。
 
 - **超时与重试**
-  - 默认请求超时：`30s`
-  - 最大重试次数：`3`
-  - 退避策略：指数退避（`1s -> 2s -> 4s`）+ 随机抖动
+ - 默认请求超时：`30s`
+ - 最大重试次数：`3`
+ - 退避策略：指数退避（`1s -> 2s -> 4s`）+ 随机抖动
 - **可重试状态码**
-  - `408 / 429 / 500 / 502 / 503 / 504`
+ - `408 / 429 / 500 / 502 / 503 / 504`
 - **不可重试场景**
-  - 常见 `4xx`（如参数错误、鉴权问题）默认不重试，直接返回错误结构
+ - 常见 `4xx`（如参数错误、鉴权问题）默认不重试，直接返回错误结构
 - **工作流降级**
-  - `paper_deep_dive`：`paper_search` 无结果时自动降级到 `paper_search_pro`
-  - `paper_qa`：`query` 模式无结果时，自动降级到 `paper_search_pro`
+ - `paper_deep_dive`：`paper_search` 无结果时自动降级到 `paper_search_pro`
+ - `paper_qa`：`query` 模式无结果时，自动降级到 `paper_search_pro`
 - **可追踪调用链**
-  - 组合工作流输出中包含 `source_api_chain`，用于标记结果由哪些 API 组合得到
+ - 组合工作流输出中包含 `source_api_chain`，用于标记结果由哪些 API 组合得到
 
 ---
 
@@ -112,13 +112,13 @@ python scripts/aminer_client.py --token <TOKEN> --action raw \
 **调用链：**
 ```
 学者搜索（name → person_id）
-    ↓
+  ↓
 并行调用：
-  ├── 学者详情（bio/教育背景/荣誉）
-  ├── 学者画像（研究方向/兴趣/工作经历）
-  ├── 学者论文（论文列表）
-  ├── 学者专利（专利列表）
-  └── 学者项目（科研项目/资助信息）
+ ├── 学者详情（bio/教育背景/荣誉）
+ ├── 学者画像（研究方向/兴趣/工作经历）
+ ├── 学者论文（论文列表）
+ ├── 学者专利（专利列表）
+ └── 学者项目（科研项目/资助信息）
 ```
 
 **命令：**
@@ -145,11 +145,11 @@ python scripts/aminer_client.py --token <TOKEN> --action scholar_profile --name 
 **调用链：**
 ```
 论文搜索 / 论文搜索pro（title/keyword → paper_id）
-    ↓
+  ↓
 论文详情（摘要/作者/DOI/期刊/年份/关键词）
-    ↓
+  ↓
 论文引用（该论文引用了哪些论文 → cited_ids）
-    ↓
+  ↓
 （可选）对被引论文批量获取论文信息
 ```
 
@@ -160,7 +160,7 @@ python scripts/aminer_client.py --token <TOKEN> --action paper_deep_dive --title
 
 # 按关键词搜索（使用 pro 接口）
 python scripts/aminer_client.py --token <TOKEN> --action paper_deep_dive \
-  --keyword "large language model" --author "Hinton" --order n_citation
+ --keyword "large language model" --author "Hinton" --order n_citation
 ```
 
 ---
@@ -172,12 +172,12 @@ python scripts/aminer_client.py --token <TOKEN> --action paper_deep_dive \
 **调用链：**
 ```
 机构消歧pro（原始字符串 → org_id，处理别名/全称差异）
-    ↓
+  ↓
 并行调用：
-  ├── 机构详情（简介/类型/成立时间）
-  ├── 机构学者（学者列表）
-  ├── 机构论文（论文列表）
-  └── 机构专利（专利ID列表，支持分页，最多10000条）
+ ├── 机构详情（简介/类型/成立时间）
+ ├── 机构学者（学者列表）
+ ├── 机构论文（论文列表）
+ └── 机构专利（专利ID列表，支持分页，最多10000条）
 ```
 
 > 若有多个同名机构，机构搜索会返回候选列表，可结合机构消歧 pro 精确匹配。
@@ -198,11 +198,11 @@ python scripts/aminer_client.py --token <TOKEN> --action org_analysis --org "Mas
 **调用链：**
 ```
 期刊搜索（name → venue_id）
-    ↓
+  ↓
 期刊详情（ISSN/类型/简称）
-    ↓
+  ↓
 期刊论文（venue_id + year → paper_id 列表）
-    ↓
+  ↓
 （可选）论文详情批量查询
 ```
 
@@ -228,13 +228,13 @@ python scripts/aminer_client.py --token <TOKEN> --action venue_papers --venue "N
 ```bash
 # 自然语言问答
 python scripts/aminer_client.py --token <TOKEN> --action paper_qa \
-  --query "用于蛋白质结构预测的深度学习方法"
+ --query "用于蛋白质结构预测的深度学习方法"
 
 # 精细关键词搜索（必须同时含 A 和 B，加分含 C）
 python scripts/aminer_client.py --token <TOKEN> --action paper_qa \
-  --topic_high '[["transformer","self-attention"],["protein folding"]]' \
-  --topic_middle '[["AlphaFold"]]' \
-  --sci_flag --sort_citation
+ --topic_high '[["transformer","self-attention"],["protein folding"]]' \
+ --topic_middle '[["AlphaFold"]]' \
+ --sci_flag --sort_citation
 ```
 
 ---
@@ -246,7 +246,7 @@ python scripts/aminer_client.py --token <TOKEN> --action paper_qa \
 **调用链（独立搜索）：**
 ```
 专利搜索（query → patent_id）
-    ↓
+  ↓
 专利详情（摘要/申请日/申请号/受让人/发明人）
 ```
 
@@ -254,7 +254,7 @@ python scripts/aminer_client.py --token <TOKEN> --action paper_qa \
 ```
 学者搜索 → 学者专利（patent_id 列表）
 机构消歧 → 机构专利（patent_id 列表）
-    ↓
+  ↓
 专利信息 / 专利详情
 ```
 

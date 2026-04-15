@@ -3,24 +3,24 @@ name: peekaboo
 description: Capture and automate macOS UI with the Peekaboo CLI.
 homepage: https://peekaboo.boo
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "👀",
+    "os": ["darwin"],
+    "requires": { "bins": ["peekaboo"] ,
+    "install":
+     [
       {
-        "emoji": "👀",
-        "os": ["darwin"],
-        "requires": { "bins": ["peekaboo"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/peekaboo",
-              "bins": ["peekaboo"],
-              "label": "Install Peekaboo (brew)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "steipete/tap/peekaboo",
+       "bins": ["peekaboo"],
+       "label": "Install Peekaboo (brew)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # Peekaboo
@@ -97,13 +97,13 @@ peekaboo type "Hello" --return
 - Snapshot targeting: `--snapshot` (ID from `see`; defaults to latest)
 - Element/coords: `--on`/`--id` (element ID), `--coords x,y`
 - Focus control: `--no-auto-focus`, `--space-switch`, `--bring-to-current-space`,
-  `--focus-timeout-seconds`, `--focus-retry-count`
+ `--focus-timeout-seconds`, `--focus-retry-count`
 
 ## Common capture parameters
 
 - Output: `--path`, `--format png|jpg`, `--retina`
 - Targeting: `--mode screen|window|frontmost`, `--screen-index`,
-  `--window-title`, `--window-id`
+ `--window-title`, `--window-id`
 - Analysis: `--analyze "prompt"`, `--annotate`
 - Capture engine: `--capture-engine auto|classic|cg|modern|sckit`
 
@@ -145,7 +145,7 @@ peekaboo see --mode screen --screen-index 0 --analyze "Summarize the dashboard"
 
 ```bash
 peekaboo capture live --mode region --region 100,100,800,600 --duration 30 \
-  --active-fps 8 --idle-fps 2 --highlight-changes --path /tmp/capture
+ --active-fps 8 --idle-fps 2 --highlight-changes --path /tmp/capture
 ```
 
 ### App + window management

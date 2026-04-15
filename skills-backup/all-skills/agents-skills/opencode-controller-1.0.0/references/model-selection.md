@@ -1,7 +1,7 @@
 ## Model selection procedure
 
 - Open model selector with:
-  /models
+ /models
 
 - Select the provider requested by the user
 

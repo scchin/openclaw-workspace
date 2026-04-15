@@ -3,24 +3,24 @@ name: things-mac
 description: Manage Things 3 via the `things` CLI on macOS (add/update projects+todos via URL scheme; read/search/list from the local Things database). Use when a user asks OpenClaw to add a task to Things, list inbox/today/upcoming, search tasks, or inspect projects/areas/tags.
 homepage: https://github.com/ossianhempel/things3-cli
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "✅",
+    "os": ["darwin"],
+    "requires": { "bins": ["things"] ,
+    "install":
+     [
       {
-        "emoji": "✅",
-        "os": ["darwin"],
-        "requires": { "bins": ["things"] },
-        "install":
-          [
-            {
-              "id": "go",
-              "kind": "go",
-              "module": "github.com/ossianhempel/things3-cli/cmd/things@latest",
-              "bins": ["things"],
-              "label": "Install things3-cli (go)",
-            },
-          ],
-      },
-  }
+       "id": "go",
+       "kind": "go",
+       "module": "github.com/ossianhempel/things3-cli/cmd/things@latest",
+       "bins": ["things"],
+       "label": "Install things3-cli (go)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # Things 3 CLI
@@ -57,11 +57,11 @@ Examples: add a todo
 - With tags: `things add "Call dentist" --tags "health,phone"`
 - Checklist: `things add "Trip prep" --checklist-item "Passport" --checklist-item "Tickets"`
 - From STDIN (multi-line => title + notes):
-  - `cat <<'EOF' | things add -`
-  - `Title line`
-  - `Notes line 1`
-  - `Notes line 2`
-  - `EOF`
+ - `cat <<'EOF' | things add -`
+ - `Title line`
+ - `Notes line 1`
+ - `Notes line 2`
+ - `EOF`
 
 Examples: modify a todo (needs auth token)
 

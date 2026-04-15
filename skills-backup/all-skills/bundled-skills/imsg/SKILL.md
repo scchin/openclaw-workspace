@@ -3,24 +3,24 @@ name: imsg
 description: iMessage/SMS CLI for listing chats, history, and sending messages via Messages.app.
 homepage: https://imsg.to
 metadata:
-  {
-    "openclaw":
+ {
+  "openclaw":
+   {
+    "emoji": "📨",
+    "os": ["darwin"],
+    "requires": { "bins": ["imsg"] ,
+    "install":
+     [
       {
-        "emoji": "📨",
-        "os": ["darwin"],
-        "requires": { "bins": ["imsg"] },
-        "install":
-          [
-            {
-              "id": "brew",
-              "kind": "brew",
-              "formula": "steipete/tap/imsg",
-              "bins": ["imsg"],
-              "label": "Install imsg (brew)",
-            },
-          ],
-      },
-  }
+       "id": "brew",
+       "kind": "brew",
+       "formula": "steipete/tap/imsg",
+       "bins": ["imsg"],
+       "label": "Install imsg (brew)",
+      ,
+     ],
+   ,
+ 
 ---
 
 # imsg

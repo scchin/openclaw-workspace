@@ -7,14 +7,14 @@ Implement a seamless, high-frequency synchronization between the backend dialogu
 
 ### Requirements
 1. **Refresh Intensity: Silent Background Updates**
-   - The UI should update the dialogue flow in the background.
-   - Updates must be "elegant" (no jarring jumps or full-page reloads).
-   - Requirement: Gateway API must support partial updates or a streamable dialogue state.
+  - The UI should update the dialogue flow in the background.
+  - Updates must be "elegant" (no jarring jumps or full-page reloads).
+  - Requirement: Gateway API must support partial updates or a streamable dialogue state.
 
 2. **Trigger Frequency: Guardian Fast-track**
-   - **Frequency**: Every 10 seconds.
-   - **Mechanism**: A dedicated high-speed channel managed by the **Guardian** (System Guardian / Reliability Guardian).
-   - **Responsibility**: The Guardian triggers the sync signal, ensuring the UI stays updated regardless of whether a new message was sent.
+  - **Frequency**: Every 10 seconds.
+  - **Mechanism**: A dedicated high-speed channel managed by the **Guardian** (System Guardian / Reliability Guardian).
+  - **Responsibility**: The Guardian triggers the sync signal, ensuring the UI stays updated regardless of whether a new message was sent.
 
 ### Technical Considerations
 - **Gateway API**: Verify support for silent state synchronization.

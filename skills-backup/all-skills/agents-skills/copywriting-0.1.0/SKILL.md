@@ -30,57 +30,57 @@ Effective copy follows a structure. The three most battle-tested frameworks:
 Classic and reliable. Use for landing pages, emails, and sales pages.
 
 ```
-ATTENTION:    Bold headline that stops the scroll (the promise or the pain)
-INTEREST:     Elaborate on the problem or opportunity (make them nod "yes, that's me")
-DESIRE:       Show the transformation or outcome (paint the picture of success)
-ACTION:       Clear CTA (tell them exactly what to do next)
+ATTENTION:  Bold headline that stops the scroll (the promise or the pain)
+INTEREST:   Elaborate on the problem or opportunity (make them nod "yes, that's me")
+DESIRE:    Show the transformation or outcome (paint the picture of success)
+ACTION:    Clear CTA (tell them exactly what to do next)
 ```
 
 **Example (SaaS landing page):**
 ```
-ATTENTION:    "Spend 10 hours/week on client reporting? Automate it in 10 minutes."
-INTEREST:     "Most agencies waste entire days pulling data from 6 different tools
-               into one report. Your clients don't care about your process — they
-               want insights, fast."
-DESIRE:       "Imagine sending polished, branded reports automatically every Monday.
-               Your clients stay informed. Your team stays focused on the work that
-               actually grows accounts."
-ACTION:       "Start your free 14-day trial — no credit card required."
+ATTENTION:  "Spend 10 hours/week on client reporting? Automate it in 10 minutes."
+INTEREST:   "Most agencies waste entire days pulling data from 6 different tools
+        into one report. Your clients don't care about your process — they
+        want insights, fast."
+DESIRE:    "Imagine sending polished, branded reports automatically every Monday.
+        Your clients stay informed. Your team stays focused on the work that
+        actually grows accounts."
+ACTION:    "Start your free 14-day trial — no credit card required."
 ```
 
 ### Framework 2: PAS (Problem, Agitate, Solution)
 Best for pain-driven products or when your audience is already aware of the problem.
 
 ```
-PROBLEM:      State the problem clearly
-AGITATE:      Make the pain feel urgent (what happens if they don't solve it?)
-SOLUTION:     Present your product as the fix
+PROBLEM:   State the problem clearly
+AGITATE:   Make the pain feel urgent (what happens if they don't solve it?)
+SOLUTION:   Present your product as the fix
 ```
 
 **Example (email subject + body):**
 ```
-PROBLEM:      "Your outreach emails are getting ignored."
-AGITATE:      "Every unanswered email is a lost opportunity. The longer you wait to
-               fix your messaging, the more revenue walks out the door."
-SOLUTION:     "Our 5-step cold email framework gets 23% reply rates. Grab the
-               template free."
+PROBLEM:   "Your outreach emails are getting ignored."
+AGITATE:   "Every unanswered email is a lost opportunity. The longer you wait to
+        fix your messaging, the more revenue walks out the door."
+SOLUTION:   "Our 5-step cold email framework gets 23% reply rates. Grab the
+        template free."
 ```
 
 ### Framework 3: FAB (Features, Advantages, Benefits)
 Best for explaining product value or differentiating from competitors.
 
 ```
-FEATURE:      What the thing is or does (the fact)
-ADVANTAGE:    Why that feature matters (the comparison)
-BENEFIT:      What the customer gains from it (the outcome)
+FEATURE:   What the thing is or does (the fact)
+ADVANTAGE:  Why that feature matters (the comparison)
+BENEFIT:   What the customer gains from it (the outcome)
 ```
 
 **Example (product description):**
 ```
-FEATURE:      "Our tool syncs with 12 data sources in real time."
-ADVANTAGE:    "Unlike competitors that sync once daily, you never work with stale data."
-BENEFIT:      "Make confident decisions faster — no more second-guessing whether
-               your numbers are current."
+FEATURE:   "Our tool syncs with 12 data sources in real time."
+ADVANTAGE:  "Unlike competitors that sync once daily, you never work with stale data."
+BENEFIT:   "Make confident decisions faster — no more second-guessing whether
+        your numbers are current."
 ```
 
 ---
@@ -102,7 +102,7 @@ The headline is 80% of the battle. If it doesn't grab attention, nothing else ma
 | **The Transformation** | "From 50 leads/month to 500 — here's what changed" |
 
 **Rules for headlines:**
-- Be specific. "Grow your business" is vague. "Add $10K MRR in 90 days" is specific.
+- Be specific. "Grow your business" is vague. "Add 10K MRR in 90 days" is specific.
 - Lead with the outcome, not the method. "Save 10 hours/week" beats "Use our automation tool."
 - Test multiple headlines. A/B test at minimum — even slight wording changes can double conversions.
 
@@ -147,11 +147,11 @@ Humans make decisions emotionally and justify them rationally. Tap into the emot
 | Trigger | When to Use | Example |
 |---|---|---|
 | **Fear of missing out (FOMO)** | Limited offers, scarcity | "Only 3 spots left this month" |
-| **Fear of loss** | When the cost of inaction is high | "Every day without this, you're losing $X" |
+| **Fear of loss** | When the cost of inaction is high | "Every day without this, you're losing X" |
 | **Desire for status** | Aspirational products, B2B | "Join 10,000+ top-performing agencies" |
 | **Desire for ease** | Replacing manual work | "Set it up once. Forget about it forever." |
 | **Anger or frustration** | Replacing a broken solution | "Tired of tools that promise the world and deliver nothing?" |
-| **Hope** | When the outcome feels out of reach | "Yes, you CAN hit $10K MRR as a solo founder" |
+| **Hope** | When the outcome feels out of reach | "Yes, you CAN hit 10K MRR as a solo founder" |
 
 **Rule:** Use emotion to hook them, then use logic (features, proof, specifics) to justify the decision.
 

@@ -1,7 +1,7 @@
 ---
 name: taskflow
 description: Use when work should span one or more detached tasks but still behave like one job with a single owner context. TaskFlow is the durable flow substrate under authoring layers like Lobster, ACPX, plugins, or plain code. Keep conditional logic in the caller; use TaskFlow for flow identity, child-task linkage, waiting state, revision-checked mutations, and user-facing emergence.
-metadata: { "openclaw": { "emoji": "🪝" } }
+metadata: { "openclaw": { "emoji": "🪝" 
 ---
 
 # TaskFlow
@@ -37,7 +37,7 @@ Canonical plugin/runtime entrypoint:
 Binding:
 
 - `api.runtime.tasks.flow.fromToolContext(ctx)` when you already have trusted tool context with `sessionKey`
-- `api.runtime.tasks.flow.bindSession({ sessionKey, requesterOrigin })` when your binding layer already resolved the session and delivery context
+- `api.runtime.tasks.flow.bindSession({ sessionKey, requesterOrigin )` when your binding layer already resolved the session and delivery context
 
 Managed-flow lifecycle:
 
@@ -62,68 +62,68 @@ Managed-flow lifecycle:
 const taskFlow = api.runtime.tasks.flow.fromToolContext(ctx);
 
 const created = taskFlow.createManaged({
-  controllerId: "my-plugin/inbox-triage",
-  goal: "triage inbox",
-  currentStep: "classify",
-  stateJson: {
-    businessThreads: [],
-    personalItems: [],
-    eodSummary: [],
-  },
-});
+ controllerId: "my-plugin/inbox-triage",
+ goal: "triage inbox",
+ currentStep: "classify",
+ stateJson: {
+  businessThreads: [],
+  personalItems: [],
+  eodSummary: [],
+ ,
+);
 
 const classify = taskFlow.runTask({
-  flowId: created.flowId,
-  runtime: "acp",
-  childSessionKey: "agent:main:subagent:classifier",
-  runId: "inbox-classify-1",
-  task: "Classify inbox messages",
-  status: "running",
-  startedAt: Date.now(),
-  lastEventAt: Date.now(),
-});
+ flowId: created.flowId,
+ runtime: "acp",
+ childSessionKey: "agent:main:subagent:classifier",
+ runId: "inbox-classify-1",
+ task: "Classify inbox messages",
+ status: "running",
+ startedAt: Date.now(),
+ lastEventAt: Date.now(),
+);
 
 if (!classify.created) {
-  throw new Error(classify.reason);
-}
+ throw new Error(classify.reason);
+
 
 const waiting = taskFlow.setWaiting({
-  flowId: created.flowId,
-  expectedRevision: created.revision,
-  currentStep: "await_business_reply",
-  stateJson: {
-    businessThreads: ["slack:thread-1"],
-    personalItems: [],
-    eodSummary: [],
-  },
-  waitJson: {
-    kind: "reply",
-    channel: "slack",
-    threadKey: "slack:thread-1",
-  },
-});
+ flowId: created.flowId,
+ expectedRevision: created.revision,
+ currentStep: "await_business_reply",
+ stateJson: {
+  businessThreads: ["slack:thread-1"],
+  personalItems: [],
+  eodSummary: [],
+ ,
+ waitJson: {
+  kind: "reply",
+  channel: "slack",
+  threadKey: "slack:thread-1",
+ ,
+);
 
 if (!waiting.applied) {
-  throw new Error(waiting.code);
-}
+ throw new Error(waiting.code);
+
 
 const resumed = taskFlow.resume({
-  flowId: waiting.flow.flowId,
-  expectedRevision: waiting.flow.revision,
-  status: "running",
-  currentStep: "finalize",
-  stateJson: waiting.flow.stateJson,
-});
+ flowId: waiting.flow.flowId,
+ expectedRevision: waiting.flow.revision,
+ status: "running",
+ currentStep: "finalize",
+ stateJson: waiting.flow.stateJson,
+);
 
 if (!resumed.applied) {
-  throw new Error(resumed.code);
-}
+ throw new Error(resumed.code);
+
 
 taskFlow.finish({
-  flowId: resumed.flow.flowId,
-  expectedRevision: resumed.flow.revision,
-  stateJson: resumed.flow.stateJson,
-});
+ flowId: resumed.flow.flowId,
+ expectedRevision: resumed.flow.revision,
+ stateJson: resumed.flow.stateJson,
+);
 ```
 
 ## Keep conditionals above the runtime
