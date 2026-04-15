@@ -10,7 +10,7 @@ Google Places 店家查詢工具 v9（乾淨重寫版）
 import subprocess, json, sys, os, re, asyncio, urllib.request, time, websockets
 from datetime import datetime, timezone, timedelta
 
-GOOGLE_PLACES_API_KEY
+GOOGLE_PLACES_API_KEY = os.environ.get(
     "GOOGLE_PLACES_API_KEY", "[API_KEY_REDACTED]")
 HOST = "127.0.0.1"
 PORT = 18800
@@ -60,7 +60,7 @@ def get_reviews(place_id):
 
 def get_price_range_api(place_id):
     url = (f"https://places.googleapis.com/v1/places/{place_id}"
-           f"?fields=priceRange&key={GOOGLE_PLACES_API_KEY")
+           f"?fields=priceRange&key={GOOGLE_PLACES_API_KEY}")
     try:
         req = urllib.request.Request(url)
         with urllib.request.urlopen(req, timeout=10) as r:
