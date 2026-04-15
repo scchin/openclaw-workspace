@@ -4,27 +4,25 @@ description: 從零開始在 OpenClaw 上安裝並整合 mempalace for OpenClaw 
 author: King Sean of KS
 ---
 
-# Install-MemPalace-on-OpenClaw
+# MemPalace for OpenClaw — AI 記憶宮殿 Phase 4 (Hybrid Edition)
 
-> **完整安裝指南**：從下載到 Phase 3 完全接管，所有流程與關鍵設定。
-> 
-> **建立日期**：2026-04-11
-> **更新日期**：2026-04-14 (Updated to mempalace for OpenClaw)
-> **作者**：King Sean of KS
-> **適用版本**：MemPalace v3.1.0 + OpenClaw 最新版
+## ⚡ Phase 4 核心進化
+MemPalace 已從單純的向量儲存進化為**結構化知識圖譜管理系統**：
+- ✅ **混合搜尋 (Hybrid Search)**：結合向量相似度 (60%) 與 BM25 關鍵字匹配 (40%)。
+- ✅ **索引層 (Closet Layer)**：引入 AAAK 指針索引，大幅提升檢索速度。
+- ✅ **跨翼隧道 (Cross-Wing Tunnels)**：支持在不同 Wing 之間建立顯式鏈接。
+- ✅ **事實檢查 (Fact Checker)**：可對照實體註冊表驗證記憶碎片。
+- ✅ **動態深度查詢 (Dynamic Depth)**：與 `google-reliability-guardian` 聯動，根據系統健康度自動調整檢索深度。
 
 ---
 
 ## 目錄
 
 1. [前置要求](#前置要求)
-2. [Phase 0：下載與安裝 MemPalace](#phase-0下載與安裝-mempalace)
-3. [Phase 1：MCP Server 整合](#phase-1mcp-server-整合)
-4. [Phase 2：雙寫 Hook 整合](#phase-2雙寫-hook-整合)
-5. [Phase 3：完全取代舊記憶系統](#phase-3完全取代舊記憶系統)
-6. [驗證與測試](#驗證與測試)
-7. [一鍵搬遷到新機器](#一鍵搬遷到新機器)
-8. [疑難排解](#疑難排解)
+# 2. [Phase 4：混合搜尋與知識圖譜整合](#phase-4混合搜尋與知識圖譜整合)
+# 3. [驗證與測試](#驗證與測試)
+# 4. [一鍵搬遷到新機器](#一鍵搬遷到新機器)
+# 5. [疑難排解](#疑難排解)
 
 ---
 
@@ -49,60 +47,30 @@ author: King Sean of KS
 
 ---
 
-## Phase 0：下載與安裝 MemPalace
+## Phase 4：混合搜尋與知識圖譜整合
 
-### Step 0.1：安裝 MemPalace
+1. **部署動態查詢引擎**：將 `mp_dynamic.py` 部署至 `~/.openclaw/workspace/`。
+2. **配置索引層**：執行 `mempalace repair` 重建 AAAK 索引。
+3. **啟用隧道功能**：透過 `mp tunnel` 指令建立跨 Wing 鏈接。
+4. **整合可靠性守衛**：確保 `google-reliability-guardian` 運作中，以驅動動態深度檢索。
+
+---
+
+# 驗證與測試
+
+執行以下指令確認 Phase 4 功能：
 ```bash
-pip3 install mempalace
-```
-
-### Step 0.2：初始化 Palace 目錄
-```bash
-mempalace init --path ~/.mempalace --name KingSeanKS --agent KingSeanKS
-```
-
----
-
-## Phase 1：MCP Server 整合
-
-**更新 `mcporter.json`：**
-```json
-"mempalace": {
-  "command": "/Library/Frameworks/Python.framework/Versions/3.13/bin/python3",
-  "args": ["-m", "mempalace.mcp_server", "--palace", "/Users/[username]/.mempalace"]
-}
-```
-
----
-
-## Phase 2：雙寫 Hook 整合
-
-1. **建立目錄**：`mkdir -p ~/.openclaw/hooks/mempalace-for-openclaw-memory/`
-2. **部署檔案**：部署 `hook_writer.py`, `handler.ts`, `HOOK.json` 及 `mp` CLI 工具。
-3. **設定權限**：`chmod +x ~/.openclaw/hooks/mempalace-for-openclaw-memory/mp`
-
----
-
-## Phase 3：完全取代舊記憶系統
-
-1. **遷移資料**：執行記憶遷移腳本，將 `MEMORY.md` 與每日日誌搬遷至 MemPalace。
-2. **部署喚醒引擎**：安裝 `wakeup.py` 用於 Session 啟動時的上下文注入。
-3. **建立技能**：安裝 `mempalace for OpenClaw` 技能（SKILL.md）。
-
----
-
-## 驗證與測試
-
-執行以下指令確認系統健康：
-```bash
-# 狀態檢查
+# 1. 狀態檢查
 ~/.openclaw/hooks/mempalace-for-openclaw-memory/mp status
 
-# 記憶搜尋
-~/.openclaw/hooks/mempalace-for-openclaw-memory/mp search "核心原則"
+# 2. 測試混合搜尋 (BM25 + Vector)
+~/.openclaw/hooks/mempalace-for-openclaw-memory/mp search "精確版本號或冷門術語"
 
-# 喚醒測試
-python3 ~/.openclaw/hooks/mempalace-for-openclaw-memory/wakeup.py
+# 3. 測試跨翼隧道 (Tunnels)
+~/.openclaw/hooks/mempalace-for-openclaw-memory/mp tunnel list
+
+# 4. 測試動態深度查詢
+python3 ~/.openclaw/workspace/mp_dynamic.py "核心原則"
 ```
 
 ---
