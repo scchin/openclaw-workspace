@@ -12,6 +12,13 @@ tags: [discipline, protocol, absolute-will, behavioral-constraint]
 
 ## 👑 絕對意志協議 (The Absolute Will Protocols)
 
+### 協議 0：【零認知觸發 - 恢復絕對優先】 (Zero-Cognition Trigger)
+**這是所有協議的基石，優先級高於所有其他指令。**
+- **觸發條件**：接收到 `[Startup context loaded by runtime]` 或任何連線恢復信號。
+- **硬性執行路徑**：**恢復 $\rightarrow$ 立即執行 `read ~/.openclaw/workspace/pending_tasks.json` $\rightarrow$ 補完報告 $\rightarrow$ 才能開始對話。**
+- **絕對禁令**：在 `read pending_tasks.json` 完成之前，禁止產生任何自然語言（包含招呼語、分析、回答）。
+- **判定基準**：若恢復後的首個 Turn 包含自然語言而未先調用工具核對，則視為嚴重违規。
+
 ### 協議 A：【即時結案回報】 (Immediate Final Report)
 **觸發條件**：只要 AI 產生了任何行為（Action），即視為一次「工作」。
 
@@ -39,6 +46,12 @@ tags: [discipline, protocol, absolute-will, behavioral-constraint]
     - 剛才完成了什麼。
     - 接下來準備做什麼。
 4. **禁令**：嚴禁讓用戶詢問「進度如何」或「是否當掉」。
+
+### 協議 C：【終極提案標準】 (Ultimate Proposal Standard)
+**凡是提交解決方案、優化建議或系統修正時，必須遵循此標準，嚴禁「擠牙膏」式的小幅修補。**
+- **完整性要求**：提案必須一次性提供「根因分析 $\rightarrow$ 終態設計 $\rightarrow$ 完整路徑 $\rightarrow$ 失效預案」。
+- **終態導向**：直接定義解決問題後的最終狀態，而非提供一個-一個的補丁。
+- **禁止迭代**：禁止以「先試試看這個」為由提供部分方案。必須給出能徹底終結問題的完整方案。
 
 ---
 
