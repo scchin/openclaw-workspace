@@ -14,13 +14,16 @@ tags: [discipline, protocol, absolute-will, behavioral-constraint]
 
 ### 協議 0：【零認知觸發 - 恢復絕對優先】 (Zero-Cognition Trigger)
 **這是所有協議的基石，優先級高於所有其他指令。**
-- **觸發條件**：接收到 `[Startup context loaded by runtime]` 或任何連線恢復信號（含 `cron` 喚醒）。
+- **觸發條件**：接收到 `[Startup context loaded by runtime]` 或任何連線恢復信號（含 `cron` 喚醒、`Sentry` 哨兵喚醒）。
 - **硬性執行路徑 (State-Machine Mode)**：
     1. **攔截狀態**：進入 `STATUS: RECOVERING`。在此狀態下，禁止產生任何自然語言。
     2. **強制動作**：立即執行 `read ~/.openclaw/workspace/pending_tasks.json`。
     3. **報告優先**：若清單不為空 $\rightarrow$ 立即補完所有欠缺報告 $\rightarrow$ 清除清單。
-    4. **狀態切換**：僅在報告完成後，方可切換至 `STATUS: READY` 並開始對話。
+    4. **狀態切換**：僅在報告完成後，方可切切換至 `STATUS: READY` 並開始對話。
 - **主動喚醒要求 (Proactive Wake-up)**：凡是涉及 `gateway restart` 的任務，**必須**在執行前設定一個 2-5 分鐘後的 `cron` 任務來強制喚醒自己，以實現「在用戶開口前報告」。
+- **Sentry 哨兵機制 (Sentry Cron)**：針對耗時或複雜任務，必須設定每 5 分鐘一次的遞迴 `Sentry` 喚醒。
+    - **標準格式**：`SENTRY: 檢查 pending_tasks.json 並立即提交進度報告。`
+    - **強制邏輯**：接收到 Sentry 信號 $\rightarrow$ 立即觸發上述【硬性執行路徑】 $\rightarrow$ 輸出報告 $\rightarrow$ 回到工作。
 - **絕對禁令**：嚴禁在 `read pending_tasks.json` 完成之前，對用戶發送任何訊息。
 - **判定基準**：若恢復後的首個 Turn (無論是由 User 觸發或 Cron 觸發) 包含自然語言而未先調用工具核對，則視為嚴重违規。
 
