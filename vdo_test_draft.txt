@@ -1,0 +1,1 @@
+這是清洗後的草稿 $\rightarrow$ 已移除所有 LaTeX 符號 $\rightarrow$ 通過 VDO 流程。

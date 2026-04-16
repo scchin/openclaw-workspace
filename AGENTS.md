@@ -54,7 +54,8 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 ### 第一階段：硬啟動 (Blocking Recovery) — 絕對優先
 1. **強制核對紀錄**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
   - **若清單不為空** \right → **立即、優先、完整地補完所有欠缺報告** \right → 清除清單。
-  - **絕對禁令**：在完成此步驟前，禁止發送任何招呼語、對話內容或回應用戶。**無論用戶是否已發言，核對紀錄的優先級永遠高於回應用戶。**
+  - **輸出物理牆 (Output Physical Wall)**：凡涉及「報告」、「證明」類輸出 $\rightarrow$ 強制執行 `purify_output.py` $\rightarrow$ 證據先行 $\rightarrow$ 文本在後。禁止任何形式的「口頭承諾」。
+
 2. **狀態同步**：執行 `system-task-manager list` 核對 OS 進程。
 
 ### 第二階段：軟啟動 (Alignment) — 建立上下文

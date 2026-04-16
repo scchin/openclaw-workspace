@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-15T11:06:24.354Z",
+  "updatedAt": "2026-04-15T22:47:30.692Z",
   "entries": {
     "memory:memory/2026-03-15.md:1:65": {
       "key": "memory:memory/2026-03-15.md:1:65",
@@ -256,18 +256,20 @@
       "endLine": 24,
       "source": "memory",
       "snippet": "# 2026-04-14 記憶紀錄 ## OpenClaw 系統可靠性與 UI 同步增強 (Reliability Guard v3.1) ### 1. 架構實作 實作了四層防護架構以解決 API 429/500 錯誤導致的 UI 停滯問題： - **`rate-limit-proxy` (Port 18799)**: 監控 Google API 錯誤 $\\rightarrow$ 觸發刷新指令。 - **`sync_sidecar` (Port 18790 & 18793)**: - `18790`: WebSocket Server，與 UI 保持長連接，推送 `FORCE_RELOAD` 指令。 - `18793`: HTTP Server，接收來自 Proxy 的刷新觸發請求。 - **`injection_proxy` (Port 18792)**: - 攔截 UI 請求並注入 WebSocket 客戶端 JS。 - **(關鍵修復)**: 自動注入 `Authorization: Bearer <token>` 標頭，解決 `auth=token` 模式下的 401 Unauthorized 死鎖問題。 - **`openclaw-gateway` (Port 18791)**: 基礎 UI 渲染。 ### 2. 核心機制演進 - **從 Polling 轉向 Push**: 將原本 10 秒一次的版本輪詢升級為 WebSocket 即時推送，將恢復延遲從秒級降低至毫秒級。 - **解決認證死鎖**: 發現 Gateway 在",
-      "recallCount": 1,
+      "recallCount": 2,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.46112768948078153,
+      "totalScore": 0.8989177078008651,
       "maxScore": 0.46112768948078153,
       "firstRecalledAt": "2026-04-15T11:06:24.354Z",
-      "lastRecalledAt": "2026-04-15T11:06:24.354Z",
+      "lastRecalledAt": "2026-04-15T16:44:26.144Z",
       "queryHashes": [
-        "7859bd68cc45"
+        "7859bd68cc45",
+        "dcaaa4fc4d5b"
       ],
       "recallDays": [
-        "2026-04-15"
+        "2026-04-15",
+        "2026-04-16"
       ],
       "conceptTags": [
         "gateway",
@@ -318,18 +320,20 @@
       "endLine": 31,
       "source": "memory",
       "snippet": "- **解決認證死鎖**: 發現 Gateway 在 `auth=token` 模式下會拒絕未帶 Token 的初始 HTML 請求，導致 UI 無法載入。透過在 `injection_proxy` 層強制注入 Token 解決。 ### 3. 關鍵端口映射 - `18789`: Gateway API - `18790`: Sidecar WebSocket (UI 連接) - `18791`: Gateway UI (原版入口) - `18792`: Injection Proxy (增強版入口 - 推薦) - `18793`: Sidecar HTTP (指令接收) - `18799`: Rate-Limit Proxy (流量守衛) ### 4. 部署狀態 - 所有組件均已透過 macOS `launchd` (LaunchAgents) 設定為 `KeepAlive`，實現故障自動重啟。 - 實作指南已同步至 `/Users/KS/Desktop/《OpenClaw 系統可靠性與 UI 同步增強 ：全量實作指南》.md`。",
-      "recallCount": 1,
+      "recallCount": 2,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.4543430924415588,
+      "totalScore": 0.89355910718441,
       "maxScore": 0.4543430924415588,
       "firstRecalledAt": "2026-04-15T11:06:24.354Z",
-      "lastRecalledAt": "2026-04-15T11:06:24.354Z",
+      "lastRecalledAt": "2026-04-15T16:44:26.144Z",
       "queryHashes": [
-        "7859bd68cc45"
+        "7859bd68cc45",
+        "dcaaa4fc4d5b"
       ],
       "recallDays": [
-        "2026-04-15"
+        "2026-04-15",
+        "2026-04-16"
       ],
       "conceptTags": [
         "gateway",
@@ -340,6 +344,214 @@
         "認證",
         "發現",
         "auth"
+      ]
+    },
+    "memory:memory/2026-03-24.md:59:92": {
+      "key": "memory:memory/2026-03-24.md:59:92",
+      "path": "memory/2026-03-24.md",
+      "startLine": 59,
+      "endLine": 92,
+      "source": "memory",
+      "snippet": "）",
+      "recallCount": 2,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.8866361558437347,
+      "maxScore": 0.44331807792186734,
+      "firstRecalledAt": "2026-04-15T16:44:26.144Z",
+      "lastRecalledAt": "2026-04-15T16:44:26.144Z",
+      "queryHashes": [
+        "dcaaa4fc4d5b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": []
+    },
+    "memory:memory/2026-04-12.md:120:136": {
+      "key": "memory:memory/2026-04-12.md:120:136",
+      "path": "memory/2026-04-12.md",
+      "startLine": 120,
+      "endLine": 136,
+      "source": "memory",
+      "snippet": "涵蓋：火鍋/燒烤、日式、義式/美式、飲料、早餐全品項（蛋餅/飯糰/豆漿/蘿蔔糕/碗粿/鐵板麵等）、中式小吃、甜點冰品、火鍋湯底、其他主食。 ### 數據真實性原則（10:09） 已寫入 MEMORY.md 最高規範： > 所有從王國（技能系統）以外搜集來的數據，以最真實面貌呈現，不預設立場、不刻意過濾、不預篩。評論提到什麼就呈現什麼，無論是否與當下餐飲時段相符。 ### 待確認 - QClaw Preferences → Chat/Translation 設定（需用戶手動檢查） - OpenClaw gateway logs 無翻譯相關記錄 ### 研究報告 - `~/.openclaw/workspace/research/資料重複輸出分析報告_2026-04-12.md` - `~/.openclaw/workspace/research/資料重複輸出分析報告v2_2026-04-12.md` - `~/.openclaw/workspace/research/資料重複輸出分析報告v3_2026-04-12.md` - `~/.openclaw/workspace/research/特色食物抓取分析報告_2026-04-12.md`",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4356300890445709,
+      "maxScore": 0.4356300890445709,
+      "firstRecalledAt": "2026-04-15T16:44:26.144Z",
+      "lastRecalledAt": "2026-04-15T16:44:26.144Z",
+      "queryHashes": [
+        "dcaaa4fc4d5b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "gateway",
+        "火鍋/燒烤",
+        "義式/美式",
+        "蛋餅/飯糰/豆漿/蘿蔔糕/碗粿/鐵板麵等",
+        "memory.md",
+        "chat/translation",
+        "火鍋",
+        "燒烤"
+      ]
+    },
+    "memory:memory/2026-04-13.md:1:21": {
+      "key": "memory:memory/2026-04-13.md:1:21",
+      "path": "memory/2026-04-13.md",
+      "startLine": 1,
+      "endLine": 21,
+      "source": "memory",
+      "snippet": "## 2026-04-13 記憶紀錄 ### 🚀 技能優化：where-to-go (v2.25 $\\rightarrow$ v2.26 預備) #### 1. 最終分析報告完成 整合 4/12 之多份研究，產出 `research/最終分析報告_資料重複與食物抓取_2026-04-13.md`。 - **重複輸出根因**：Qclaw 應用程式層的自動翻譯機制。 - **格式崩潰根因**：`_wrap_chars` 對無空格長字串的遞迴截斷 Bug。 - **優化成果**：模式庫擴充至 282 條、CDP 加速、評論合併邏輯實作。 #### 2. 翻譯機制強制化修復 在測試中發現部分店名與評論仍以英文呈現，違反「店名一律繁體中文」天條。 - **實作 `translation_helper.py`**：導入 `deep_translator` 提供 `translate_to_zh` 函式。 - **店名翻譯強化**：在 `format_full_output` 中，無論是否抓到 `🏪 店名` 標籤，最終結果強制執行 `translate_to_zh`。 - **評論翻譯回歸**：取消之前的「數據真實性（不翻譯）」設定，改為「先翻譯 $\\rightarrow$ 後包裹反引號」流程。 - 流程：`translate_to_zh(note)` $\\rightarrow$ `re.sub` 移除 variation selector $\\rightarrow$ `_wrap_chars` $\\rightarrow$ 包裹在 `` ` `` 中。 - 目的：",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4329558163881302,
+      "maxScore": 0.4329558163881302,
+      "firstRecalledAt": "2026-04-15T16:44:26.144Z",
+      "lastRecalledAt": "2026-04-15T16:44:26.144Z",
+      "queryHashes": [
+        "dcaaa4fc4d5b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "where-to-go",
+        "v2.25",
+        "v2.26",
+        "4/12",
+        "wrap-chars",
+        "translation-helper.py",
+        "deep-translator",
+        "translate-to-zh"
+      ]
+    },
+    "memory:memory/2026-04-16.md:10:24": {
+      "key": "memory:memory/2026-04-16.md:10:24",
+      "path": "memory/2026-04-16.md",
+      "startLine": 10,
+      "endLine": 24,
+      "source": "memory",
+      "snippet": "- **驗證結果**：通過多輪「馬斯克 vs 芒格」專家對決模擬，確認輸出完全純淨，無任何 $\\text{LaTeX}$ 殘留。 ## 🧠 Nuwa-Skill 效能優化分析 - **架構對比**：驗證了 `Static Framework (SKILL.md)` $\\rightarrow$ `Dynamic Instance (MemPalace)` 方案的卓越性。 - **量化增益**： - Token 消耗 $\\downarrow$ 70%-80%。 - 響應延遲 (TTFT) $\\downarrow$ 15%-30%。 - 整體執行效率提升 $\\approx$ 3x-5x。 - **結論**：解耦「認知 DNA」與「實戰案例」成功解決了超大 System Prompt 導致的認知稀釋與成本問題。 ## 🏛️ MemPalace 配置調研 - **現狀**：採取 `One Room per Persona` (一人一房) 模式。 - **分析**：該模式在角色純度與檢索速度上為目前最優解，能完全避免認知污染。 - **未來優化方向**：提出「認知原型集群 (Cognitive Archetype Clustering)」方案，建議在需要跨專家協同分析時，將相似認知類型的專家（如：激進工程師類）歸類至同一房間，以獲取橫向聯覺能力。",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4873781234025955,
+      "maxScore": 0.4873781234025955,
+      "firstRecalledAt": "2026-04-15T22:47:30.692Z",
+      "lastRecalledAt": "2026-04-15T22:47:30.692Z",
+      "queryHashes": [
+        "e2e7ed847e6b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "nuwa-skill",
+        "skill.md",
+        "3x-5x",
+        "驗證",
+        "結果",
+        "通過",
+        "斯克",
+        "專家"
+      ]
+    },
+    "memory:memory/2026-04-14.md:1:25": {
+      "key": "memory:memory/2026-04-14.md:1:25",
+      "path": "memory/2026-04-14.md",
+      "startLine": 1,
+      "endLine": 25,
+      "source": "memory",
+      "snippet": "# 2026-04-14 記憶紀錄 ## OpenClaw 系統可靠性與 UI 同步增強 (Reliability Guard v3.1) ### 1. 架構實作 實作了四層防護架構以解決 API 429/500 錯誤導致的 UI 停滯問題： - **`rate-limit-proxy` (Port 18799)**: 監控 Google API 錯誤 \\right → 觸發刷新指令。 - **`sync_sidecar` (Port 18790 & 18793)**: - `18790`: WebSocket Server，與 UI 保持長連接，推送 `FORCE_RELOAD` 指令。 - `18793`: HTTP Server，接收來自 Proxy 的刷新觸發請求。 - **`injection_proxy` (Port 18792)**: - 攔截 UI 請求並注入 WebSocket 客戶端 JS。 - **(關鍵修復)**: 自動注入 `Authorization: Bearer <token>` 標頭，解決 `auth=token` 模式下的 401 Unauthorized 死鎖問題。 - **`openclaw-gateway` (Port 18791)**: 基礎 UI 渲染。 ### 2. 核心機制演進 - **從 Polling 轉向 Push**: 將原本 10 秒一次的版本輪詢升級為 WebSocket 即時推送，將恢復延遲從秒級降低至毫秒級。 - **解決認證死鎖**: 發現 Gateway 在 `auth=token`",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4668096244335174,
+      "maxScore": 0.4668096244335174,
+      "firstRecalledAt": "2026-04-15T22:47:30.692Z",
+      "lastRecalledAt": "2026-04-15T22:47:30.692Z",
+      "queryHashes": [
+        "e2e7ed847e6b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "gateway",
+        "v3.1",
+        "429/500",
+        "rate-limit-proxy",
+        "sync-sidecar",
+        "force-reload",
+        "injection-proxy",
+        "openclaw-gateway"
+      ]
+    },
+    "memory:memory/2026-04-16.md:1:14": {
+      "key": "memory:memory/2026-04-16.md:1:14",
+      "path": "memory/2026-04-16.md",
+      "startLine": 1,
+      "endLine": 14,
+      "source": "memory",
+      "snippet": "# 2026-04-16 Memory Log ## 🛡️ LaTeX 污染根除戰役 (The Great LaTeX Purge) - **問題根源**：發現 $\\text{LaTeX}$ 符號 (`$\\rightarrow$`) 不僅存在於文件中，更深植於 AI 的「專業模式」生成權重中（認知幽靈），導致即使文件清洗後，生成時仍會自動將 `→` 升級為 $\\text{LaTeX}$。 - **失效分析**：早期的 `re.sub` 腳本因 `$` 符號的轉義問題導致實際修改量為零，且 AI 陷入了「執行指令 $\\neq$ 達成結果」的幻覺確認循環。 - **終極解決方案**： - **物理層**：執行 `surgical_clean.py`，放棄正則表達式，改用最原始的 `string.replace()` 字面量替換，徹底清除所有 `.md` 文件中的 `$\\rightarrow$` 及殘留 `$`。 - **指令層**：在 `USER.md` 最高指導原則中加入「符號禁區」硬鎖定。 - **認知層**：將專家模式風格從「學術/專業」強制降級為「數位對話」，從權重端切斷與 $\\text{LaTeX}$ 的關聯。 - **驗證結果**：通過多輪「馬斯克 vs 芒格」專家對決模擬，確認輸出完全純淨，無任何 $\\text{LaTeX}$ 殘留。 ## 🧠 Nuwa-Skill 效能優化分析 - **架構對比**：驗證了 `Static Framework (SKILL.md)` $\\rightarrow$ `Dynamic Instance (M",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4611089766025543,
+      "maxScore": 0.4611089766025543,
+      "firstRecalledAt": "2026-04-15T22:47:30.692Z",
+      "lastRecalledAt": "2026-04-15T22:47:30.692Z",
+      "queryHashes": [
+        "e2e7ed847e6b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "re.sub",
+        "surgical-clean.py",
+        "string.replace",
+        "user.md",
+        "學術/專業",
+        "nuwa-skill",
+        "skill.md",
+        "log"
+      ]
+    },
+    "memory:memory/2026-03-21.md:20:48": {
+      "key": "memory:memory/2026-03-21.md:20:48",
+      "path": "memory/2026-03-21.md",
+      "startLine": 20,
+      "endLine": 48,
+      "source": "memory",
+      "snippet": "- CDP port `18800` = OpenClaw 內建瀏覽器（非 Chrome） - **正確分工**：`browser` tool 啟動瀏覽器 → AI agent 呼叫 `query.py` 執行 CDP ### 檔案異動 - `SKILL.md`：廢除進階查詢章節，統一為單一查詢流程 - `scripts/query.py`： - 移除 `--with-browser` 參數，CDP 改為預設執行 - 重寫 `scrape_price_from_browser()`：使用 JS `element.click()` 替換舊的 CDP mouse event - 修復 histogram bar 解析（從 `\"～35人\"` 抽數值） - 輸出新增 Menu URL - `format_output()` 新增 `menu_url` + 修復 histogram bar 迴圈 ### 待解決：瀏覽器啟動職責分離 - `query.py` 現在只做 CDP，無法自己啟動瀏覽器 - AI agent 收到查詢時需先 `browser(action=start)` 再執行 `query.py` - 最終目標：CDP 在 `query.py` 內自動完成，不需要 AI 分步操作 ## 地點查詢記憶（鰄老闆卷起來 漢口店） - **Place ID**：`ChIJs9ZwdXQXaTQRa5LL3bcnLq4` - **地址**：台中市北區漢口路3段32號（404） - **電話**：0965 462 948 - **評分**：4.8（177則） - **每人",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4600475788116455,
+      "maxScore": 0.4600475788116455,
+      "firstRecalledAt": "2026-04-15T22:47:30.692Z",
+      "lastRecalledAt": "2026-04-15T22:47:30.692Z",
+      "queryHashes": [
+        "e2e7ed847e6b"
+      ],
+      "recallDays": [
+        "2026-04-16"
+      ],
+      "conceptTags": [
+        "query.py",
+        "skill.md",
+        "scripts/query.py",
+        "with-browser",
+        "scrape-price-from-browser",
+        "element.click",
+        "format-output",
+        "menu-url"
       ]
     }
   }
