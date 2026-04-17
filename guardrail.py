@@ -1,36 +1,39 @@
-import sys
+import argparse
 import re
+import sys
 
-def check_output(text):
-    # 定義禁忌符號 (LaTeX 相關)
-    forbidden_patterns = [
-        r'\$',                # 禁止任何 $ 符號
-        r'\\rightarrow',       # 禁止 \rightarrow
-        r'\\text',            # 禁止 \text
-        r'\\begin',           # 禁止 \begin
-        r'\\end',             # 禁止 \end
+def scan_for_banned_symbols(text):
+    # 禁用符號清單
+    banned_patterns = [
+        r'\$',                 # 任何 $ 符號 (LaTeX 定界符)
+        r'\\text',             # \text 標記
+        r'→',                  # Unicode 箭頭
+        r'↓',                  # Unicode 箭頭
+        r'↑',                  # Unicode 箭頭
+        r'≈',                  # 近似符號
+        r'\\rightarrow',        # LaTeX 箭頭
+        r'\\downarrow',        # LaTeX 箭頭
+        r'\\uparrow',          # LaTeX 箭頭
+        r'\\approx',           # LaTeX 近似
     ]
     
-    violations = []
-    for pattern in forbidden_patterns:
+    for pattern in banned_patterns:
         if re.search(pattern, text):
-            violations.append(pattern)
+            return False  # 發現禁項
             
-    if violations:
-        return False, violations
-    return True, []
+    return True  # 完全乾淨
+
+def main():
+    parser = argparse.ArgumentParser(description="OpenClaw Output Guardrail")
+    parser.add_argument("--text", type=str, required=True, help="The text to scan")
+    args = parser.parse_args()
+    
+    if scan_for_banned_symbols(args.text):
+        print("CLEAN")
+        sys.exit(0)
+    else:
+        print("REJECTED")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Error: No text provided for scanning.")
-        sys.exit(1)
-        
-    input_text = sys.argv[1]
-    is_clean, found = check_output(input_text)
-    
-    if not is_clean:
-        print(f"REJECTED: Forbidden symbols found: {found}")
-        sys.exit(1) # 返回非零狀態碼表示攔截
-    else:
-        print("CLEAN: No forbidden symbols found.")
-        sys.exit(0)
+    main()
