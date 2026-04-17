@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "profiles": {
+    "openrouter:default": {
+      "type": "api_key",
+      "provider": "openrouter",
+      "key": "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"
+    },
+    "custom-custom92:default": {
+      "type": "api_key",
+      "provider": "custom-custom92",
+      "key": "0000"
+    },
+    "ollama-ollama:default": {
+      "type": "api_key",
+      "provider": "ollama-ollama",
+      "key": "ollama-local"
+    },
+    "google:default": {
+      "type": "api_key",
+      "provider": "google",
+      "key": "AIzaSyAbqQPDI0NgzotdTYnXo4jwX1lRwRuEU70"
+    },
+    "google-ai:default": {
+      "type": "api_key",
+      "provider": "google-ai",
+      "key": "AIzaSyAbqQPDI0NgzotdTYnXo4jwX1lRwRuEU70"
+    }
+  }
+}
