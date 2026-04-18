@@ -1,0 +1,12 @@
+{
+  "version": "3.3.0-dev (Hybrid v5)",
+  "timestamp": "2026-04-17T19:35:00",
+  "dimensions": {
+    "search_engine": "Advanced Hybrid (Semantic + Keyword + Temporal/Preference Boosting)",
+    "retrieval_rate_r10": "0.889 (Official) / 0.8 - 0.9 (Local Validation)",
+    "memory_structure": "Dynamic Wings (Project/Person based) > Rooms > Drawers",
+    "backend_support": "Pluggable Backend (Default: ChromaDB)",
+    "mcp_tools": "Extended MCP set (29 tools, including graph operations and diaries)",
+    "knowledge_graph": "Temporal Entity-Relationship Graph (SQLite backed, supports validity windows)"
+  }
+}

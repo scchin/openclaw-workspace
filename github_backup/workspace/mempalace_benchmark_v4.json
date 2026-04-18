@@ -1,0 +1,12 @@
+{
+  "version": "3.3.0",
+  "timestamp": "2026-04-17T19:12:00",
+  "dimensions": {
+    "search_engine": "Hybrid (ChromaDB Vector + Keyword)",
+    "retrieval_rate_r10": "Pending (Test in progress)",
+    "memory_structure": "Hierarchical (Wings > Halls > Drawers)",
+    "backend_support": "ChromaDB, SQLite",
+    "mcp_tools": "Standard Memory MCP set",
+    "knowledge_graph": "Triples-based (entities, triples tables in SQLite)"
+  }
+}

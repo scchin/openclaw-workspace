@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "skills": {
+    "prompt-injection-guard": {
+      "version": "1.0.0",
+      "installedAt": 1774943059580
+    }
+  }
+}

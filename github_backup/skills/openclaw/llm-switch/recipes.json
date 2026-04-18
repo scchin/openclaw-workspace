@@ -1,0 +1,21 @@
+{
+  "gemma-4-31b": {
+    "id": "google-ai/gemma-4-31b-it",
+    "provider": "google-ai",
+    "settings": {
+      "reasoning": false
+    }
+  },
+  "gemma-4-26b": {
+    "id": "google-ai/gemma-4-26b-a4b-it",
+    "provider": "google-ai",
+    "settings": {
+      "reasoning": false
+    }
+  },
+  "ollama": {
+    "id": "ollama-ollama/minimax-m2.7:cloud",
+    "provider": "ollama-ollama",
+    "settings": {}
+  }
+}

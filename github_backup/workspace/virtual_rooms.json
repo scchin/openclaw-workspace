@@ -1,0 +1,26 @@
+{
+  "routing_rules": [
+    {
+      "category": "technical",
+      "keywords": ["python", "javascript", "typescript", "api", "mcp", "git", "github", "config", "install", "deploy", "debug", "algorithm", "indexing", "performance", "architecture", "hook", "system", "gateway"],
+      "default_wing": "openclaw-workspace",
+      "default_room": "skills"
+    },
+    {
+      "category": "personal",
+      "keywords": ["remember", "feel", "emotion", "experience", "diary", "life", "family", "friend", "health", "habit", "thought", "opinion", "preference"],
+      "default_wing": "wing_kingseanks",
+      "default_room": "memory"
+    },
+    {
+      "category": "system_governance",
+      "keywords": ["principle", "rule", "policy", "discipline", "decision", "protocol", "guardian", "soul", "user", "agents"],
+      "default_wing": "ks-system",
+      "default_room": "general"
+    }
+  ],
+  "fallback": {
+    "wing": "ks-system",
+    "room": "general"
+  }
+}
