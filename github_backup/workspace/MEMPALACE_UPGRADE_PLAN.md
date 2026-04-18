@@ -20,5 +20,5 @@
 6. **知識圖譜 (Knowledge Graph)**：驗證時序實體關係 (Temporal ER) 的查詢正確性。
 
 ## 📂 物理備份路徑
-- v4 備份：`~/.openclaw/skills/mempalace-phase4-backup-20260417/`
+- v4 備份：`~/.openclaw/skills/[SENSITIVE_TOKEN_HARD_REDACTED]/`
 - 數據備份：`~/.mempalace/backup_v4_20260417/`

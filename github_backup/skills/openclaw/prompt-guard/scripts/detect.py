@@ -64,7 +64,7 @@ Changelog v2.8.0 (2026-02-06):
 - ENHANCED: normalize() → multi-pass normalization pipeline
 - ENHANCED: analyze() uses fully normalized text for all pattern checks
 - Source: @vhsdev / 0xjunkim security report (Token Splitting Bypass)
-- Addresses: gist.github.com/0xjunkim/cc004060aa81c166ff557496f0213925
+- Addresses: gist.github.com/0xjunkim/[GENERIC_SECRET_REDACTED]
 
 Changelog v2.7.0 (2026-02-05):
 - NEW: Auto-Approve Exploitation detection (always allow + curl/bash, process substitution)

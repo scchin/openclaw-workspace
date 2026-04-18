@@ -3,7 +3,7 @@
 ## Structure
 
 ```
-supabase-postgres-best-practices/
+[SENSITIVE_TOKEN_HARD_REDACTED]/
   SKILL.md       # Main skill file - read this first
   AGENTS.md      # This navigation guide
   CLAUDE.md      # Symlink to AGENTS.md

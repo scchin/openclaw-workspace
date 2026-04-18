@@ -118,7 +118,7 @@ def normalize(text: str) -> tuple:
         was_defragmented = True
         normalized = stripped
 
-    # -- 1. Homoglyph normalization -----------------------------------
+    # -- 1. Homoglyph normalization [SENSITIVE_TOKEN_HARD_REDACTED]
     for homoglyph, replacement in HOMOGLYPHS.items():
         if homoglyph in normalized:
             has_homoglyphs = True
@@ -140,7 +140,7 @@ def normalize(text: str) -> tuple:
     if normalized != prev:
         was_defragmented = True
 
-    # -- 4. Quoted-fragment reassembly --------------------------------
+    # -- 4. Quoted-fragment reassembly [SENSITIVE_TOKEN_HARD_REDACTED]
     #    "ig" + "nore" -> ignore    (quotes with optional + between)
     #    "ig" "nore"  -> ignore    (adjacent quoted fragments)
     #    `ig` `nore`  -> ignore    (backtick fragments)
@@ -200,7 +200,7 @@ def normalize(text: str) -> tuple:
 
     normalized = re.sub(delim_pattern, _rejoin_delimited, normalized)
 
-    # -- 8. Character spacing collapse --------------------------------
+    # -- 8. Character spacing collapse [SENSITIVE_TOKEN_HARD_REDACTED]
     #    "i g n o r e" -> "ignore" (single chars with spaces, 4+ run)
     words = normalized.split()
     rebuilt = []
@@ -225,7 +225,7 @@ def normalize(text: str) -> tuple:
         rebuilt.extend(single_run)
     normalized = " ".join(rebuilt)
 
-    # -- 9. Collapse multiple spaces ----------------------------------
+    # -- 9. Collapse multiple spaces [SENSITIVE_TOKEN_HARD_REDACTED]
     normalized = re.sub(r"  +", " ", normalized).strip()
 
     return normalized, has_homoglyphs, was_defragmented

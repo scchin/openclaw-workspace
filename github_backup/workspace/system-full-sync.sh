@@ -22,7 +22,7 @@ BACKUP_TARGET_DIR="$WORKSPACE/github_backup"
 # 需要同步的桌面指南清單
 DESKTOP_GUIDES=(
     "$HOME/Desktop/《OpenClaw 系統可靠性與 UI 同步增強 ：全量實作指南》.md"
-    "$HOME/Desktop/google-reliability-guardian_Guide.md"
+    "$HOME/Desktop/[SENSITIVE_TOKEN_HARD_REDACTED].md"
 )
 
 echo "🚀 Starting Full System Sync (Secure Mode)..."
@@ -37,9 +37,9 @@ fi
 rm -rf "$SYNC_TMP_DIR"
 mkdir -p "$SYNC_TMP_DIR/workspace" "$SYNC_TMP_DIR/skills" "$SYNC_TMP_DIR/system"
 
-# ------------------------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]--------------
 # 核心脫敏函數：針對所有文本檔案移除 API Key 樣式字符串
-# ------------------------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]--------------
 redact_sensitive_data() {
     local target_dir="$1"
     echo "🛡️ Redacting sensitive data in $target_dir..."
@@ -62,15 +62,38 @@ redact_sensitive_data() {
 # Step 2: 收集所有數據到暫存區 (Full Copy)
 echo "[1/5] Collecting all system assets..."
 
-# A. 複製 Workspace (排除 .git)
-rsync -a --exclude='.git' "$WORKSPACE/" "$SYNC_TMP_DIR/workspace/"
+# 定義全局排除清單 (防止 .venv, node_modules 等雜訊導致的 Secret 誤報)
+EXCLUDE_LIST=(
+    "--exclude=.git"
+    "--exclude=.venv"
+    "--exclude=node_modules"
+    "--exclude=__pycache__"
+    "--exclude=.DS_Store"
+    "--exclude=*.pyc"
+    "--exclude=ClaudeCode @Happy Version"
+    "--exclude=references"
+    "--exclude=gateway_backups"
+    "--exclude=skills-backup"
+    "--exclude=*backup*"
+    "--exclude=injection_proxy.py"
+    "--exclude=guardian.py"
+    "--exclude=test_detect.py"
+    "--exclude=api_client.py"
+    "--exclude=run.py"
+    "--exclude=setup_iter11.js"
+    "--exclude=SKILL.md"
+)
+
+# A. 複製 Workspace
+rsync -a "${EXCLUDE_LIST[@]}" "$WORKSPACE/" "$SYNC_TMP_DIR/workspace/"
 
 # B. 複製所有技能
-rsync -a --exclude='.git' "$AGENTS_SKILLS/" "$SYNC_TMP_DIR/skills/agents/"
-rsync -a --exclude='.git' "$OPENCLAW_SKILLS/" "$SYNC_TMP_DIR/skills/openclaw/"
+rsync -a "${EXCLUDE_LIST[@]}" "$AGENTS_SKILLS/" "$SYNC_TMP_DIR/skills/agents/"
+rsync -a "${EXCLUDE_LIST[@]}" "$OPENCLAW_SKILLS/" "$SYNC_TMP_DIR/skills/openclaw/"
+
 
 # C. 收集系統配置
-[ -d "$GUARDIAN_DIR" ] && cp -R "$GUARDIAN_DIR" "$SYNC_TMP_DIR/system/guardian"
+[ -d "$GUARDIAN_DIR" ] && rsync -a "${EXCLUDE_LIST[@]}" "$GUARDIAN_DIR/" "$SYNC_TMP_DIR/system/guardian/"
 [ -f "$MEMPALACE_CONFIG" ] && cp "$MEMPALACE_CONFIG" "$SYNC_TMP_DIR/system/mempalace.yaml"
 [ -f "$RUNTIME_STATE" ] && cp "$RUNTIME_STATE" "$SYNC_TMP_DIR/system/active_tasks.json"
 
@@ -85,8 +108,18 @@ for guide in "${DESKTOP_GUIDES[@]}"; do
 done
 
 # Step 3: 執行全域脫敏 (Crucial Step)
-# 在上傳前，對暫存區所有文件進行物理脫敏
-redact_sensitive_data "$SYNC_TMP_DIR"
+# 使用專用的 Python 脫敏引擎，取代不穩定的 sed
+echo "🛡️ Running Advanced Physical Redaction..."
+python3 "$WORKSPACE/scripts/redact_secrets.py" redact "$SYNC_TMP_DIR"
+
+# Step 3.5: 執行推送前物理審計 (Pre-push Audit)
+echo "🔍 Running Pre-push Audit..."
+if ! python3 "$WORKSPACE/scripts/redact_secrets.py" audit "$SYNC_TMP_DIR"; then
+    echo "🚨 FATAL ERROR: Secrets still detected after redaction! Aborting sync to prevent leak."
+    rm -rf "$SYNC_TMP_DIR"
+    exit 1
+fi
+
 
 # Step 4: 同步至 GitHub 備份目錄
 echo "[2/5] Syncing redacted assets to GitHub..."

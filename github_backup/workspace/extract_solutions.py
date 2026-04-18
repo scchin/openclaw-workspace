@@ -12,7 +12,7 @@ solutions = [
     ["Associative Reasoning Control (FlexAC)", "Lightweight, training-free framework to modulate associative behavior", "https://github.com/ylhz/FlexAC"],
     ["Self-Optimizing Coherent Memory (Oscillink)", "Maintain coherent memory for embedding workflows to prevent drift", "https://github.com/Maverick0351a/Oscillink"],
     ["Listwise Preference Optimization (LPOI)", "Optimize VLM preferences specifically for factual accuracy", "https://github.com/fatemehpesaran310/lpoi"],
-    ["Comprehensive VLM Hallucination List", "Curated collection of state-of-the-art detection and mitigation tools", "https://github.com/mala-lab/Awesome-LLM-LVLM-Hallucination-Detection-and-Mitigation"],
+    ["Comprehensive VLM Hallucination List", "Curated collection of state-of-the-art detection and mitigation tools", "https://github.com/mala-lab/[SENSITIVE_TOKEN_HARD_REDACTED]"],
     ["Clinical Contrastive Decoding (CCD)", "Plug-and-play toolkit for radiology MLLM hallucination mitigation", "https://github.com/X-iZhang/CCD"],
     ["Adaptive Token Selection (HaMI)", "Robust detection via adaptive selection of tokens for verification", "https://github.com/mala-lab/HaMI"],
     ["Attention-Informed Token Boosting (PAINT)", "Intervene in self-attention to boost visual-attention informed tokens", "https://github.com/hasanar1f/PAINT"],
@@ -23,6 +23,6 @@ solutions = [
     ["Semantic Tension (ΔS)", "Replacing confidence scores with 'semantic tension' to detect resistance to facts", "https://news.ycombinator.com/"]
 ]
 
-with open('/Users/KS/.openclaw/workspace/openclaw_hallucination_forum_solutions.csv', 'a', newline='', encoding='utf-8') as f:
+with open('/Users/KS/.openclaw/workspace/[SENSITIVE_TOKEN_HARD_REDACTED].csv', 'a', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerows(solutions)

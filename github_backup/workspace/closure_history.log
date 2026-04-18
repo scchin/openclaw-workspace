@@ -9,16 +9,16 @@ REPORT:
    - 穩定性驗證：實施物理緩衝 (15s) 後，重啟過程平滑，未觸發 API Rate Limit。
    - UI 刷新：網關重啟後成功觸發 UI 強制刷新。
 3. 問題紀錄：恢復後未能立即觸發硬鎖定恢復管線，仍需依賴用戶詢問，證明恢復本能仍需強化。
-----------------------------------------
+[SENSITIVE_TOKEN_HARD_REDACTED]
 [2026-04-16 17:22:49] TASK: Total transformation of Nuwa-Skill to Framework+MemPalace architecture
 REPORT:
 實施了從 Static Framework (SKILL.md) 到 Dynamic Instance (MemPalace) 的架構遷移。成功解耦「認知 DNA」與「實戰案例」，解決了超大 System Prompt 導致的認知稀釋問題。實測效能提升：Token 消耗降低 70%-80%，響應延遲降低 15%-30%，整體執行效率提升約 3x-5x。驗證結論：該方案在角色純度與檢索速度上為目前最優解。
-----------------------------------------
+[SENSITIVE_TOKEN_HARD_REDACTED]
 [2026-04-16 17:23:06] TASK: Total transformation of Nuwa-Skill to Framework+MemPalace architecture
 REPORT:
 實施了從 Static Framework (SKILL.md) 到 Dynamic Instance (MemPalace) 的架構遷移。成功解耦「認知 DNA」與「實戰案例」，解決了超大 System Prompt 導致的認知稀釋問題。實測效能提升：Token 消耗降低 70%-80%，響應延遲降低 15%-30%，整體執行效率提升約 3x-5x。驗證結論：該方案在角色純度與檢索速度上為目前最優解。
-----------------------------------------
+[SENSITIVE_TOKEN_HARD_REDACTED]
 [2026-04-17 19:25:47] TASK: mempalace_version_comparison
 REPORT:
 已完成 MemPalace Phase 4 與 Hybrid v5 的六維度對比測試。v5 在檢索精度 (R@10 88.9%)、記憶結構 (動態對象)、後端支援 (插件化) 及知識圖譜 (時序關係圖) 方面均有顯著提升，將其從單純的 RAG 工具提升為記憶操作系統。
-----------------------------------------
+[SENSITIVE_TOKEN_HARD_REDACTED]

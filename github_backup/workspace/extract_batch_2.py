@@ -23,6 +23,6 @@ solutions = [
     ["Citation Anchor Verification", "Parse citations and physically check if the anchor text exists in the retrieved source", "GitHub / laion-ai"]
 ]
 
-with open('/Users/KS/.openclaw/workspace/openclaw_hallucination_forum_solutions.csv', 'a', newline='', encoding='utf-8') as f:
+with open('/Users/KS/.openclaw/workspace/[SENSITIVE_TOKEN_HARD_REDACTED].csv', 'a', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerows(solutions)

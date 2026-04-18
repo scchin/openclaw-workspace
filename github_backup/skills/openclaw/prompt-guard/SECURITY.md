@@ -50,7 +50,7 @@ We appreciate security researchers who help improve Prompt Guard. With your perm
 
 - [Clawdbot Security Docs](https://docs.clawd.bot/security)
 - [Moltbot Security Guide](https://docs.molt.bot/security)
-- [OWASP LLM Top 10](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
+- [OWASP LLM Top 10](https://owasp.org/[SENSITIVE_TOKEN_HARD_REDACTED]/)
 - [Prompt Injection Defense Patterns](https://github.com/topics/prompt-injection)
 
 ## 🔗 Related Projects

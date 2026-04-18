@@ -42,7 +42,7 @@ EMOTION_WORDS = [
 ]
 
 
-def check_title_thumbnail_complementarity(title: str, thumb_text: str = "") -> dict:
+def [SENSITIVE_TOKEN_HARD_REDACTED](title: str, thumb_text: str = "") -> dict:
     """检查标题与缩略图是否互补（而非重复）"""
     title_words = set(title.lower().split())
     thumb_words = set(thumb_text.lower().split()) if thumb_text else set()
@@ -220,7 +220,7 @@ def analyze_image(image_path: str) -> dict:
 
 def generate_report(title: str, thumb_text: str = "", image_path: str = None) -> str:
     """生成完整审核报告"""
-    complementarity = check_title_thumbnail_complementarity(title, thumb_text)
+    complementarity = [SENSITIVE_TOKEN_HARD_REDACTED](title, thumb_text)
     text_amount = check_text_amount(thumb_text)
     emotion = check_emotion_in_title(title)
     curiosity = check_title_curiosity_gap(title)

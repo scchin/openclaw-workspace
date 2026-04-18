@@ -138,7 +138,7 @@
     "bind": "loopback",
     "auth": {
       "mode": "token",
-      "token": "5848f7b926aecdbb71493034aec2ea544ad04b980ab65fd5"
+      "token": "[GENERIC_SECRET_REDACTED]"
     },
     "tailscale": {
       "mode": "off",
@@ -288,7 +288,7 @@
       "goplaces": {
         "enabled": true,
         "env": {
-          "GOOGLE_PLACES_API_KEY": "AIzaSyDlz5BN5QjXhmQ-x0uB4O3zTJTxNF8-PKE"
+          "GOOGLE_PLACES_API_KEY": "[GCP_API_KEY_REDACTED]"
         }
       },
       "gog": {

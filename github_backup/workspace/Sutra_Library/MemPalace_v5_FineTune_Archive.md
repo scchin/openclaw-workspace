@@ -1,10 +1,10 @@
 # 📚 MemPalace v5 深度整合工程記錄 (Archive)
 
 ## 1. 技能定義 (Skill Definition)
-**名稱**：`fintune-mempalace-v5-on-openclaw`
+**名稱**：`[SENSITIVE_TOKEN_HARD_REDACTED]`
 **定位**：將 MemPalace v5 官方能力轉化為 OpenClaw 自動化行為的工程實作技能。
 **核心內容**：包含關聯喚醒、異構索引、時序有效性與智能分流的實作 SOP。
-**封裝路徑**：`/Users/KS/.agents/skills/fintune-mempalace-v5-on-openclaw/`
+**封裝路徑**：`/Users/KS/.agents/skills/[SENSITIVE_TOKEN_HARD_REDACTED]/`
 
 ## 2. 實作指南 (Implementation Guide)
 請參閱詳細指南文件：`/Users/KS/Desktop/MemPalace_v5_FineTune_Guide.md` (副本已存儲於本目錄)。

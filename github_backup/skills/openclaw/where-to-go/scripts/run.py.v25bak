@@ -24,7 +24,7 @@ import textwrap
 import asyncio
 from typing import List, Dict, Optional, Tuple
 
-# --- 設定 ----------------------------------------------------
+# --- 設定 [SENSITIVE_TOKEN_HARD_REDACTED]
 DEFAULT_LAT = 24.18588146738243
 DEFAULT_LNG = 120.66765935832942
 DEFAULT_RADIUS_M = 1000
@@ -34,15 +34,15 @@ DEFAULT_MAX_CANDIDATES = 30   # 先多抓一些，食物關鍵字會過濾掉部
 
 EXPANSION_RADII = [1000, 1500, 2500, 5000, 10000, 20000, 50000]
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # In-memory cache（同一程序內重複查詢加速）
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 _QUERY_API_CACHE: Dict[str, Optional[dict]] = {}
 _QUERY_FULL_CACHE: Dict[str, str] = {}
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # 觸發關鍵字
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 # 餐飲時段 / 業態關鍵字（原有）
 MEAL_KEYWORDS = [
@@ -96,9 +96,9 @@ TRIGGER_KEYWORDS = MEAL_KEYWORDS + FACILITY_KEYWORDS + PLACE_KEYWORDS + FOOD_KEY
 SKIP_KEYWORDS = ["哪裡", "什麼", "怎麼", "如何", "為什麼", "教", "學", "做"]
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # 工具函式
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def haversine(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
     R = 6371000
@@ -158,9 +158,9 @@ def estimate_time(dist_m: float, mode: str = "driving") -> int:
     return max(1, round(dist_m / 1000 / 20 * 60))
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # 關鍵字偵測
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def extract_keyword(text: str) -> Optional[str]:
     """抓第一個出現的觸發關鍵字"""
@@ -182,9 +182,9 @@ def extract_food_keyword(text: str) -> Optional[str]:
     return None
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # 食物過濾器
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 FOOD_ALIASES = {
     "火鍋": ["火鍋", "涮涮鍋", "麻辣鍋", "石頭火鍋", "羊肉爐", "薑母鴨", "鍋物"],
@@ -305,9 +305,9 @@ def place_mentions_food(place_data: dict, food_kw: str) -> bool:
     return False
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # goplaces search
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def goplaces_search(keyword: str, lat: float, lng: float,
                     radius_m: int, min_rating: float,
@@ -342,9 +342,9 @@ def goplaces_search(keyword: str, lat: float, lng: float,
     return []
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # filter + sort
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def filter_and_sort(candidates: List[dict],
                     center_lat: float, center_lng: float,
@@ -362,9 +362,9 @@ def filter_and_sort(candidates: List[dict],
     return filtered
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # Google Places 地點查詢技能（query.py full）
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def query_place_full(place_id: str) -> Tuple[Optional[dict], str]:
     """
@@ -495,9 +495,9 @@ def _filter_reviews_6m(reviews: list) -> list:
     return filtered
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # v2.5 輸出格式（純文字模板，符合 MEMORY.md 規範）
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 
 def format_full_output(place_data: dict, maps_price: dict,
@@ -596,9 +596,9 @@ def format_full_output(place_data: dict, maps_price: dict,
 
     return "\n".join(lines_out)
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # 解析使用者輸入
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def parse_input(user_text: str) -> Dict:
     text = user_text.strip()
@@ -679,9 +679,9 @@ def parse_input(user_text: str) -> Dict:
     }
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # 主搜尋流程
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def search_and_detail(params: Dict, verbose: bool = True) -> str:
     keyword   = params["keyword"]
@@ -1017,9 +1017,9 @@ def _rev_from_list(reviews):
 
 
 
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 # CLI 入口
-# -------------------------------------------------------------
+# [SENSITIVE_TOKEN_HARD_REDACTED]
 
 def main():
     if len(sys.argv) < 2:

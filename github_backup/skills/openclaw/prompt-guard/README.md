@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/🚀_version-3.2.0-blue.svg?style=for-the-badge" alt="Version">
-  <img src="https://img.shields.io/badge/📅_updated-2026--02--11-brightgreen.svg?style=for-the-badge" alt="Updated">
+  <img src="https://img.shields.io/badge/📅[SENSITIVE_TOKEN_HARD_REDACTED].svg?style=for-the-badge" alt="Updated">
   <img src="https://img.shields.io/badge/license-MIT-green.svg?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/SHIELD.md-compliant-purple.svg?style=for-the-badge" alt="SHIELD.md">
 </p>

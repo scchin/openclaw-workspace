@@ -33,11 +33,11 @@
     <key>NODE_USE_SYSTEM_CA</key>
     <string>1</string>
     <key>GEMINI_API_KEY</key>
-    <string>AQ.Ab8RN6LFQjb5LQYxUfDn41Dsu-31Ii0ZWi3GEB5ENw4asExkyw</string>
+    <string>AQ.[SENSITIVE_TOKEN_HARD_REDACTED]</string>
     <key>GOOGLE_API_KEY</key>
-    <string>AQ.Ab8RN6LFQjb5LQYxUfDn41Dsu-31Ii0ZWi3GEB5ENw4asExkyw</string>
+    <string>AQ.[SENSITIVE_TOKEN_HARD_REDACTED]</string>
     <key>GOOGLE_AI_API_KEY</key>
-    <string>AQ.Ab8RN6LFQjb5LQYxUfDn41Dsu-31Ii0ZWi3GEB5ENw4asExkyw</string>
+    <string>AQ.[SENSITIVE_TOKEN_HARD_REDACTED]</string>
     <key>HOME</key>
     <string>/Users/KS</string>
     <key>TMPDIR</key>
@@ -60,7 +60,7 @@
     <string>gateway</string>
     <key>OPENCLAW_SERVICE_VERSION</key>
     <string>2026.4.15</string>
-    <key>OPENCLAW_SERVICE_MANAGED_ENV_KEYS</key>
+    <key>[SENSITIVE_TOKEN_HARD_REDACTED]</key>
     <string>GEMINI_API_KEY,GOOGLE_AI_API_KEY,GOOGLE_API_KEY</string>
     </dict>
   </dict>

@@ -211,13 +211,13 @@ def run_simulation():
     """Run the full simulation test."""
 
     print(colorize("""
-+---------------------------------------------------------------+
++[SENSITIVE_TOKEN_HARD_REDACTED]+
 |                                                               |
 |   TOKEN OPTIMIZER - SIMULATION TEST                           |
 |                                                               |
 |   Demonstrates before/after performance comparison            |
 |                                                               |
-+---------------------------------------------------------------+
++[SENSITIVE_TOKEN_HARD_REDACTED]+
     """, Colors.BOLD + Colors.CYAN))
 
     # Setup test directory
@@ -355,10 +355,10 @@ def run_simulation():
     print(f"  {'Monthly Cost':<20} ${before_costs['monthly_total']:>10.2f} ${after_costs['monthly_total']:>10.2f} {colorize(f'${monthly_savings:>10.2f}', Colors.GREEN)}")
     print(f"  {'Yearly Cost':<20} ${before_costs['yearly_total']:>10.2f} ${after_costs['yearly_total']:>10.2f} {colorize(f'${yearly_savings:>10.2f}', Colors.GREEN)}")
 
-    print(colorize(f"\n  +-------------------------------------------------------+", Colors.BOLD + Colors.GREEN))
+    print(colorize(f"\n  +[SENSITIVE_TOKEN_HARD_REDACTED]+", Colors.BOLD + Colors.GREEN))
     print(colorize(f"  |  TOTAL SAVINGS: {savings_percent:.0f}%                                 |", Colors.BOLD + Colors.GREEN))
     print(colorize(f"  |  ${monthly_savings:.2f}/month = ${yearly_savings:.2f}/year                    |", Colors.BOLD + Colors.GREEN))
-    print(colorize(f"  +-------------------------------------------------------+", Colors.BOLD + Colors.GREEN))
+    print(colorize(f"  +[SENSITIVE_TOKEN_HARD_REDACTED]+", Colors.BOLD + Colors.GREEN))
 
     # Breakdown
     print(colorize("\n  Savings Breakdown:", Colors.BOLD))

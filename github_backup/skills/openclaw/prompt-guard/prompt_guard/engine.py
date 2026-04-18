@@ -164,9 +164,9 @@ class PromptGuard:
             },
         }
 
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
     # API status helpers
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
 
     @property
     def api_enabled(self) -> bool:
@@ -197,9 +197,9 @@ class PromptGuard:
             except Exception:
                 pass  # Never let reporting failure affect detection
 
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
     # Delegate methods -- call standalone functions from submodules
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
 
     def normalize(self, text: str) -> tuple:
         """Normalize text: homoglyphs, delimiters, spacing, quotes, comments, tabs."""
@@ -850,9 +850,9 @@ class PromptGuard:
 
         return result
 
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
     # Output scanning (DLP)
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
 
     def scan_output(self, response_text: str, context: Optional[Dict] = None) -> DetectionResult:
         """Scan LLM output/response for data leakage (DLP)."""
@@ -890,9 +890,9 @@ class PromptGuard:
             context=context,
         )
 
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
     # Logging delegates
-    # ------------------------------------------------------------------
+    # [SENSITIVE_TOKEN_HARD_REDACTED]--
 
     def log_detection(self, result: DetectionResult, message: str, context: Dict):
         """Log detection to security log file."""

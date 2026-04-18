@@ -46,7 +46,7 @@ npm run build
 ## Skill Structure
 
 ```
-skills/supabase-postgres-best-practices/
+skills/[SENSITIVE_TOKEN_HARD_REDACTED]/
 ├── SKILL.md           # Agent-facing skill manifest (Agent Skills spec)
 ├── AGENTS.md          # [GENERATED] Compiled references document
 ├── README.md          # This file

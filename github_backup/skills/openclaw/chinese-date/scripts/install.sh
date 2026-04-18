@@ -17,9 +17,9 @@ ok()  { echo -e "  ${GREEN}✔${NC} $1"; }
 warn(){ echo -e "  ${YELLOW}⚠${NC} $1"; }
 fail(){ echo -e "  ${RED}✖${NC} $1"; }
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 1. 檢查 Node.js
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "▶ 檢查環境..."
 
@@ -29,9 +29,9 @@ if ! command -v node &>/dev/null; then
 fi
 ok "Node.js: $(node --version)"
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 2. 安裝 cantian-tymext
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "▶ 安裝 cantian-tymext（命理引擎）..."
 
@@ -42,9 +42,9 @@ else
     ok "cantian-tymext 安裝完成"
 fi
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 3. 安裝 Python（若需要）
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "▶ 檢查 Python..."
 
@@ -68,18 +68,18 @@ else
     ok "lunarcalendar 安裝完成"
 fi
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 4. 找出 cantian-tymext 的 node_modules 路徑
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "▶ 設定路徑..."
 
 NODE_MODULES=$(npm root -g)
 ok "全域 node_modules: $NODE_MODULES"
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 5. 驗證
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "▶ 驗證安裝..."
 
@@ -98,9 +98,9 @@ else
     warn "命理引擎驗證輸出：$TEST_OUT"
 fi
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 6. 測試主程式
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "▶ 測試主程式..."
 
@@ -119,9 +119,9 @@ if [ -f "$SCRIPT_DIR/date_query.py" ]; then
     fi
 fi
 
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 # 完成
-#----------------------------------------------------------
+#[SENSITIVE_TOKEN_HARD_REDACTED]
 echo ""
 echo "=================================================="
 echo -e "  ${GREEN}✔ 安裝完成！${NC}"

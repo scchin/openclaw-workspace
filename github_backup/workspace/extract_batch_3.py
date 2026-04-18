@@ -23,6 +23,6 @@ solutions = [
     ["Cross-Model Consistency Check", "Compare the output of a 70B model with a 7B model; discrepancies flag potential hallucinations", "Model Distillation / Verification"]
 ]
 
-with open('/Users/KS/.openclaw/workspace/openclaw_hallucination_forum_solutions.csv', 'a', newline='', encoding='utf-8') as f:
+with open('/Users/KS/.openclaw/workspace/[SENSITIVE_TOKEN_HARD_REDACTED].csv', 'a', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerows(solutions)

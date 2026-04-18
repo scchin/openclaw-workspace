@@ -272,9 +272,9 @@ class OptimizationVerifier:
         yearly_projection = savings['total'] * 12
 
         # Show benefit report
-        print(colorize("\n  +--------------------------------------------------+", Colors.BOLD + Colors.GREEN))
+        print(colorize("\n  +[SENSITIVE_TOKEN_HARD_REDACTED]+", Colors.BOLD + Colors.GREEN))
         print(colorize("  |         Your Savings Report                      |", Colors.BOLD + Colors.GREEN))
-        print(colorize("  +--------------------------------------------------+", Colors.GREEN))
+        print(colorize("  +[SENSITIVE_TOKEN_HARD_REDACTED]+", Colors.GREEN))
         print(colorize(f"  |  Active for: {days_active} days                              ", Colors.GREEN))
         print(colorize(f"  |                                                  ", Colors.GREEN))
         print(colorize(f"  |  Savings this week:       ~${weekly_savings:>8.2f}          ", Colors.GREEN))
@@ -286,7 +286,7 @@ class OptimizationVerifier:
         print(colorize(f"  |                                                  ", Colors.GREEN))
         print(colorize(f"  |  -> https://ko-fi.com/smartpeopleconnected       ", Colors.CYAN + Colors.BOLD))
         print(colorize(f"  |                                                  ", Colors.GREEN))
-        print(colorize("  +--------------------------------------------------+", Colors.GREEN))
+        print(colorize("  +[SENSITIVE_TOKEN_HARD_REDACTED]+", Colors.GREEN))
 
         # Update last report timestamp
         stats['last_benefit_report'] = now.isoformat()

@@ -23,6 +23,6 @@ solutions = [
     ["Active Learning for Fact-Correction", "Using user corrections to fine-tune a small 'Correctness-Classifier' for the Guardrail", "Practical ML Implementation"]
 ]
 
-with open('/Users/KS/.openclaw/workspace/openclaw_hallucination_forum_solutions.csv', 'a', newline='', encoding='utf-8') as f:
+with open('/Users/KS/.openclaw/workspace/[SENSITIVE_TOKEN_HARD_REDACTED].csv', 'a', newline='', encoding='utf-8') as f:
     writer = csv.writer(f)
     writer.writerows(solutions)

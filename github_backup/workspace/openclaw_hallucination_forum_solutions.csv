@@ -10,7 +10,7 @@ Phrase-Level Alignment (HALVA),Data-augmented phrase-level alignment to mitigate
 Associative Reasoning Control (FlexAC),"Lightweight, training-free framework to modulate associative behavior",https://github.com/ylhz/FlexAC
 Self-Optimizing Coherent Memory (Oscillink),Maintain coherent memory for embedding workflows to prevent drift,https://github.com/Maverick0351a/Oscillink
 Listwise Preference Optimization (LPOI),Optimize VLM preferences specifically for factual accuracy,https://github.com/fatemehpesaran310/lpoi
-Comprehensive VLM Hallucination List,Curated collection of state-of-the-art detection and mitigation tools,https://github.com/mala-lab/Awesome-LLM-LVLM-Hallucination-Detection-and-Mitigation
+Comprehensive VLM Hallucination List,Curated collection of state-of-the-art detection and mitigation tools,https://github.com/mala-lab/[SENSITIVE_TOKEN_HARD_REDACTED]
 Clinical Contrastive Decoding (CCD),Plug-and-play toolkit for radiology MLLM hallucination mitigation,https://github.com/X-iZhang/CCD
 Adaptive Token Selection (HaMI),Robust detection via adaptive selection of tokens for verification,https://github.com/mala-lab/HaMI
 Attention-Informed Token Boosting (PAINT),Intervene in self-attention to boost visual-attention informed tokens,https://github.com/hasanar1f/PAINT
@@ -91,7 +91,9 @@ Logit Bias for Hallucination Words,Applying negative bias to words like 'Certain
 Context-Window Pruning,Dynamically removing low-similarity chunks to reduce 'lost in the middle' noise,https://anthropic.com/news/long-context-window
 Chain-of-Verification (CoVe) Implementation,A physical implementation of the Generate-Verify-Correct cycle,https://arxiv.org/abs/2309.11495
 Contrastive Decoding for Factuality,"Using a smaller, 'hallucination-prone' model as a contrast to filter tokens",https://arxiv.org/abs/2305.14248
-Symmetry-Based Multilingual Check,"Translating answer to French $ightarrow$ Japanese $ightarrow$ English to check for factual drift",https://github.com/facebookresearch/LASER
+Symmetry-Based Multilingual Check,"Translating answer to French $
+ightarrow$ Japanese $
+ightarrow$ English to check for factual drift",https://github.com/facebookresearch/LASER
 Strict Grounding Prompting,Instructional enforcement: 'Answer ONLY using the provided context. Any other info is forbidden',General Engineering Consensus
 Knowledge-Graph Triplet Alignment,Mapping generated claims to KG paths to ensure logical connectivity,https://neo4j.com/developer/llm/
 Iterative Tool-Error Feedback,Using the precise error message from a tool (e.g. Python Exception) as the prompt for correction,GitHub / LangChain Issues

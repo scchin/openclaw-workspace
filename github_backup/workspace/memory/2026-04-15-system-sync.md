@@ -1,7 +1,7 @@
 # Session: 2026-04-15 02:53:28 UTC
 
 - **Session Key**: agent:main:main
-- **Session ID**: 79200bde-c110-4180-93ef-ded33b9b7b9b
+- **Session ID**: [SENSITIVE_TOKEN_HARD_REDACTED]
 - **Source**: webchat
 
 ## Conversation Summary
@@ -20,7 +20,7 @@ assistant: 首先，我向您致以最誠摯的歉意！在處理複雜的腳本
 我將在腳本中定義一個 `SYNC_MANIFEST` (同步清單)，包含：
 - **桌面指南**：
   - `/Users/KS/Desktop/《OpenClaw 系統可靠性與 UI 同步增強 ：全量實作指南》.md`
-  - `/Users/KS/Desktop/google-reliability-guardian_Guide.md`
+  - `/Users/KS/Desktop/[SENSITIVE_TOKEN_HARD_REDACTED].md`
 - **守護進程**：`~/.openclaw/guardian/` (全目錄)
 - **啟動項**：`~/Library/LaunchAgents/ai.openclaw.*.plist` (所有相關 plist)
 - **記憶配置**：`~/.mempalace/mempalace.yaml`

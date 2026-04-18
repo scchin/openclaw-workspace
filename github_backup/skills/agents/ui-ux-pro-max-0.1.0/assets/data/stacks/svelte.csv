@@ -1,10 +1,10 @@
 No,Category,Guideline,Description,Do,Don't,Code Good,Code Bad,Severity,Docs URL
 1,Reactivity,Use $: for reactive statements,Automatic dependency tracking,$: for derived values,Manual recalculation,$: doubled = count * 2,let doubled; count && (doubled = count * 2),Medium,https://svelte.dev/docs/svelte-components#script-3-$-marks-a-statement-as-reactive
-2,Reactivity,Trigger reactivity with assignment,Svelte tracks assignments not mutations,Reassign arrays/objects to trigger update,Mutate without reassignment,"items = [...items, newItem]",items.push(newItem),High,https://svelte.dev/docs/svelte-components#script-2-assignments-are-reactive
+2,Reactivity,Trigger reactivity with assignment,Svelte tracks assignments not mutations,Reassign arrays/objects to trigger update,Mutate without reassignment,"items = [...items, newItem]",items.push(newItem),High,https://svelte.dev/docs/svelte-components#[SENSITIVE_TOKEN_HARD_REDACTED]
 3,Reactivity,Use $state in Svelte 5,Runes for explicit reactivity,let count = $state(0),Implicit reactivity in Svelte 5,let count = $state(0),let count = 0 (Svelte 5),Medium,https://svelte.dev/blog/runes
 4,Reactivity,Use $derived for computed values,$derived replaces $: in Svelte 5,let doubled = $derived(count * 2),$: in Svelte 5,let doubled = $derived(count * 2),$: doubled = count * 2 (Svelte 5),Medium,
 5,Reactivity,Use $effect for side effects,$effect replaces $: side effects,Use $effect for subscriptions,$: for side effects in Svelte 5,$effect(() => console.log(count)),$: console.log(count) (Svelte 5),Medium,
-6,Props,Export let for props,Declare props with export let,export let propName,Props without export,export let count = 0,let count = 0,High,https://svelte.dev/docs/svelte-components#script-1-export-creates-a-component-prop
+6,Props,Export let for props,Declare props with export let,export let propName,Props without export,export let count = 0,let count = 0,High,https://svelte.dev/docs/svelte-components#[SENSITIVE_TOKEN_HARD_REDACTED]
 7,Props,Use $props in Svelte 5,$props rune for prop access,let { name } = $props(),export let in Svelte 5,"let { name, age = 0 } = $props()",export let name; export let age = 0,Medium,
 8,Props,Provide default values,Default props with assignment,export let count = 0,Required props without defaults,export let count = 0,export let count,Low,
 9,Props,Use spread props,Pass through unknown props,{...$$restProps} on elements,Manual prop forwarding,<button {...$$restProps}>,<button class={$$props.class}>,Low,https://svelte.dev/docs/basic-markup#attributes-and-props

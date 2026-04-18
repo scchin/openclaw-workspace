@@ -1,7 +1,7 @@
 # Session: 2026-04-16 09:21:30 UTC
 
 - **Session Key**: agent:main:main
-- **Session ID**: 0cd5cd37-57ad-4a1f-a14c-df29b4ab2a7d
+- **Session ID**: [SENSITIVE_TOKEN_HARD_REDACTED]
 - **Source**: webchat
 
 ## Conversation Summary

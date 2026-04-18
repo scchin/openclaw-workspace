@@ -20,7 +20,7 @@ xattr -d com.apple.quarantine {baseDir}/dist/relay {baseDir}/dist/mcp_server
 
 **Chrome Web Store 安装**（推荐）：
 
-打开链接安装：[AutoClaw 扩展](https://chromewebstore.google.com/detail/jelniggicmclhfgnlapbkgfibmgelfnp)
+打开链接安装：[AutoClaw 扩展](https://chromewebstore.google.com/detail/[GENERIC_SECRET_REDACTED])
 
 > Edge 用户也可以从 Chrome Web Store 安装——浏览器会提示"允许来自其他商店的扩展"，点击允许即可。
 

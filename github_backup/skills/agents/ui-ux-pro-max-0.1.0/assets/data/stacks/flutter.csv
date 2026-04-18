@@ -45,7 +45,7 @@ No,Category,Guideline,Description,Do,Don't,Code Good,Code Bad,Severity,Docs URL
 44,Accessibility,Support large fonts,MediaQuery text scaling,MediaQuery.textScaleFactor,Fixed font sizes,style: Theme.of(context).textTheme,TextStyle(fontSize: 14),High,
 45,Accessibility,Test with screen readers,TalkBack and VoiceOver,Test accessibility regularly,Skip accessibility testing,Regular TalkBack testing,No screen reader testing,High,
 46,Testing,Use widget tests,Test widget behavior,WidgetTester for UI tests,Unit tests only,testWidgets('...' (tester) async {}),Only test() for UI,Medium,https://docs.flutter.dev/testing
-47,Testing,Use integration tests,Full app testing,integration_test package,Manual testing only,IntegrationTestWidgetsFlutterBinding,Manual E2E testing,Medium,
+47,Testing,Use integration tests,Full app testing,integration_test package,Manual testing only,[GENERIC_SECRET_REDACTED],Manual E2E testing,Medium,
 48,Testing,Mock dependencies,Isolate tests,Mockito or mocktail,Real dependencies in tests,when(mock.method()).thenReturn(),Real API calls in tests,Medium,
 49,Platform,Use Platform checks,Platform-specific code,Platform.isIOS Platform.isAndroid,Same code for all platforms,if (Platform.isIOS) {},Hardcoded iOS behavior,Medium,
 50,Platform,Use kIsWeb for web,Web platform detection,kIsWeb for web checks,Platform for web,if (kIsWeb) {},Platform.isWeb (doesn't exist),Medium,

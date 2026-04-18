@@ -68,5 +68,5 @@ git pull origin main
 ## References
 
 - [ClawSecurity](https://github.com/jiayaoqijia/ClawSecurity) — CrowdStrike for AI Agents
-- [OWASP Agentic Top 10](https://owasp.org/www-project-top-10-for-agentic-applications/)
+- [OWASP Agentic Top 10](https://owasp.org/[SENSITIVE_TOKEN_HARD_REDACTED]/)
 - [ClawHavoc Campaign Analysis](https://clawsecurity.io/advisories/clawhavoc)

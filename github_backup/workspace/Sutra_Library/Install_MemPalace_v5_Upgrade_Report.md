@@ -14,7 +14,7 @@
   - 實作路徑：克隆 $\rightarrow$ 原位升級 $\rightarrow$ `5.0.0-dev` 版本鎖定 $\rightarrow$ 基礎 Hook 部署。
 
 ### 第二階段：行為激活 (Behavior Active)
-- **執行技能**：`Fintune-MemPalace-V5-on-OpenClaw`
+- **執行技能**：`[SENSITIVE_TOKEN_HARD_REDACTED]`
 - **目標**：將原生引擎轉化為自動化行為。
 - **實作內容**：關聯喚醒、智能分流、異構隔離等高階邏輯對齊。
 
@@ -24,7 +24,7 @@
 
 ## 4. 交付成果
 - **更新技能**：`Install-MemPalace-on-OpenClaw` (支持 v5 Develop)。
-- **配套技能**：`Fintune-MemPalace-V5-on-OpenClaw` (行為激活)。
+- **配套技能**：`[SENSITIVE_TOKEN_HARD_REDACTED]` (行為激活)。
 - **效果**：確保任何新環境均能快速且精準地部署最高能級的記憶系統。
 
 ---
