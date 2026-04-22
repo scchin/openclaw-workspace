@@ -1,0 +1,23 @@
+{
+  "task_id": "[SENSITIVE_TOKEN_HARD_REDACTED]",
+  "task_name": "safe_clone_research",
+  "created_at": "2026-04-19T01:33:22.302128",
+  "status": "ACTIVE",
+  "agents": {
+    "macos_expert": {
+      "role": "MacOS System & Service Expert",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED]/agent_macos_expert/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED]/agent_macos_expert/distilled/conclusion.md"
+    },
+    "backup_expert": {
+      "role": "Physical Backup & Filesystem Expert",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED]/agent_backup_expert/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED]/agent_backup_expert/distilled/conclusion.md"
+    },
+    "community_analyst": {
+      "role": "Community Best-Practice Analyst",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED]/agent_community_analyst/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED]/agent_community_analyst/distilled/conclusion.md"
+    }
+  }
+}

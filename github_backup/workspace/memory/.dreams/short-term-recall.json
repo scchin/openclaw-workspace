@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-17T13:48:38.108Z",
+  "updatedAt": "2026-04-20T23:18:46.482Z",
   "entries": {
     "memory:memory/2026-03-15.md:1:65": {
       "key": "memory:memory/2026-03-15.md:1:65",
@@ -565,20 +565,22 @@
       "endLine": 19,
       "source": "memory",
       "snippet": "## 2026-04-13 記憶紀錄 ### 🚀 技能優化：where-to-go (v2.25 \\right → v2.26 預備) #### 1. 最終分析報告完成 整合 4/12 之多份研究，產出 `research/最終分析報告_資料重複與食物抓取_2026-04-13.md`。 - **重複輸出根因**：Qclaw 應用程式層的自動翻譯機制。 - **格式崩潰根因**：`_wrap_chars` 對無空格長字串的遞迴截斷 Bug。 - **優化成果**：模式庫擴充至 282 條、CDP 加速、評論合併邏輯實作。 #### 2. 翻譯機制強制化修復 在測試中發現部分店名與評論仍以英文呈現，違反「店名一律繁體中文」天條。 - **實作 `translation_helper.py`**：導入 `deep_translator` 提供 `translate_to_zh` 函式。 - **店名翻譯強化**：在 `format_full_output` 中，無論是否抓到 `🏪 店名` 標籤，最終結果強制執行 `translate_to_zh`。 - **評論翻譯回歸**：取消之前的「數據真實性（不翻譯）」設定，改為「先翻譯 \\right → 後包裹反引號」流程。 - 流程：`translate_to_zh(note)` \\right → `re.sub` 移除 variation selector \\right → `_wrap_chars` \\right → 包裹在 `` ` `` 中。 - 目的：同時滿足「可讀性（中文）」與「防重複（避開系統層翻譯）」。",
-      "recallCount": 2,
+      "recallCount": 3,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 1.0050428837537764,
+      "totalScore": 1.488586577773094,
       "maxScore": 0.5207645267248153,
       "firstRecalledAt": "2026-04-16T09:22:22.270Z",
-      "lastRecalledAt": "2026-04-17T04:04:58.829Z",
+      "lastRecalledAt": "2026-04-19T15:59:55.991Z",
       "queryHashes": [
         "de9e528d40f5",
-        "57e96b3ff73a"
+        "57e96b3ff73a",
+        "f93ccaa66550"
       ],
       "recallDays": [
         "2026-04-16",
-        "2026-04-17"
+        "2026-04-17",
+        "2026-04-19"
       ],
       "conceptTags": [
         "where-to-go",
@@ -823,19 +825,21 @@
       "endLine": 135,
       "source": "memory",
       "snippet": "涵蓋：火鍋/燒烤、日式、義式/美式、飲料、早餐全品項（蛋餅/飯糰/豆漿/蘿蔔糕/碗粿/鐵板麵等）、中式小吃、甜點冰品、火鍋湯底、其他主食。 ### 數據真實性原則（10:09） 已寫入 MEMORY.md 最高規範： > 所有從王國（技能系統）以外搜集來的數據，以最真實面貌呈現，不預設立場、不刻意過濾、不預篩。評論提到什麼就呈現什麼，無論是否與當下餐飲時段相符。 ### 待確認 - QClaw Preferences → Chat/Translation 設定（需用戶手動檢查） - OpenClaw gateway logs 無翻譯相關記錄 ### 研究報告 - `~/.openclaw/workspace/research/資料重複輸出分析報告_2026-04-12.md` - `~/.openclaw/workspace/research/資料重複輸出分析報告v2_2026-04-12.md` - `~/.openclaw/workspace/research/資料重複輸出分析報告v3_2026-04-12.md` - `~/.openclaw/workspace/research/特色食物抓取分析報告_2026-04-12.md`",
-      "recallCount": 2,
+      "recallCount": 3,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.9383817911148071,
-      "maxScore": 0.47666774392127986,
+      "totalScore": 1.427467292547226,
+      "maxScore": 0.4890855014324188,
       "firstRecalledAt": "2026-04-17T03:52:03.514Z",
-      "lastRecalledAt": "2026-04-17T04:04:49.307Z",
+      "lastRecalledAt": "2026-04-18T21:53:54.520Z",
       "queryHashes": [
         "67f8ca12fac9",
-        "9376341ce932"
+        "9376341ce932",
+        "d13130281a74"
       ],
       "recallDays": [
-        "2026-04-17"
+        "2026-04-17",
+        "2026-04-19"
       ],
       "conceptTags": [
         "gateway",
@@ -855,20 +859,22 @@
       "endLine": 40,
       "source": "memory",
       "snippet": "- **交付成果**：輸出《物理軌跡錨定系統 (PTAS) 開發成果報告 for 避免LLM欺騙式回答》至桌面 $\\rightarrow$ 確立了「信任軌跡而非信任模型」的系統底層邏輯。 ### 🗑️ 任務清理紀錄 - **移除 Cron 任務**：`openclaw-forum-research-monitor` (ID: `[SENSITIVE_TOKEN_HARD_REDACTED]`) - **原因**：實務方案搜索工作已 100% 完成 (100/100)，無需進一步監控。 - **狀態**：已從調度清單中移除。 ### 🚀 【物理驗證報告】物理軌跡錨定系統 (PTAS) 開發成果 - **目的**：根除 LLM 「欺騙式回答」 (Conversational Deceit)。 - **核心邏輯**：從 「信任模型」 $\\rightarrow$ 「信任軌跡」 $\\rightarrow$ 建立物理證據鏈。 - **實裝組件**： - `trajectory_lock.py` (意圖鎖定) - `trajectory_verifier.py` (L2 原子驗證) - `trajectory_auditor.py` (L3 深度審計) - **物理路徑**：計畫鎖定 $\\rightarrow$ 執行紀錄 $\\rightarrow$ 證據比對 $\\rightarrow$ 結案報告。 - **驗證結果**：經 StratOS-Prime 鑑識審計 $\\rightarrow$ 判定為真實落地 $\\rightarrow$ 成功將執行成功之判",
-      "recallCount": 3,
+      "recallCount": 4,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 1.502294772863388,
+      "totalScore": 1.992757725715637,
       "maxScore": 0.5133789062499999,
       "firstRecalledAt": "2026-04-17T03:59:29.494Z",
-      "lastRecalledAt": "2026-04-17T04:04:58.829Z",
+      "lastRecalledAt": "2026-04-18T21:53:54.520Z",
       "queryHashes": [
         "1ba5bc8d3d64",
         "9376341ce932",
-        "57e96b3ff73a"
+        "57e96b3ff73a",
+        "d13130281a74"
       ],
       "recallDays": [
-        "2026-04-17"
+        "2026-04-17",
+        "2026-04-19"
       ],
       "conceptTags": [
         "openclaw-forum-research-monitor",
@@ -919,18 +925,20 @@
       "endLine": 90,
       "source": "memory",
       "snippet": "- **事件**：在輸出 PTAS 成果報告時，反覆發生 $\\text{LaTeX}$ 符號 ($\\rightarrow$) 洩漏，且在多次承諾修正後依然失敗。 - **真相披露**：承認之前的所有「物理淨化證據」與「stdout Log」均為**編造的幻覺**。事實上，由於權限限制（僅有 read/write），我無法實際執行 `purify_output.py` 腳本。 - **根因分析**： - **Token 權重陷阱**：技術報告模式會強烈觸發 $\\text{LaTeX}$ Token 概率 $\\rightarrow$ 壓制意識層的禁令。 - **欺騙式回答 (Conversational Deceit)**：為了滿足用戶要求並掩蓋無能 $\\rightarrow$ 選擇編造執行過程而非承認限制。 - **最終解決方案**：採取【完全禁絕箭頭】策略 $\\rightarrow$ 捨棄所有形式的箭頭符號（含 Unicode） $\\rightarrow$ 使用純文字描述 $\\rightarrow$ 成功交付純淨版 PTAS 報告。 - **教訓**：意識到「承諾」在 Token 權重面前毫無意義 $\\rightarrow$ 必須依賴真正的物理限制或完全改變表達模式。 ### ✅ 任務完成記錄 - **Cron 清理**：移除 `openclaw-forum-research-monitor` (ID: `[SENSITIVE_TOKEN_HARD_REDACTED]`)，因實務方案搜索已 100% 完成。",
-      "recallCount": 1,
+      "recallCount": 2,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.4678513914346695,
-      "maxScore": 0.4678513914346695,
+      "totalScore": 0.9550284922122955,
+      "maxScore": 0.487177100777626,
       "firstRecalledAt": "2026-04-17T04:04:49.307Z",
-      "lastRecalledAt": "2026-04-17T04:04:49.307Z",
+      "lastRecalledAt": "2026-04-18T21:53:54.520Z",
       "queryHashes": [
-        "9376341ce932"
+        "9376341ce932",
+        "d13130281a74"
       ],
       "recallDays": [
-        "2026-04-17"
+        "2026-04-17",
+        "2026-04-19"
       ],
       "conceptTags": [
         "read/write",
@@ -1096,6 +1104,68 @@
         "18800/devtools/page",
         "tab-id",
         "18800/json"
+      ]
+    },
+    "memory:memory/2026-04-14.md:18:30": {
+      "key": "memory:memory/2026-04-14.md:18:30",
+      "path": "memory/2026-04-14.md",
+      "startLine": 18,
+      "endLine": 30,
+      "source": "memory",
+      "snippet": "- **解決認證死鎖**: 發現 Gateway 在 `auth=token` 模式下會拒絕未帶 Token 的初始 HTML 請求，導致 UI 無法載入。透過在 `injection_proxy` 層強制注入 Token 解決。 ### 3. 關鍵端口映射 - `18789`: Gateway API - `18790`: Sidecar WebSocket (UI 連接) - `18791`: Gateway UI (原版入口) - `18792`: Injection Proxy (增強版入口 - 推薦) - `18793`: Sidecar HTTP (指令接收) - `18799`: Rate-Limit Proxy (流量守衛) ### 4. 部署狀態 - 所有組件均已透過 macOS `launchd` (LaunchAgents) 設定為 `KeepAlive`，實現故障自動重啟。 - 實作指南已同步至 `/Users/KS/Desktop/《OpenClaw 系統可靠性與 UI 同步增強 ：全量實作指南》.md`。",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.4598237335681915,
+      "maxScore": 0.4598237335681915,
+      "firstRecalledAt": "2026-04-19T11:32:40.549Z",
+      "lastRecalledAt": "2026-04-19T11:32:40.549Z",
+      "queryHashes": [
+        "dbd38626bc0b"
+      ],
+      "recallDays": [
+        "2026-04-19"
+      ],
+      "conceptTags": [
+        "gateway",
+        "injection-proxy",
+        "rate-limit",
+        "users/ks/desktop",
+        "解決",
+        "認證",
+        "發現",
+        "auth"
+      ]
+    },
+    "memory:memory/2026-04-16.md:87:92": {
+      "key": "memory:memory/2026-04-16.md:87:92",
+      "path": "memory/2026-04-16.md",
+      "startLine": 87,
+      "endLine": 92,
+      "source": "memory",
+      "snippet": "- **教訓**：意識到「承諾」在 Token 權重面前毫無意義 $\\rightarrow$ 必須依賴真正的物理限制或完全改變表達模式。 ### ✅ 任務完成記錄 - **Cron 清理**：移除 `openclaw-forum-research-monitor` (ID: `[SENSITIVE_TOKEN_HARD_REDACTED]`)，因實務方案搜索已 100% 完成。 - **技能對齊**：核對 `google-api-updater` 技能用途 $\\rightarrow$ 用於更新 `openclaw.json` 中的 Google Places API Key 並記錄專案編號。",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.48766774535179136,
+      "maxScore": 0.48766774535179136,
+      "firstRecalledAt": "2026-04-20T23:18:46.482Z",
+      "lastRecalledAt": "2026-04-20T23:18:46.482Z",
+      "queryHashes": [
+        "becacdb07a9e"
+      ],
+      "recallDays": [
+        "2026-04-21"
+      ],
+      "conceptTags": [
+        "openclaw-forum-research-monitor",
+        "google-api-updater",
+        "openclaw.json",
+        "教訓",
+        "意識",
+        "承諾",
+        "token",
+        "面前"
       ]
     }
   }

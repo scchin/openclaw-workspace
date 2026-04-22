@@ -1,0 +1,3 @@
+Content of /Users/KS/.openclaw/workspace/test_env_physical/workspace
+Version 1.0
+SecretKey: ABC123XYZ

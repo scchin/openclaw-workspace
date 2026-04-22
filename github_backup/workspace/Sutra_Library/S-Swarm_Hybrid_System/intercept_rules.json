@@ -1,0 +1,18 @@
+{
+  "latex_to_unicode": {
+    "\\\\rightarrow": "→",
+    "\\\\longrightarrow": "→",
+    "\\\\Rightarrow": "⇒",
+    "\\\\leftrightarrow": "↔",
+    "\\\\Leftrightarrow": "⇔",
+    "\\\\downarrow": "↓",
+    "\\\\uparrow": "↑",
+    "\\\\approx": "≈",
+    "\\\\neq": "≠",
+    "\\\\geq": "≥",
+    "\\\\leq": "≤",
+    "\\\\le": "≤",
+    "\\\\pm": "±",
+    "\\\\infty": "∞"
+  }
+}

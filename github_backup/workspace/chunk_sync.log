@@ -1,0 +1,120 @@
+Cloning into '/Users/KS/.openclaw/backups/github_sync_tmp'...
+[main 92e062b] Full Soul Backup (Chunked): full_soul_20260420_151143
+ Committer: K.Sean <KS@MOM-Living-Room.local>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly. Run the
+following command and follow the instructions in your editor to edit
+your configuration file:
+
+    git config --global --edit
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 49 files changed, 53 insertions(+)
+ create mode 100644 full_soul_20260420_151143/backup_manifest.json
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+ create mode 100644 full_soul_20260420_151143/[SENSITIVE_TOKEN_HARD_REDACTED].bin
+To https://github.com/scchin/openclaw-soul-backups.git
+   369d31a..92e062b  main -> main
+✂️ Chunking full_soul_20260420_151143.bin into 50MB parts...
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: eb445f31...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 6e943552...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 5baa7f73...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: dae88fe1...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 7165bd82...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 175cbe6f...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 8f72cfe4...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 7f803802...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 2d1b39b1...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 363ce2a8...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 5c836b5b...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: f276230b...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: a03740be...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 35fb6892...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 7fcca6a5...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: b2b2ece6...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 984ac3c0...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: eb5fe39c...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 4ac7eb48...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 61a6bfe7...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 2885e7a8...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 137c9d39...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 1d202902...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: e9400747...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 8f5cfd72...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 4f025fc9...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: faf674ab...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 5e640d73...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 11f8dade...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: f9edc900...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 39ecc4b7...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: edff4564...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 5154dc3e...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: b09fad91...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: eac58266...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 629fd087...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 33f964f4...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 42828ecd...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 268ef261...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 3d7497cc...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 3c8e20dd...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 5b05a160...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 70f440dc...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 673c3546...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 226a54ff...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 1afd0565...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 0e29aa09...)
+✅ Created [SENSITIVE_TOKEN_HARD_REDACTED].bin (SHA256: 6345434f...)
+🚀 Uploading chunks to GitHub folder full_soul_20260420_151143 via Git Push...
+✨ Cloud Sync Completed Successfully.
+
+✨ [SUCCESS] Full Soul Snapshot has been chunked and synced to GitHub.

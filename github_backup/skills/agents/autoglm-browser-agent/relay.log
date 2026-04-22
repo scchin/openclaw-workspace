@@ -1,0 +1,11 @@
+2026-04-22 08:10:07,042 [RELAY] INFO server listening on 127.0.0.1:62030
+2026-04-22 08:10:07,043 [RELAY] INFO server listening on 127.0.0.1:62031
+2026-04-22 08:10:07,043 [RELAY] INFO Relay daemon started  chrome=62030  mcp=62031  pid=1982
+2026-04-22 08:10:16,586 [RELAY] INFO connection open
+2026-04-22 08:10:16,587 [RELAY] INFO MCP connected ('127.0.0.1', 54659)  (total: 1)
+2026-04-22 08:10:25,674 [RELAY] INFO connection open
+2026-04-22 08:10:25,675 [RELAY] INFO Chrome connected ('127.0.0.1', 54664)  (total: 1)
+2026-04-22 08:11:01,448 [RELAY] INFO Chrome disconnected ('127.0.0.1', 54664)  (total: 0)
+2026-04-22 08:11:01,449 [RELAY] INFO connection closed
+2026-04-22 08:11:11,462 [RELAY] INFO MCP disconnected ('127.0.0.1', 54659)  (Chrome stays connected: 0)
+2026-04-22 08:11:11,463 [RELAY] INFO connection closed

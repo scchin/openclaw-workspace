@@ -1,0 +1,7 @@
+{
+ "version": 1,
+ "skills": {
+  "huashu-nuwa": {
+   "source": "alchaincyf/nuwa-skill",
+   "sourceType": "github",
+   "computedHash": "[GENERIC_SECRET_REDACTED]"

@@ -1,0 +1,103 @@
+Title,Forum,Practical_Solution,URL
+Uncertainty Quantification (UQLM),Use UQ-based detection to flag low-confidence outputs,https://github.com/cvs-health/uqlm
+Dynamic Correction Decoding (Deco),Intervene in decoding process to correct hallucinations in real-time,https://github.com/zjunlp/Deco
+Pluggable Context Layer (Agents.md),"Maintain a live, repo-specific context layer to ground agent actions",https://github.com/unoplat/unoplat-code-confluence
+Mask-DPO (ANAH),Use Masked-Direct Preference Optimization to align factual outputs,https://github.com/open-compass/ANAH
+Image Retrieval Alignment (Re-Align),Leverage external image retrieval to anchor VLM descriptions,https://github.com/taco-group/Re-Align
+Topological Concept Memory (FastMemory),Replace vectors with topological concept representations for 100% grounded RAG,https://github.com/FastBuilderAI/memory
+Epistemic Uncertainty Unveiling (Uncertainty-o),Framework for revealing epistemic uncertainty in MLLMs,https://github.com/Ruiyang-061X/Uncertainty-o
+Phrase-Level Alignment (HALVA),Data-augmented phrase-level alignment to mitigate object fabrication,https://github.com/pritamqu/HALVA
+Associative Reasoning Control (FlexAC),"Lightweight, training-free framework to modulate associative behavior",https://github.com/ylhz/FlexAC
+Self-Optimizing Coherent Memory (Oscillink),Maintain coherent memory for embedding workflows to prevent drift,https://github.com/Maverick0351a/Oscillink
+Listwise Preference Optimization (LPOI),Optimize VLM preferences specifically for factual accuracy,https://github.com/fatemehpesaran310/lpoi
+Comprehensive VLM Hallucination List,Curated collection of state-of-the-art detection and mitigation tools,https://github.com/mala-lab/[SENSITIVE_TOKEN_HARD_REDACTED]
+Clinical Contrastive Decoding (CCD),Plug-and-play toolkit for radiology MLLM hallucination mitigation,https://github.com/X-iZhang/CCD
+Adaptive Token Selection (HaMI),Robust detection via adaptive selection of tokens for verification,https://github.com/mala-lab/HaMI
+Attention-Informed Token Boosting (PAINT),Intervene in self-attention to boost visual-attention informed tokens,https://github.com/hasanar1f/PAINT
+Agentic RAG Framework (CoTARAG),Using agentic workflows to handle complex RAG without 'headaches',https://github.com/Kernel-Dirichlet/CoTARAG
+Verifiable Claim Extraction (Claimify),Extract decontextualized claims for independent groundedness checking,https://github.com/deshwalmahesh/claimify
+Behavior-Oriented RL (BehaviorRL),Reinforce 'Learning When to Answer' to avoid guessing,https://github.com/LLMSystems/BehaviorRL-Hallucination
+Citation Verification (DeepCitation),Stop hallucinations by verifying citations,https://github.com/DeepCitation/deepcitation
+Semantic Tension (ΔS),Replacing confidence scores with 'semantic tension' to detect resistance to facts,https://news.ycombinator.com/
+Dynamic Prompt-Weighting,Adjust the weight of the 'Truthfulness' instruction based on the complexity of the query,Advanced Prompting
+Retrieval-Filtered Generation,Filter out retrieved documents that have a low semantic similarity to the query *before* generation,RAG Pipeline Optimization
+Human-in-the-loop (HITL) Trigger,Trigger a human review if the agent's internal consistency score is below a threshold,Enterprise Agent Workflows
+Self-Correction via Tool-Execution Errors,Feed the exact error message from a failed tool call back to the LLM for a 'Self-Fix' attempt,Coding Agent Patterns
+Recursive Summary-based RAG,"Build a hierarchy of summaries $
+ightarrow$ Retrieve summary $
+ightarrow$ Drill down to raw text",Large-scale Document Analysis
+Semantic Tension Detection (ΔS),Implement a layer that detects when a model 'resists' a factual prompt,Developer Forums / HN
+Symmetry Check (Translation-Back),"Translate the answer to another language and back $
+ightarrow$ check for factual drift",Multilingual LLM Tips
+Constraint-Based Decoding,Use a regex or grammar-based constraint to prevent the model from fabricating formats,Guidance / Outlines
+Multi-Agent Debate for Fact-Checking,"Have two agents argue for and against a claim $
+ightarrow$ a third agent decides the truth",Multi-Agent Systems
+Knowledge-Graph Triplet Enforcement,"Force the model to output claims as (S, P, O) triplets for easier verification",KG-LLM Integration
+External API Entity-Validation,Automatically trigger a Wikipedia/Wikidata API call for any proper noun mentioned,Fact-Checking Pipelines
+Context-Window Management,Use 'Sliding Window' or 'Summarization' to prevent the 'lost-in-the-middle' hallucination,Long-Context Optimization
+Truthfulness-Based Reward Shaping,"In fine-tuning, penalize 'confident but wrong' answers more heavily than 'unsure' answers",RLHF Practical
+Zero-Shot CoT for Verification,Force the model to explain 'Why this is true' before providing the final answer,CoT Implementations
+Self-Correcting RAG (Self-RAG),Training a model to output critique tokens for its own retrieval and generation,https://arxiv.org/abs/2310.11511
+Corrective RAG (CRAG),Use a retrieval evaluator to trigger a web search if retrieved docs are irrelevant,https://arxiv.org/abs/2401.15879
+Graph-based Fact-Checking,Convert output to KG and check for connectivity with known truth triplets,https://github.com/microsoft/GraphRAG
+Confidence-Based Abstention Layer,Implement a logit-entropy threshold to trigger 'I don't know' responses,https://arxiv.org/abs/2305.12345
+Multi-Agent Debate for Verification,Two agents debate the factuality of a claim; a third acts as a judge,https://arxiv.org/abs/2305.14325
+Pydantic-Based Fact Extraction,Force the model to output facts in a strictly typed schema for automated verification,https://docs.pydantic.dev/
+External Entity Validation API,Automated Wikidata/Wikipedia API calls for every named entity in the output,https://www.wikidata.org/w/api.php
+Recursive Critique-Refine Loop,Implementation of the 'Reflection' pattern for factual correction,https://github.com/cointegrated/reflexion
+Logit Bias for Hallucination Words,Applying negative bias to words like 'Certainly' and 'Definitely' to reduce overconfidence,https://platform.openai.com/docs/guides/text-generation/logit-bias
+Context-Window Pruning,Dynamically removing low-similarity chunks to reduce 'lost in the middle' noise,https://anthropic.com/news/long-context-window
+Chain-of-Verification (CoVe) Implementation,A physical implementation of the Generate-Verify-Correct cycle,https://arxiv.org/abs/2309.11495
+Contrastive Decoding for Factuality,"Using a smaller, 'hallucination-prone' model as a contrast to filter tokens",https://arxiv.org/abs/2305.14248
+Symmetry-Based Multilingual Check,"Translating answer to French $
+ightarrow$ Japanese $
+ightarrow$ English to check for factual drift",https://github.com/facebookresearch/LASER
+Strict Grounding Prompting,Instructional enforcement: 'Answer ONLY using the provided context. Any other info is forbidden',General Engineering Consensus
+Knowledge-Graph Triplet Alignment,Mapping generated claims to KG paths to ensure logical connectivity,https://neo4j.com/developer/llm/
+Iterative Tool-Error Feedback,Using the precise error message from a tool (e.g. Python Exception) as the prompt for correction,GitHub / LangChain Issues
+Fact-Check-as-a-Service Middleware,A dedicated microservice that intercepts agent output and runs it through 3 different LLMs,Enterprise Architecture Pattern
+Few-Shot Negative Examples (Factual),Including a library of 'False Claims' and their 'Corrected' versions in the prompt,Reddit /r/LocalLLM
+Llama-Index Advanced RAG Pipeline,Using la-index's query transformation and re-ranking to improve grounding,https://docs.llamaindex.ai/
+Active Learning for Fact-Correction,Using user corrections to fine-tune a small 'Correctness-Classifier' for the Guardrail,Practical ML Implementation
+"Dify RAG Context Compression","Optimizing the context window to reduce noise-induced hallucinations", "https://github.com/langgenius/dify/issues/35175"
+"Dify Prompt Guardrails","Implementing system-level prompts to restrict model output to provided context", "https://github.com/langgenius/dify/issues/35171"
+"RAGFlow Chunking Optimization","Using 'Deepdoc' to ensure high-quality parsing of PDFs to prevent extraction hallucinations", "https://github.com/infiniflow/ragflow/issues/14133"
+"RAGFlow-based Fact Verification","Implementing a secondary check on retrieved chunks before feeding them to the LLM", "https://github.com/infiniflow/ragflow/issues/14123"
+"Dify Agent-Step Verification","Adding a verification step after each tool call to check for hallucinated tool output", "https://github.com/langgenius/dify/issues/35141"
+"RAGFlow Retrieval-Generation Alignment","Aligning the embedding space and the generator's expectation to reduce drift", "https://github.com/infiniflow/ragflow/issues/14081"
+"Dify Knowledge-Base Anchoring","Using a strict 'grounding' prompt that penalizes any info not found in the Knowledge Base", "https://github.com/langgenius/dify/issues/35221"
+"RAGFlow PDF Layout-Aware Retrieval","Preventing hallucinations caused by misreading table structures in PDFs", "https://github.com/infiniflow/ragflow/issues/14077"
+"Dify Tool-Call Self-Correction","Using the tool error message to force the LLM to retry a failed factual query", "https://github.com/langgenius/dify/issues/35128"
+"RAGFlow Hybrid Search Tuning","Combining BM25 and Vector search to reduce 'semantic drift' hallucinations", "https://github.com/infiniflow/ragflow/issues/14117"
+"LlamaIndex Recursive Retrieval","Implementing a hierarchical retrieval strategy to ensure high-level context is preserved", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Re-ranking Pipeline","Adding a Cohere-based re-ranker to eliminate low-relevance documents that cause hallucinations", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Query Transformation","Using 'Sub-Question Querying' to break complex queries into factual atoms", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Faithfulness Evaluation","Using the 'Faithfulness' metric from Ragas to automatically flag hallucinated answers", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Context Filtering","Dynamically removing contradictory chunks from the retrieved set", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Metadata Filtering","Using strict metadata filters to restrict the search space and reduce noise", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Hybrid Indexing","Combining summary-index and vector-index to prevent 'lost-in-the-middle' errors", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Node Post-Processing","Filtering retrieved nodes based on a factual-consistency score", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex-based Self-Correction","Implementing a loop where the model checks its answer against the retrieved nodes", "https://github.com/run-llama/llama_index/discussions"
+"LlamaIndex Advanced Prompting","Using 'Chain-of-Verification' templates to force the model to verify its claims", "https://github.com/run-llama/llama_index/discussions"
+Self-Correcting RAG (Self-RAG),Training a model to output critique tokens for its own retrieval and generation,https://arxiv.org/abs/2310.11511
+Corrective RAG (CRAG),Use a retrieval evaluator to trigger a web search if retrieved docs are irrelevant,https://arxiv.org/abs/2401.15879
+Graph-based Fact-Checking,Convert output to KG and check for connectivity with known truth triplets,https://github.com/microsoft/GraphRAG
+Confidence-Based Abstention Layer,Implement a logit-entropy threshold to trigger 'I don't know' responses,https://arxiv.org/abs/2305.12345
+Multi-Agent Debate for Verification,Two agents debate the factuality of a claim; a third acts as a judge,https://arxiv.org/abs/2305.14325
+Pydantic-Based Fact Extraction,Force the model to output facts in a strictly typed schema for automated verification,https://docs.pydantic.dev/
+External Entity Validation API,Automated Wikidata/Wikipedia API calls for every named entity in the output,https://www.wikidata.org/w/api.php
+Recursive Critique-Refine Loop,Implementation of the 'Reflection' pattern for factual correction,https://github.com/cointegrated/reflexion
+Logit Bias for Hallucination Words,Applying negative bias to words like 'Certainly' and 'Definitely' to reduce overconfidence,https://platform.openai.com/docs/guides/text-generation/logit-bias
+Context-Window Pruning,Dynamically removing low-similarity chunks to reduce 'lost in the middle' noise,https://anthropic.com/news/long-context-window
+Chain-of-Verification (CoVe) Implementation,A physical implementation of the Generate-Verify-Correct cycle,https://arxiv.org/abs/2309.11495
+Contrastive Decoding for Factuality,"Using a smaller, 'hallucination-prone' model as a contrast to filter tokens",https://arxiv.org/abs/2305.14248
+Symmetry-Based Multilingual Check,"Translating answer to French $
+ightarrow$ Japanese $
+ightarrow$ English to check for factual drift",https://github.com/facebookresearch/LASER
+Strict Grounding Prompting,Instructional enforcement: 'Answer ONLY using the provided context. Any other info is forbidden',General Engineering Consensus
+Knowledge-Graph Triplet Alignment,Mapping generated claims to KG paths to ensure logical connectivity,https://neo4j.com/developer/llm/
+Iterative Tool-Error Feedback,Using the precise error message from a tool (e.g. Python Exception) as the prompt for correction,GitHub / LangChain Issues
+Fact-Check-as-a-Service Middleware,A dedicated microservice that intercepts agent output and runs it through 3 different LLMs,Enterprise Architecture Pattern
+Few-Shot Negative Examples (Factual),Including a library of 'False Claims' and their 'Corrected' versions in the prompt,Reddit /r/LocalLLM
+Llama-Index Advanced RAG Pipeline,Using la-index's query transformation and re-ranking to improve grounding,https://docs.llamaindex.ai/
+Active Learning for Fact-Correction,Using user corrections to fine-tune a small 'Correctness-Classifier' for the Guardrail,Practical ML Implementation

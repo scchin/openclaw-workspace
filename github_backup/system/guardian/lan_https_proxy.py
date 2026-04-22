@@ -146,7 +146,7 @@ async def handle_one_request(client_reader, client_writer) -> bool:
         # WebSocket：讀取 101 Switching Protocols 回應後，進入全雙工橋接
         try:
             ws_resp_raw = await asyncio.wait_for(
-                srv_reader.readuntil(b"\r\n\r\n"), timeout=10.0
+                srv_reader.readuntil(b"\r\n\r\n"), timeout=30.0
             )
             client_writer.write(ws_resp_raw)
             await client_writer.drain()

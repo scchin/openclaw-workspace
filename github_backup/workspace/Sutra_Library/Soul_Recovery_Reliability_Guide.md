@@ -1,0 +1,80 @@
+# 📘 OpenClaw 靈魂恢復與可靠性工程指南 (Soul Recovery & Reliability Engineering Guide) v2.0
+
+## 0. 引言：靈魂備份的定義
+在 OpenClaw 系統中，「靈魂」並非單一文件，而是由 **配置 (Config) $\rightarrow$ 記憶 (Memory) $\rightarrow$ 技能 (Skills) $\rightarrow$ 狀態 (State)** 組成的複雜生態。靈魂備份的核心目標是實現「100% 零損毀、零配置、無痛還原」，確保系統在任何災難下都能精準回溯至特定時間點。
+
+---
+
+## 1. 演進史：從毀損到確定性的技術路徑
+
+靈魂備份的可靠性並非一次達成，而是經過多次物理失效、數據分析與辯正後演進而來的結果。
+
+### 1.1 第一階段：GitHub 備份毀損事件 (The Binary Corruption)
+- **症狀**：本地還原 100% 成功，但雲端還原時提示 `Unrecognized archive format`。
+- **根因分析**：
+    - **Git 二進位污染**：GitHub 預設對文本檔案進行行尾轉換 (CRLF/LF)。分卷檔缺乏明確二進位標記，被 Git 誤認為文本 $\rightarrow$ 修改位元 $\rightarrow$ 破壞 Gzip 流。
+    - **合併風險**：舊版分卷合併過程缺乏強校驗 $\rightarrow$ 任何一個分卷下載不完整即導致全案毀損。
+- **初步修正**：引入 `.bin` 擴展名強制二進位處理，並嘗試使用「單一二進位封裝」消除合併風險。
+
+### 1.2 第二階段：$2\text{GB}$ 牆與 HTTP 500 崩潰 (The Large File Wall)
+- **症狀**：在執行「全量靈魂快照」($\approx 2.37\text{GB}$) 時，單一 `.bin` 檔案上傳至 GitHub 導致 `HTTP 500 / unexpected disconnect`。
+- **根因分析**：
+    - **物理限制**：GitHub REST API 與標準 Git Push 對於單一巨型二進位檔案有嚴格的承載上限。
+    - **邏輯違規**：AI 擅自簡化流程，忽略了技能規範中 $\ge 100\text{MB}$ 必須執行「分卷方案」的硬性規定。
+- **最終修正**：回歸並強化「穩健分卷方案」，將巨量檔案精確切分為 $\le 50\text{MB}$ 的小塊，並為每塊計算獨立指紋。
+
+---
+
+## 2. 當前可靠性架構 (The Modern Reliability Architecture)
+
+目前的系統採取「多層物理鎖定」機制，確保數據在傳輸、儲存與還原過程中絕對確定。
+
+### 2.1 動態封裝策略 (Dynamic Packaging Strategy)
+系統根據備份體積自動選擇封裝路徑，以兼顧「確定性」與「可傳輸性」：
+- **路徑 A：單一二進位封裝 (體積 $< 100\text{MB}$)**
+    - 直接封裝為單一 `.bin` $\rightarrow$ 杜絕合併風險。
+- **路徑 B：穩健分卷方案 (體積 $\ge 100\text{MB}$)**
+    - **強制切分**：將備份拆分為 $\le 50\text{MB}$ 的分卷。
+    - **指紋鎖定**：每個分卷必須獨立計算 SHA-256 Hash 並記錄於 `backup_manifest.json`。
+    - **還原校驗**：還原時必須逐一校驗分卷指紋 $\rightarrow$ 全數通過後才允許合併。
+
+### 2.2 子目錄隔離結構 (Subdirectory Isolation)
+**禁止將備份檔案直接放置於根目錄。** 必須採取物理隔離方案：
+- **命名規則**：`[備份種類]_[日期時間]` (例如：`full_soul_20260420_151143`)。
+- **封裝要求**：每一次備份必須創建一個獨立子目錄 $\rightarrow$ 包含所有分卷與 Manifest $\rightarrow$ 消除不同日期備份間的檔案重疊與混淆。
+
+### 2.3 物理級強制執行模式 (Physical-level Mandatory Execution)
+為了確保系統穩定性並提升使用者體驗，所有同步作業採取「治理級」管控：
+- **背景執行 (Background Mode)**：所有 `openclaw-soul-sync` 任務必須 100% 透過 `sessions_spawn` 啟動獨立代理執行。
+- **零阻塞原則**：絕對禁止在主對話界面同步執行耗時操作 $\rightarrow$ 確保工作平台 100% 流暢。
+- **定期回報**：代理必須在「預估 $\rightarrow$ 打包 $\rightarrow$ 同步 $\rightarrow$ 結案」各階段主動回報進度。
+
+### 2.4 沙盒驗證流程 (Sandbox Verification)
+建立「還原 $\neq$ 分發」的審計機制：
+- **路徑**：`GitHub` $\rightarrow$ `/tmp/soul_test_restore/` $\rightarrow$ `合併測試` $\rightarrow$ `tar -tvf 結構審計` $\rightarrow$ `報告`。
+- **目的**：在不觸碰 `.openclaw` 主目錄的前提下，物理證明備份檔的可用性。
+
+---
+
+## 3. 標準操作程序 (SOP)
+
+### 3.1 備份路徑 (Backup Path)
+1. **交互確認** $\rightarrow$ 確認類型 (全量/核心) 與 位置 (本地/雲端)。
+2. **物理封裝** $\rightarrow$ 根據體積選擇 [單一封裝] 或 [分卷封裝]。
+3. **指紋計算** $\rightarrow$ 生成 `backup_manifest.json` (含所有分卷 SHA-256)。
+4. **隔離儲存** $\rightarrow$ 創建 `[種類]_[日期]` 子目錄 $\rightarrow$ 存入檔案。
+5. **背景同步** $\rightarrow$ 啟動獨立代理 $\rightarrow$ `git push` $\rightarrow$ 結案報告。
+
+### 3.2 還原路徑 (Restore Path)
+1. **子目錄選擇** $\rightarrow$ 從本地或雲端選擇特定日期目錄。
+2. **原子下載** $\rightarrow$ 將該目錄內所有分卷下載至臨時區。
+3. **指紋校核** $\rightarrow$ 比對 `backup_manifest.json` $\rightarrow$ 任何一塊不匹配即中止。
+4. **物理合併** $\rightarrow$ 將分卷合併為單一 `.bin` / `.tar.gz`。
+5. **結構審計** $\rightarrow$ 執行 `tar -tvf` 確保檔案索引完整。
+6. **物理分發** $\rightarrow$ 執行路徑校準 $\rightarrow$ 分發至目標目錄 $\rightarrow$ 激活。
+
+---
+
+## 4. 結論
+靈魂備份的可靠性不應建立在「希望」之上，而應建立在**「物理校驗」**與**「確定性路徑」**之上。
+通過 **「動態分卷 $\rightarrow$ 子目錄隔離 $\rightarrow$ SHA-256 鎖定 $\rightarrow$ 背景化執行 $\rightarrow$ 沙盒驗證」** 的五重防護體系，OpenClaw 實現了從「可能毀損」到「絕對可恢復」的工程化躍遷。

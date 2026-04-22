@@ -15,14 +15,7 @@
     <integer>1</integer>
     <key>Umask</key>
     <integer>63</integer>
-    <key>ProgramArguments</key>
-    <array>
-      <string>/opt/homebrew/opt/node/bin/node</string>
-      <string>/opt/homebrew/lib/node_modules/openclaw/dist/index.js</string>
-      <string>gateway</string>
-      <string>--port</string>
-      <string>18792</string>
-    </array>
+    <key>ProgramArguments</key><array><string>/bin/bash</string><string>/Users/KS/.agents/skills/openclaw-fortress-1.0.0/logic/start_gateway.sh</string></array>
     
     <key>StandardOutPath</key>
     <string>/Users/KS/.openclaw/logs/gateway.log</string>
@@ -30,14 +23,13 @@
     <string>/Users/KS/.openclaw/logs/gateway.err.log</string>
     <key>EnvironmentVariables</key>
     <dict>
+    <key>NODE_OPTIONS</key>
+    <string>--import /Users/KS/.openclaw/guardian/epperm-patch.mjs</string>
     <key>NODE_USE_SYSTEM_CA</key>
     <string>1</string>
-    <key>GEMINI_API_KEY</key>
-    <string>AQ.[SENSITIVE_TOKEN_HARD_REDACTED]</string>
-    <key>GOOGLE_API_KEY</key>
-    <string>AQ.[SENSITIVE_TOKEN_HARD_REDACTED]</string>
-    <key>GOOGLE_AI_API_KEY</key>
-    <string>AQ.[SENSITIVE_TOKEN_HARD_REDACTED]</string>
+    <key>GEMINI_API_KEY</key><string>[GCP_API_KEY_REDACTED]</string>
+    <key>GOOGLE_API_KEY</key><string>[GCP_API_KEY_REDACTED]</string>
+    <key>GOOGLE_AI_API_KEY</key><string>[GCP_API_KEY_REDACTED]</string>
     <key>HOME</key>
     <string>/Users/KS</string>
     <key>TMPDIR</key>
@@ -45,7 +37,7 @@
     <key>NODE_EXTRA_CA_CERTS</key>
     <string>/etc/ssl/cert.pem</string>
     <key>PATH</key>
-    <string>/opt/homebrew/opt/node/bin:/Users/KS/.local/bin:/Users/KS/.npm-global/bin:/Users/KS/bin:/Users/KS/.volta/bin:/Users/KS/.asdf/shims:/Users/KS/.bun/bin:/Users/KS/Library/Application Support/fnm/aliases/default/bin:/Users/KS/.fnm/aliases/default/bin:/Users/KS/Library/pnpm:/Users/KS/.local/share/pnpm:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+    <string>/usr/sbin:/sbin:/usr/bin:/bin:/opt/homebrew/opt/node/bin:/Users/KS/.local/bin:/Users/KS/.npm-global/bin:/Users/KS/bin:/Users/KS/.volta/bin:/Users/KS/.asdf/shims:/Users/KS/.bun/bin:/Users/KS/Library/Application Support/fnm/aliases/default/bin:/Users/KS/.fnm/aliases/default/bin:/Users/KS/Library/pnpm:/Users/KS/.local/share/pnpm:/opt/homebrew/bin:/usr/local/bin</string>
     <key>OPENCLAW_GATEWAY_PORT</key>
     <string>18792</string>
     <key>OPENCLAW_LAUNCHD_LABEL</key>

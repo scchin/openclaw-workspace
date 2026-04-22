@@ -11,7 +11,7 @@ python3 /Users/KS/.openclaw/guardian/guardian.py --once
 # 2. 強制重啟所有連動服務
 echo "🚀 正在重新啟動核心服務鏈..."
 uid=$(id -u)
-launchctl kickstart -k gui/$uid/ai.openclaw.gateway
+launchctl kickstart -k gui/$uid/ai.openclaw.gateway.v2
 launchctl kickstart -k gui/$uid/com.openclaw.lan-https-proxy
 launchctl kickstart -k gui/$uid/com.openclaw.injection-proxy
 

@@ -1,0 +1,3 @@
+Analyzing RLHF... reward model v1... reward model v2... la-la-la. Iteration 1: fail. Iteration 2: success. [DEBUG] Token probability shift... [INFO] KL divergence check... redundant comment 1, 2.
+
+CONCLUSION: Safety alignment transitioned from basic RLHF to DPO and Constitutional AI for more stable and steerable behavior.

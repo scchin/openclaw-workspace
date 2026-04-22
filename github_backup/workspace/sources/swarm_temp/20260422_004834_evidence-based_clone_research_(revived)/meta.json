@@ -1,0 +1,28 @@
+{
+  "task_id": "[SENSITIVE_TOKEN_HARD_REDACTED](revived)",
+  "task_name": "Evidence-Based Clone Research (Revived)",
+  "created_at": "2026-04-22T00:48:34.933350",
+  "status": "ACTIVE",
+  "agents": {
+    "Technical_Lead": {
+      "role": "Project Coordinator",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_Technical_Lead/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_Technical_Lead/distilled/conclusion.md"
+    },
+    "macos_expert": {
+      "role": "MacOS System Specialist",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_macos_expert/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_macos_expert/distilled/conclusion.md"
+    },
+    "backup_expert": {
+      "role": "Data Integrity Expert",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_backup_expert/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_backup_expert/distilled/conclusion.md"
+    },
+    "community_analyst": {
+      "role": "Best-Practice Researcher",
+      "transient_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_community_analyst/transient/process.md",
+      "distilled_path": "/Users/KS/.openclaw/workspace/sources/swarm_temp/[SENSITIVE_TOKEN_HARD_REDACTED](revived)/agent_community_analyst/distilled/conclusion.md"
+    }
+  }
+}

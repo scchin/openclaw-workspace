@@ -29,6 +29,10 @@ def init_swarm(task_name, session_key="main"):
     task_dir = os.path.join(TEMP_ROOT, task_id)
     os.makedirs(task_dir, exist_ok=True)
     
+    # Create tiered memory rooms for the swarm
+    os.makedirs(os.path.join(task_dir, "transient"), exist_ok=True)
+    os.makedirs(os.path.join(task_dir, "distilled"), exist_ok=True)
+    
     # Bind with system-task-manager
     if run_manager("register", task_id, f"swarm-governor:{task_name}", session_key):
         print(f"LOG: Task {task_id} registered in system-task-manager.")
@@ -51,24 +55,36 @@ def dispatch_swarm(task_id, agent_id, role):
     if not os.path.exists(task_dir):
         return f"Error: Task ID {task_id} not found."
     
-    # Create specific isolation path for this agent
-    agent_dir = os.path.join(task_dir, f"agent_{agent_id}")
-    os.makedirs(agent_dir, exist_ok=True)
+    # Create specific isolation paths for this agent (Tiered Memory)
+    agent_root = os.path.join(task_dir, f"agent_{agent_id}")
+    transient_dir = os.path.join(agent_root, "transient")
+    distilled_dir = os.path.join(agent_root, "distilled")
     
-    # Create the target file for the agent to write to
-    target_file = os.path.join(agent_dir, "research_output.md")
-    with open(target_file, "w") as f:
-        f.write(f"# Research Output for {role}\n\nStarted at {datetime.now().isoformat()}\n")
+    os.makedirs(transient_dir, exist_ok=True)
+    os.makedirs(distilled_dir, exist_ok=True)
     
-    # Update meta
+    # Define target files
+    transient_file = os.path.join(transient_dir, "process.md")
+    distilled_file = os.path.join(distilled_dir, "conclusion.md")
+    
+    with open(transient_file, "w") as f:
+        f.write(f"# Process Log for {role}\n\nStarted at {datetime.now().isoformat()}\n")
+    with open(distilled_file, "w") as f:
+        f.write(f"# Distilled Conclusion for {role}\n\n(Awaiting distilled insights...)\n")
+    
+    # Update meta with tiered paths
     with open(os.path.join(task_dir, "meta.json"), "r+") as f:
         meta = json.load(f)
-        meta["agents"][agent_id] = {"role": role, "path": target_file}
+        meta["agents"][agent_id] = {
+            "role": role, 
+            "transient_path": transient_file,
+            "distilled_path": distilled_file
+        }
         f.seek(0)
         json.dump(meta, f, indent=2)
         f.truncate()
     
-    return target_file
+    return f"Agent {agent_id} dispatched. Transient: {transient_file} | Distilled: {distilled_file}"
 
 def finalize_swarm(task_id, output_path):
     task_dir = os.path.join(TEMP_ROOT, task_id)
@@ -78,15 +94,15 @@ def finalize_swarm(task_id, output_path):
     with open(os.path.join(task_dir, "meta.json"), "r") as f:
         meta = json.load(f)
     
-    # Synthesize results
+    # Synthesize results - ONLY read from distilled paths (Physical Noise Block)
     synthesis = f"# Swarm Synthesis: {meta['task_name']}\n\n"
     for agent_id, info in meta["agents"].items():
-        path = info["path"]
-        if os.path.exists(path):
+        path = info.get("distilled_path")
+        if path and os.path.exists(path):
             with open(path, "r") as rf:
-                synthesis += f"## Perspective: {info['role']}\n\n{rf.read()}\n\n---\n\n"
+                synthesis += f"## Pure Perspective: {info['role']}\n\n{rf.read()}\n\n---\n\n"
         else:
-            synthesis += f"## Perspective: {info['role']}\n\n(No output recorded)\n\n---\n\n"
+            synthesis += f"## Perspective: {info['role']}\n\n(No distilled conclusion recorded)\n\n---\n\n"
     
     # Write to final destination
     with open(output_path, "w") as f:
@@ -96,10 +112,10 @@ def finalize_swarm(task_id, output_path):
     if run_manager("clear", task_id):
         print(f"LOG: Task {task_id} cleared from system-task-manager.")
     
-    # Physical Purge
+    # Physical Purge (Destroy all transient and distilled data)
     shutil.rmtree(task_dir)
     
-    return f"Synthesis complete. Results written to {output_path}. Temporary directory {task_dir} purged."
+    return f"Synthesis complete. Results written to {output_path}. Temporary tiered directories {task_dir} purged."
 
 def main():
     parser = argparse.ArgumentParser(description="Swarm Governor - Multi-Agent Isolation Manager")

@@ -1,0 +1,54 @@
+{
+  "modules": [
+    {
+      "id": "rec_pending_tasks",
+      "name": "Pending Tasks Recovery Check",
+      "type": "native",
+      "priority": 1,
+      "intensity": "LIGHT"
+    },
+    {
+      "id": "ctx_persona_sync",
+      "name": "Persona Context Sync",
+      "type": "native",
+      "priority": 2,
+      "intensity": "LIGHT"
+    },
+    {
+      "id": "sys_process_sync",
+      "name": "System Process Synchronization",
+      "type": "native",
+      "priority": 3,
+      "intensity": "STANDARD"
+    },
+    {
+      "id": "sec_gateway_guard",
+      "name": "Gateway Guardian Security Scan",
+      "type": "native",
+      "priority": 4,
+      "intensity": "STRICT"
+    },
+    {
+      "id": "ext_disk_check",
+      "name": "External Disk Space Check",
+      "type": "external",
+      "command": "df -h /",
+      "priority": 5,
+      "intensity": "STANDARD"
+    },
+    {
+      "id": "registry_sync_sentry",
+      "name": "Immortal Registry Synchronization",
+      "type": "external",
+      "priority": 1,
+      "intensity": "STANDARD"
+    },
+    {
+      "id": "soul_sync_robustness",
+      "name": "Soul Sync Robustness Check",
+      "type": "native",
+      "priority": 2,
+      "intensity": "STANDARD"
+    }
+  ]
+}

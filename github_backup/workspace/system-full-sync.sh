@@ -82,6 +82,16 @@ EXCLUDE_LIST=(
     "--exclude=run.py"
     "--exclude=setup_iter11.js"
     "--exclude=SKILL.md"
+    "--exclude=soul_sync*"
+    "--exclude=shim_soul*"
+    "--exclude=full_soul*"
+    "--exclude=list_github*"
+    "--exclude=restore_soul*"
+    "--exclude=root_purge*"
+    "--exclude=openclaw_soul_verify*"
+    "--exclude=chunk_and_sync*"
+    "--exclude=openclaw_soul_core.py"
+    "--exclude=guardian_logic.py"
 )
 
 # A. 複製 Workspace

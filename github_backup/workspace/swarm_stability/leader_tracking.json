@@ -1,0 +1,42 @@
+{
+  "experts": {
+    "system": {
+      "status": "in_progress",
+      "last_update": "2026-04-19T20:12:00Z",
+      "percentage": 20,
+      "distilled_received": false,
+      "quality_score": null
+    },
+    "network": {
+      "status": "in_progress",
+      "last_update": "2026-04-19T20:15:00Z",
+      "percentage": 20,
+      "distilled_received": false,
+      "quality_score": null
+    },
+    "ui": {
+      "status": "initialized",
+      "last_update": "2026-04-19T20:11:00Z",
+      "percentage": 0,
+      "distilled_received": false,
+      "quality_score": null
+    }
+  },
+  "stages": {
+    "data_collection": {
+      "start_time": "2026-04-19T20:11:00Z",
+      "end_time": null,
+      "status": "active"
+    },
+    "technical_review": {
+      "start_time": null,
+      "end_time": null,
+      "status": "pending"
+    },
+    "proposal_finalization": {
+      "start_time": null,
+      "end_time": null,
+      "status": "pending"
+    }
+  }
+}

@@ -1,6 +1,6 @@
 {
-  "ts": "2026-04-18T08:52:09.732304",
-  "action": "REVIVE_GATEWAY",
-  "detail": "Gateway port 18792 was dead after upgrade; revived via launchctl load.",
-  "status": "recovered"
+  "ts": "2026-04-20T01:22:01.984557",
+  "action": "SELF_HEAL_PATCH",
+  "detail": "Environmental discrepancy detected and patched automatically.",
+  "status": "healed"
 }
