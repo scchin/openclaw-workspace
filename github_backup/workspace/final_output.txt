@@ -1,1 +1,0 @@
-這是一個物理攔截執行測試 $\rightarrow$ 包含 $\text{LaTeX}$ 符號 $\rightarrow$ 驗證物理過濾管道是否生效 $\rightarrow$ 預期結果應為純淨文本 $\rightarrow$ 測試金額 $\$100$。

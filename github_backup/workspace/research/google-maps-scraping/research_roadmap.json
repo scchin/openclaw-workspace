@@ -1,0 +1,95 @@
+{
+  "project_name": "Google Maps Review Scraping Research",
+  "version": "1.0.0",
+  "objective": "建立一個 100% 可執行的 Google Maps 評論抓取方案，克服動態加載與反爬蟲機制，確保數據抓取的穩定性與完整性。",
+  "technical_challenges": [
+    {
+      "challenge": "動態內容加載 (Dynamic Loading)",
+      "description": "Google Maps 採用高度動態的 JavaScript 渲染，評論內容隨滾動條向下移動而異步加載，且 DOM 結構複雜且類名經常變動。",
+      "impact": "傳統靜態請求 (requests/axios) 無法獲取數據，必須使用 headless browser。"
+    },
+    {
+      "challenge": "反爬蟲機制 (Anti-Scraping)",
+      "description": "Google 擁有頂級的機器人檢測系統，包含 IP 頻率限制、瀏覽器指紋分析 (Browser Fingerprinting) 以及隨機觸發的 reCAPTCHA。",
+      "impact": "高頻度請求會導致 IP 被封禁或強制要求人機驗證，導致抓取中斷。"
+    },
+    {
+      "challenge": "帳號權限與風險 (Account Risk)",
+      "description": "部分詳細評論或特定篩選結果可能需要登入帳號，但使用帳號抓取會大幅增加帳號被封禁的風險。",
+      "impact": "需要在『匿名抓取』與『帳號授權』之間權衡風險與數據深度。"
+    },
+    {
+      "challenge": "API 成本與限制 (API Limitations)",
+      "description": "官方 Google Places API 雖然穩定，但價格昂貴且對評論數量有嚴格限制（通常僅返回前 5 條評論）。",
+      "impact": "無法僅依賴官方 API 實現大規模評論抓取，必須研究混合方案。"
+    }
+  ],
+  "expert_team_configuration": [
+    {
+      "role": "反爬蟲專家 (Anti-Scraping Specialist)",
+      "responsibilities": [
+        "研究並實作高效的代理 IP 輪詢 (Proxy Rotation) 機制。",
+        "配置瀏覽器指紋掩蓋 (Stealth Mode) 以繞過 Google 機器人檢測。",
+        "評估並整合第三方 CAPTCHA 破解服務。"
+      ]
+    },
+    {
+      "role": "自動化工程師 (Automation Engineer)",
+      "responsibilities": [
+        "利用 Playwright 或 Puppeteer 建立能模擬人類行為的滾動與點擊流程。",
+        "分析 Google Maps 的 DOM 結構，建立具備容錯能力的選擇器 (Selectors) 庫。",
+        "實作異步抓取流程以提升數據獲取效率。"
+      ]
+    },
+    {
+      "role": "API 研究專家 (API Researcher)",
+      "responsibilities": [
+        "探索 Google Maps 內部隱藏 API (Internal API) 的調用路徑與參數。",
+        "對比官方 API 與模擬瀏覽器抓取的成本、速度與數據完整性。",
+        "研究第三方 API 供應商 (如 SerpApi, Apify) 的可行性。"
+      ]
+    },
+    {
+      "role": "數據架構師 (Data Architect)",
+      "responsibilities": [
+        "定義評論數據的標準化 Schema (包含用戶名, 評分, 評論內容, 時間, 翻譯狀態等)。",
+        "設計可擴展的數據存儲方案，防止數據重複抓取。",
+        "建立數據清洗與校驗流程。"
+      ]
+    }
+  ],
+  "key_research_themes": [
+    {
+      "theme": "指紋與檢測繞過研究",
+      "goal": "找出 3 組以上可穩定運行的瀏覽器指紋配置，且在連續抓取 100 頁面內不觸發 CAPTCHA。",
+      "metrics": "CAPTCHA 觸發率 < 5%",
+      "priority": "Critical"
+    },
+    {
+      "theme": "DOM 結構穩定性分析",
+      "goal": "分析 5 個不同地區/類型的 Google Maps 頁面，定義出一套通用的評論提取 CSS/XPath 選擇器模式。",
+      "metrics": "數據提取準確率 > 98%",
+      "priority": "High"
+    },
+    {
+      "theme": "大規模抓取擴展策略",
+      "goal": "研究並測試 3 種不同的併發模型（單機多線程、分佈式集群、伺服器無頭化），決定最適合的擴展方案。",
+      "metrics": "單日抓取量能達到 10k+ 條評論",
+      "priority": "Medium"
+    },
+    {
+      "theme": "隱藏 API 逆向分析",
+      "goal": "嘗試分析並複現 Google Maps 內部 AJAX 請求的簽名機制，驗證是否能脫離瀏覽器直接獲取數據。",
+      "metrics": "成功獲取 1 次有效 JSON 回應",
+      "priority": "Low"
+    }
+  ],
+  "deliverables": {
+    "final_output": "/Users/KS/.openclaw/workspace/research/google-maps-scraping/execution_plan.md",
+    "supporting_docs": [
+      "proxy_config_list.json",
+      "dom_selector_map.json",
+      "api_comparison_report.md"
+    ]
+  }
+}

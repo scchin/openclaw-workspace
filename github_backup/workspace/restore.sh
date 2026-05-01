@@ -1,54 +1,62 @@
 #!/bin/bash
-#===============================================================================
-# restore.sh: 全量系統恢復工具 (The All-in-One Restore)
-# 目的：在新電腦上 100% 還原 OpenClaw 的所有自定義設定與狀態
-#===============================================================================
+# ==============================================================================
+# 🔄 OpenClaw 不朽恢復工具 (v2.0 - Path Auto-Repair Edition)
+# ==============================================================================
 set -e
-
-WORKSPACE="/Users/KS/.openclaw/workspace"
+OLD_USER="KS"
+NEW_USER=$(whoami)
+WORKSPACE="$HOME/.openclaw/workspace"
 SNAPSHOT_FILE="$WORKSPACE/system_snapshot.tar.gz"
 LAUNCH_AGENTS_DIR="$HOME/Library/LaunchAgents"
 
-echo "🔄 Starting Full System Restore..."
-
-# Step 1: Restore Snapshot
-if [ ! -f "$SNAPSHOT_FILE" ]; then
-    echo "[!] Snapshot file not found. Please run sync on the old machine first."
-    exit 1
-fi
-
+echo "🔄 [1/3] 正在恢復系統快照..."
 TMP_RESTORE_DIR="/tmp/openclaw_restore"
 mkdir -p "$TMP_RESTORE_DIR"
 tar -xzf "$SNAPSHOT_FILE" -C "$TMP_RESTORE_DIR"
 
-# 1. Restore Guardian
-mkdir -p "$HOME/.openclaw"
+# 恢復目錄與設定
+mkdir -p "$HOME/.openclaw" "$HOME/.mempalace" "$HOME/.openclaw/runtime"
 cp -R "$TMP_RESTORE_DIR/guardian" "$HOME/.openclaw/"
-
-# 2. Restore MemPalace Config
-mkdir -p "$HOME/.mempalace"
 cp "$TMP_RESTORE_DIR/mempalace.yaml" "$HOME/.mempalace/"
-
-# 3. Restore Task Registry
-mkdir -p "$HOME/.openclaw/runtime"
 cp "$TMP_RESTORE_DIR/active_tasks.json" "$HOME/.openclaw/runtime/"
-
-# 4. Restore LaunchAgents
-mkdir -p "$LAUNCH_AGENTS_DIR"
 cp "$TMP_RESTORE_DIR/launchagents/"*.plist "$LAUNCH_AGENTS_DIR/"
 
-# 5. Restore Desktop Guides
-mkdir -p "$HOME/Desktop"
-cp "$TMP_RESTORE_DIR/guides/"* "$HOME/Desktop/"
-
-rm -rf "$TMP_RESTORE_DIR"
-echo "[OK] System snapshot restored."
-
-# Step 2: Load Services
-echo "[2/2] Loading system services..."
-for plist in "$LAUNCH_AGENTS_DIR"/ai.openclaw.*.plist; do
-    launchctl load "$plist" 2>/dev/null || launchctl unload "$plist" && launchctl load "$plist"
+echo "🛠️ [2/3] 正在執行路徑自癒程序 ($OLD_USER -> $NEW_USER)..."
+for plist in "$LAUNCH_AGENTS_DIR"/*openclaw*.plist; do
+    [ -f "$plist" ] && sed -i '' "s/\/Users\/$OLD_USER/\/Users\/$NEW_USER/g" "$plist"
 done
 
-echo "✅ SYSTEM FULLY RESTORED!"
-echo "Please restart your browser and visit http://127.0.0.1:18792"
+# 4. 執行擴充插件
+apply_extensions() {
+    # [不朽防護] 優先執行工作區的自定義擴充 (避風港)
+    SAFE_EXT_DIR="$HOME/.openclaw/workspace/custom_extensions"
+    if [ -d "$SAFE_EXT_DIR" ]; then
+        for ext in "$SAFE_EXT_DIR"/*.sh; do
+            [ -x "$ext" ] && bash "$ext"
+        done
+    fi
+
+    # 執行技能內部的官方擴充
+    if [ -d "$EXTENSIONS_DIR" ]; then
+        for ext in "$EXTENSIONS_DIR"/*.sh; do
+            if [ -x "$ext" ]; then
+                echo "🧩 [Extension] Executing $(basename "$ext")..."
+                bash "$ext"
+            fi
+        done
+    fi
+}
+
+echo "⚡ [3/3] 正在掛載服務並啟動守護..."
+for plist in "$LAUNCH_AGENTS_DIR"/ai.openclaw.*.plist; do
+    launchctl unload "$plist" 2>/dev/null || true
+    launchctl load "$plist"
+done
+
+# 注入防遺忘終端機提醒
+ZSHRC="$HOME/.zshrc"
+GUARD_CMD='[[ -z $(launchctl list | grep openclaw.gateway) ]] && echo -e "\n\033[1;31m🚨 [OpenClaw] 偵測到網關未啟動！請執行：bash '"$WORKSPACE"'/restore.sh\033[0m\n"'
+grep -q "OpenClaw" "$ZSHRC" || echo "$GUARD_CMD" >> "$ZSHRC"
+
+rm -rf "$TMP_RESTORE_DIR"
+echo "✅ 系統恢復完成，路徑已校準，終端機監控已啟動。"

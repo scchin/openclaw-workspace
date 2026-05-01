@@ -39,7 +39,9 @@
     <key>PATH</key>
     <string>/usr/sbin:/sbin:/usr/bin:/bin:/opt/homebrew/opt/node/bin:/Users/KS/.local/bin:/Users/KS/.npm-global/bin:/Users/KS/bin:/Users/KS/.volta/bin:/Users/KS/.asdf/shims:/Users/KS/.bun/bin:/Users/KS/Library/Application Support/fnm/aliases/default/bin:/Users/KS/.fnm/aliases/default/bin:/Users/KS/Library/pnpm:/Users/KS/.local/share/pnpm:/opt/homebrew/bin:/usr/local/bin</string>
     <key>OPENCLAW_GATEWAY_PORT</key>
-    <string>18792</string>
+    <string>18791</string>
+    <key>OPENCLAW_CANVAS_PORT</key>
+    <string>18793</string>
     <key>OPENCLAW_LAUNCHD_LABEL</key>
     <string>ai.openclaw.gateway</string>
     <key>OPENCLAW_SYSTEMD_UNIT</key>
@@ -53,7 +55,7 @@
     <key>OPENCLAW_SERVICE_VERSION</key>
     <string>2026.4.15</string>
     <key>[SENSITIVE_TOKEN_HARD_REDACTED]</key>
-    <string>GEMINI_API_KEY,GOOGLE_AI_API_KEY,GOOGLE_API_KEY</string>
+    <string>YOUR_TOKEN_HERE</string>
     </dict>
   </dict>
 </plist>

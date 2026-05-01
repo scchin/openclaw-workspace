@@ -10,19 +10,19 @@
 
 ## ⚙️ 強制執行路徑 (The Hard-Lock Path)
 
-所有多代理任務必須遵循以下物理閉環路徑 $\rightarrow$ 否則禁止發送：
+所有多代理任務必須遵循以下物理閉環路徑 → 否則禁止發送：
 
-1. **初始化**：必須調用 `swarm-governor init` $\rightarrow$ 獲取 `TASK_ID`。
-2. **分發**：必須調用 `swarm-governor dispatch` $\rightarrow$ 為每個 Agent 分配唯一路徑。
+1. **初始化**：必須調用 `swarm-governor init` → 獲取 `TASK_ID`。
+2. **分發**：必須調用 `swarm-governor dispatch` → 為每個 Agent 分配唯一路徑。
 3. **寫入驗證 (Interception)**：
-   - 在每次執行 `write` 操作前 $\rightarrow$ **必須調用 `swarm_integrity_checker.py`**。
+   - 在每次執行 `write` 操作前 → **必須調用 `swarm_integrity_checker.py`**。
    - 驗證指令：`python3 scripts/swarm_integrity_checker.py --id [TASK_ID] --path [TARGET_PATH]`。
-   - **攔截機制**：若 Checker 返回 `CRITICAL VIOLATION` $\rightarrow$ **立即中止任務** $\rightarrow$ 刪除錯誤文件 $\rightarrow$ 重啟隔離流程。
+   - **攔截機制**：若 Checker 返回 `CRITICAL VIOLATION` → **立即中止任務** → 刪除錯誤文件 → 重啟隔離流程。
 4. **合成與摧毀**：
-   - 必須調用 `swarm-governor finalize` $\rightarrow$ 執行高純度合成 $\rightarrow$ **物理刪除** 臨時目錄。
+   - 必須調用 `swarm-governor finalize` → 執行高純度合成 → **物理刪除** 臨時目錄。
 
 ## 📋 違規處置
 若偵測到繞過 `swarm-governor` 直接寫入共享文件的行為：
 - **立即自省**：停止所有子代理執行。
 - **物理清理**：強制刪除污染的共享文件。
-- **重新部署**：強制重新執行 $\rightarrow$ 必須從 `init` 步驟重新開始。
+- **重新部署**：強制重新執行 → 必須從 `init` 步驟重新開始。

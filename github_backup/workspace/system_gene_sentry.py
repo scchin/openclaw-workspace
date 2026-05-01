@@ -6,10 +6,45 @@
 import argparse
 import json
 import os
+import sys
 import subprocess
 import shutil
 import filecmp
 from datetime import datetime
+
+# --- [FORTRESS INTEGRATION] ---
+sys.path.append(os.path.expanduser("~/.openclaw/lib"))
+try:
+    from workspace_guardian import WorkspaceGuardian
+except ImportError:
+    WorkspaceGuardian = None
+# ------------------------------
+
+class RegistryAligner:
+    """[v12.6] 註冊表對齊哨兵：負責物理更名與地圖對位。"""
+    def __init__(self, openclaw_json_path):
+        self.config_path = openclaw_json_path
+
+    def align_skill(self, skill_id, current_path, target_version):
+        new_path = os.path.join(os.path.dirname(current_path), f"{skill_id}-{target_version}")
+        if current_path == new_path: return True
+        
+        update_progress(f"Aligning {skill_id}: {os.path.basename(current_path)} -> {target_version}")
+        try:
+            # 1. 物理更名
+            if os.path.exists(current_path):
+                # 處理可能的 uchg 鎖定
+                subprocess.run(["chflags", "nouchg", current_path], capture_output=True)
+                os.rename(current_path, new_path)
+            
+            # 2. 自動建立軟連結 (Legacy Support)
+            if not os.path.exists(current_path):
+                os.symlink(new_path, current_path)
+                
+            return True
+        except Exception as e:
+            update_progress(f"❌ Alignment failed for {skill_id}: {e}")
+            return False
 
 # --- 配置區 ---
 OPENCLAW_DIR = "/Users/KS/.openclaw/"
@@ -129,6 +164,35 @@ def native_check_ctx_persona_sync():
     status = "PASS" if all("OK" in c for c in checks) else "FAIL"
     return status, " | ".join(checks), ""
 
+def native_check_disk_space():
+    """檢查工作區所在的磁碟空間"""
+    try:
+        usage = shutil.disk_usage(OPENCLAW_DIR)
+        free_gb = usage.free / (1024**3)
+        status = "PASS" if free_gb > 1.0 else "WARN"
+        return status, f"Disk space: {free_gb:.2f} GB free", f"Total: {usage.total/(1024**3):.2f} GB"
+    except Exception as e:
+        return "FAIL", f"Disk check error: {str(e)}", ""
+
+def native_check_process_status():
+    """檢查核心進程狀態 (以網關為例)"""
+    # 這裡使用 launchctl list 檢查是否在運行
+    code, stdout, stderr = run_command("launchctl list | grep openclaw")
+    if code == 0 and "ai.openclaw.gateway" in stdout:
+        return "PASS", "OpenClaw Gateway is running", stdout.strip()
+    else:
+        return "WARN", "OpenClaw Gateway process not found in launchctl", stderr
+
+def native_check_permissions():
+    """檢查工作區權限"""
+    paths = [WORKSPACE_PATH, GENOME_PATH]
+    issues = []
+    for p in paths:
+        if not os.access(p, os.W_OK):
+            issues.append(f"No write access: {p}")
+    status = "PASS" if not issues else "FAIL"
+    return status, ("Permissions OK" if status == "PASS" else " | ".join(issues)), ""
+
 def main():
     parser = argparse.ArgumentParser(description="Immortal Gene Sentry - System Life Guardian")
     parser.add_argument("--intensity", choices=["LIGHT", "STANDARD", "STRICT"], default="STANDARD")
@@ -145,6 +209,19 @@ def main():
     results = []
     overall_status = "PASS"
 
+    # 0. 身分堡壘：工作區主動獵殺 (Fortress Purge)
+    if WorkspaceGuardian:
+        update_progress("Initiating Fortress Hunter: Workspace Purge...")
+        guardian = WorkspaceGuardian()
+        guardian.hunt()
+    
+    # 0.5 註冊表對位手術 (Registry Aligner)
+    aligner = RegistryAligner(os.path.join(OPENCLAW_DIR, "openclaw.json"))
+    # 這裡我們硬編碼目前需要對齊的關鍵技能
+    official_sync_path = "/Users/KS/.agents/skills/openclaw-soul-sync-1.0.0"
+    if os.path.exists(official_sync_path):
+        aligner.align_skill("openclaw-soul-sync", official_sync_path, "2.3.1")
+    
     # 1. 基因哨兵檢查 (Healing Phase)
     gen_status, gen_reports = check_and_heal_genetics(heal=args.heal)
     if gen_status == "FAIL": overall_status = "FAIL"
@@ -176,6 +253,9 @@ def main():
             if mod_id == "rec_pending_tasks": status, msg, details = native_check_rec_pending_tasks()
             elif mod_id == "ctx_persona_sync": status, msg, details = native_check_ctx_persona_sync()
             elif mod_id == "soul_sync_robustness": status, msg, details = native_check_backup_robustness()
+            elif mod_id == "disk_space_check": status, msg, details = native_check_disk_space()
+            elif mod_id == "process_status_check": status, msg, details = native_check_process_status()
+            elif mod_id == "permission_check": status, msg, details = native_check_permissions()
             # 其他 Native 略 (可根據需要補完)
             else: status, msg, details = "PASS", "Module active", "" 
         elif mod["type"] == "external":

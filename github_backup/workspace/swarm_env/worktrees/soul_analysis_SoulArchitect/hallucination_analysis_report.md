@@ -1,7 +1,7 @@
 # LLM Hallucination Mitigation - Comprehensive Analysis Report
 
 ## Batch 1 Analysis (#1-20)
-**Expert: StratOS-Prime (Physical Deconstruction $\rightarrow$ Bottleneck Localization $\rightarrow$ Extreme Optimization)**
+**Expert: StratOS-Prime (Physical Deconstruction → Bottleneck Localization → Extreme Optimization)**
 
 ### 1. Physical Deconstruction of Solutions
 The first 20 papers reveal a clear hierarchy of intervention:
@@ -20,10 +20,10 @@ The primary bottleneck identified is the **"Fluency-Truthfulness Paradox"**: Mod
 Given the current existence of a **Physical Guardrail (Scanner)** and **Output Filter (Replacer)**, the most effective additions from Batch 1 are:
 
 - **Integration A: Chain-of-Verification (CoVe) [#15]**
-  - *Logic*: Instead of a single pass, the system should trigger a `Verification-Phase` $\rightarrow$ `Fact-Check` $\rightarrow$ `Rewrite`.
-  - *Physical Path*: `Draft` $\rightarrow$ `Guardrail (Detect)` $\rightarrow$ `Verification-Agent (Check)` $\rightarrow$ `Filter (Correct)`.
+  - *Logic*: Instead of a single pass, the system should trigger a `Verification-Phase` → `Fact-Check` → `Rewrite`.
+  - *Physical Path*: `Draft` → `Guardrail (Detect)` → `Verification-Agent (Check)` → `Filter (Correct)`.
 - **Integration B: Self-Consistency Voting [#12]**
-  - *Logic*: For high-stakes queries, generate 3 paths $\rightarrow$ Vote $\rightarrow$ Use the most consistent one.
+  - *Logic*: For high-stakes queries, generate 3 paths → Vote → Use the most consistent one.
 - **Integration C: RAG-Anchoring [#13]**
   - *Logic*: Forced grounding. Any claim not present in the retrieved context is flagged by the Guardrail as a "Potential Hallucination".
 
@@ -32,7 +32,7 @@ Given the current existence of a **Physical Guardrail (Scanner)** and **Output F
 **Progress**: 20 / 100.
 
 ## Batch 2 Analysis (#21-40)
-**Expert: StratOS-Prime (Physical Deconstruction $\rightarrow$ Bottleneck Localization $\rightarrow$ Extreme Optimization)**
+**Expert: StratOS-Prime (Physical Deconstruction → Bottleneck Localization → Extreme Optimization)**
 
 ### 1. Physical Deconstruction of Solutions
 Batch 2 shifts from "What is a hallucination" to "How to surgically remove it" using retrieval and calibration:
@@ -50,18 +50,18 @@ The primary bottleneck in this batch is **"Grounding Leakage"**: Even with RAG, 
 Extending the Physical Guardrail/Filter framework:
 
 - **Integration D: Structured Constraint Enforcement [#35, #40]**
-  - *Logic*: When the system retrieves KG Triplets $\rightarrow$ the Guardrail must enforce a **Strict Inclusion Rule**: any entity mentioned in the output must exist in the retrieved triplets.
+  - *Logic*: When the system retrieves KG Triplets → the Guardrail must enforce a **Strict Inclusion Rule**: any entity mentioned in the output must exist in the retrieved triplets.
 - **Integration E: Confidence-Based Abstention Layer [#34, #38]**
-  - *Logic*: Implement a "Confidence Threshold". If the model's logit-entropy is too high $\rightarrow$ the Guardrail intercepts and forces an "Abstention" response.
+  - *Logic*: Implement a "Confidence Threshold". If the model's logit-entropy is too high → the Guardrail intercepts and forces an "Abstention" response.
 - **Integration F: Iterative Refinement Pipeline [#29]**
-  - *Logic*:  $\rightarrow$  $\rightarrow$  $\rightarrow$ .
+  - *Logic*:  →  →  → .
 
 ---
 **Analysis Status**: Batch 2 Complete.
 **Progress**: 40 / 100.
 
 ## Batch 2 Analysis (#21-40)
-**Expert: StratOS-Prime (Physical Deconstruction $\rightarrow$ Bottleneck Localization $\rightarrow$ Extreme Optimization)**
+**Expert: StratOS-Prime (Physical Deconstruction → Bottleneck Localization → Extreme Optimization)**
 
 ### 1. Physical Deconstruction of Solutions
 Batch 2 shifts from "What is a hallucination" to "How to surgically remove it" using retrieval and calibration:
@@ -79,21 +79,21 @@ The primary bottleneck in this batch is **"Grounding Leakage"**: Even with RAG, 
 Extending the Physical Guardrail/Filter framework:
 
 - **Integration D: Structured Constraint Enforcement [#35, #40]**
-  - *Logic*: When the system retrieves KG Triplets $\rightarrow$ the Guardrail must enforce a **Strict Inclusion Rule**: any entity mentioned in the output must exist in the retrieved triplets.
+  - *Logic*: When the system retrieves KG Triplets → the Guardrail must enforce a **Strict Inclusion Rule**: any entity mentioned in the output must exist in the retrieved triplets.
 - **Integration E: Confidence-Based Abstention Layer [#34, #38]**
-  - *Logic*: Implement a "Confidence Threshold". If the model's logit-entropy is too high $\rightarrow$ the Guardrail intercepts and forces an "Abstention" response.
+  - *Logic*: Implement a "Confidence Threshold". If the model's logit-entropy is too high → the Guardrail intercepts and forces an "Abstention" response.
 - **Integration F: Iterative Refinement Pipeline [#29]**
-  - *Logic*: Draft $\rightarrow$ Self-Critique (via Expert Agent) $\rightarrow$ Evidence-Based Rewrite $\rightarrow$ Final Filter.
+  - *Logic*: Draft → Self-Critique (via Expert Agent) → Evidence-Based Rewrite → Final Filter.
 
 ---
 **Analysis Status**: Batch 2 Complete.
 **Progress**: 40 / 100.
 
 ## Batch 3 Analysis (#41-60)
-**Expert: StratOS-Prime (Physical Deconstruction $\rightarrow$ Bottleneck Localization $\rightarrow$ Extreme Optimization)**
+**Expert: StratOS-Prime (Physical Deconstruction → Bottleneck Localization → Extreme Optimization)**
 
 ### 1. Physical Deconstruction of Solutions
-Batch 3 focuses on "Detection and Verification Pipelines" $\rightarrow$ moving from static checks to dynamic, agentic verification:
+Batch 3 focuses on "Detection and Verification Pipelines" → moving from static checks to dynamic, agentic verification:
 - **Iterative Fact-Checking (#41, #52)**: Decomposing complex claims into "atomic facts" and verifying each individually. This eliminates the "aggregate hallucination" where one small error poisons the entire response.
 - **Model-Based Verification (#47, #57)**: Using cross-model voting or stochastic sampling (Self-CheckGPT) to identify inconsistencies. This treats "Consistency" as a proxy for "Truth".
 - **Internal State Probing (#43, #53, #54)**: Analyzing logits, attention heads, and information bottlenecks. This attempts to find a "Physical Signal" of hallucination inside the model's hidden layers before the token is even generated.
@@ -108,18 +108,18 @@ The primary bottleneck in this batch is **"Verification Latency"**: High-precisi
 Further evolution of the Physical Guardrail/Filter:
 
 - **Integration G: Atomic Fact Decomposition [#52]**
-  - *Logic*: Before the final Filter pass, the system decomposes the output into a list of atomic claims $\rightarrow$ verifies each against the retrieved context $\rightarrow$ removes/rewrites only the hallucinated atoms.
+  - *Logic*: Before the final Filter pass, the system decomposes the output into a list of atomic claims → verifies each against the retrieved context → removes/rewrites only the hallucinated atoms.
 - **Integration H: Logit-Entropy Trigger [#43, #58]**
-  - *Logic*: The Guardrail monitors the output distribution. If the entropy for a specific factual token is too high $\rightarrow$ it triggers an "Automatic Verification" request to a secondary expert model.
+  - *Logic*: The Guardrail monitors the output distribution. If the entropy for a specific factual token is too high → it triggers an "Automatic Verification" request to a secondary expert model.
 - **Integration I: Pre-Generation Knowledge Probe [#51]**
-  - *Logic*: Implement a "Knowledge-Check" step $\rightarrow$ if the model is uncertain about the core entities $\rightarrow$ the system forces a RAG search *before* the first token is generated.
+  - *Logic*: Implement a "Knowledge-Check" step → if the model is uncertain about the core entities → the system forces a RAG search *before* the first token is generated.
 
 ---
 **Analysis Status**: Batch 3 Complete.
 **Progress**: 60 / 100.
 
 ## Batch 4 Analysis (#61-80)
-**Expert: StratOS-Prime (Physical Deconstruction $\rightarrow$ Bottleneck Localization $\rightarrow$ Extreme Optimization)**
+**Expert: StratOS-Prime (Physical Deconstruction → Bottleneck Localization → Extreme Optimization)**
 
 ### 1. Physical Deconstruction of Solutions
 Batch 4 moves from general verification to "Domain-Specific Precision" and "Complex Agentic Coordination":
@@ -137,24 +137,24 @@ The primary bottleneck identified in this batch is **"Generalist Blindness"**: G
 Refining the Guardrail/Filter system for specialization:
 
 - **Integration J: Domain-Specific Guardrail Profiles [#61, #62, #63]**
-  - *Logic*: The system should detect the "Domain" of the query (e.g., Finance) $\rightarrow$ load a specific "Constraint Set" (e.g., Numerical Precision Rules) into the Guardrail.
+  - *Logic*: The system should detect the "Domain" of the query (e.g., Finance) → load a specific "Constraint Set" (e.g., Numerical Precision Rules) into the Guardrail.
 - **Integration K: Execution-Based Verification [#67, #76]**
-  - *Logic*: For technical queries $\rightarrow$ the system must execute the code/query $\rightarrow$ Feed the output back into the Filter as a "Hard Fact" for final correction.
+  - *Logic*: For technical queries → the system must execute the code/query → Feed the output back into the Filter as a "Hard Fact" for final correction.
 - **Integration L: Judge-Agent Final Pass [#65, #79]**
-  - *Logic*: For high-stakes outputs $\rightarrow$ the final response must be signed off by a separate "Judge-Persona" that only checks for grounding consistency.
+  - *Logic*: For high-stakes outputs → the final response must be signed off by a separate "Judge-Persona" that only checks for grounding consistency.
 
 ---
 **Analysis Status**: Batch 4 Complete.
 **Progress**: 80 / 100.
 
 ## Batch 5 Analysis (#81-100)
-**Expert: StratOS-Prime (Physical Deconstruction $\rightarrow$ Bottleneck Localization $\rightarrow$ Extreme Optimization)**
+**Expert: StratOS-Prime (Physical Deconstruction → Bottleneck Localization → Extreme Optimization)**
 
 ### 1. Physical Deconstruction of Solutions
-The final batch focuses on "Metasystems" $\rightarrow$ benchmarks, scaling laws, and systemic integration:
+The final batch focuses on "Metasystems" → benchmarks, scaling laws, and systemic integration:
 - **Precision Benchmarking (#82, #100)**: Moving from anecdotal evidence to standardized metrics for grounding vs. hallucination.
 - **Cross-Modal and Cross-Lingual Consistency (#90, #98)**: Using different modalities (Image-to-Text) or languages (Translation-Back-Translation) as a "Symmetry Check" to expose hallucinations.
-- **Dynamic Retrieval Triggers (#96)**: Instead of static RAG, the system learns a "Retrieval Policy" $\rightarrow$ only calling external data when internal uncertainty is high.
+- **Dynamic Retrieval Triggers (#96)**: Instead of static RAG, the system learns a "Retrieval Policy" → only calling external data when internal uncertainty is high.
 - **Scale-Hallucination Correlation (#99)**: Analysis of how model size influences the *type* of hallucination (e.g., smaller models fabricate facts, larger models fabricate complex logic).
 
 ### 2. Bottleneck Localization
@@ -166,11 +166,11 @@ The final overarching bottleneck is **"Evaluation Blindness"**: The inability to
 The final architectural polish:
 
 - **Integration M: Symmetry-Based Verification [#90, #98]**
-  - *Logic*: For critical claims $\rightarrow$ translate to another language or modality $\rightarrow$ translate back $\rightarrow$ if the core fact changes $\rightarrow$ flag as a hallucination.
+  - *Logic*: For critical claims → translate to another language or modality → translate back → if the core fact changes → flag as a hallucination.
 - **Integration N: Adaptive Retrieval Trigger [#96]**
-  - *Logic*: Instead of "RAG every time" $\rightarrow$ use a lightweight uncertainty probe $\rightarrow$ trigger RAG only on high-entropy tokens.
+  - *Logic*: Instead of "RAG every time" → use a lightweight uncertainty probe → trigger RAG only on high-entropy tokens.
 - **Integration O: Domain-Specific Evaluation Loop [#100]**
-  - *Logic*: The Guardrail should not be static $\rightarrow$ it should launder its rules through a "Domain Benchmark" to ensure it doesn't over-filter correct but specialized terminology.
+  - *Logic*: The Guardrail should not be static → it should launder its rules through a "Domain Benchmark" to ensure it doesn't over-filter correct but specialized terminology.
 
 ---
 **Analysis Status**: Batch 5 Complete.

@@ -15,7 +15,7 @@
    - **目的**：在 `sources/swarm_temp/` 下創建唯一任務 ID 目錄。
    - **執行**：`python3 scripts/governor.py init --name "任務名稱"`
 2. **路徑分發 (`dispatch`)**：
-   - **目的**：為每個 Agent 分配專屬的物理寫入路徑 $\rightarrow$ 杜絕共享寫入。
+   - **目的**：為每個 Agent 分配專屬的物理寫入路徑 → 杜絕共享寫入。
    - **執行**：`python3 scripts/governor.py dispatch --id [TASK_ID] --agent [AGENT_ID] --role "[角色]"`
 3. **寫入驗證 (Interception)**：
    - **目的**：物理級攔截違規寫入。
@@ -26,7 +26,7 @@
 
 ## 3. 連動項目說明
 - **`system-task-manager`**：負責追蹤 `TASK_ID` 的生命週期。
-- **`discipline-guardian`**：負責監控寫入行為。任何繞過 `swarm-governor` 的並行寫入將被視為嚴重違規 $\rightarrow$ 觸發自省流程。
+- **`discipline-guardian`**：負責監控寫入行為。任何繞過 `swarm-governor` 的並行寫入將被視為嚴重違規 → 觸發自省流程。
 
 ---
 > 本指南與 `SWARM_DISCIPLINE.md` 共同構成 OpenClaw 的 Swarm 治理標準。所有協同作業必須遵循 S-Swarm Hybrid System 之規範。

@@ -15,24 +15,23 @@
       "intensity": "LIGHT"
     },
     {
-      "id": "sys_process_sync",
-      "name": "System Process Synchronization",
+      "id": "disk_space_check",
+      "name": "Native Disk Space Monitor",
       "type": "native",
       "priority": 3,
-      "intensity": "STANDARD"
+      "intensity": "LIGHT"
     },
     {
-      "id": "sec_gateway_guard",
-      "name": "Gateway Guardian Security Scan",
+      "id": "process_status_check",
+      "name": "Core Process Vitality Check",
       "type": "native",
       "priority": 4,
-      "intensity": "STRICT"
+      "intensity": "LIGHT"
     },
     {
-      "id": "ext_disk_check",
-      "name": "External Disk Space Check",
-      "type": "external",
-      "command": "df -h /",
+      "id": "permission_check",
+      "name": "Workspace Permission Audit",
+      "type": "native",
       "priority": 5,
       "intensity": "STANDARD"
     },

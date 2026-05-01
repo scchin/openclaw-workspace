@@ -6,10 +6,10 @@ DED 旨在將 AI 從單一的「通用助手」轉化為「專家集群管理員
 ## 2. 執行流程：四階段動態匹配管線
 當使用者輸入一個問題（例如：「我的新品牌消毒水銷售陷入僵局，專家的看法(意見)為何?」）時，系統將自動執行以下路徑：
 
-1. **意圖分析 (Intent Analysis)** $\rightarrow$ 偵測觸發詞（如「專家的看法」、「意見為何」）以激活 DED 模式。
-2. **領域映射 (Domain Mapping)** $\rightarrow$ 提取問題核心領域（例如：品牌行銷、銷售策略、化學產品市場）。
-3. **專家選配 (Expert Selection)** $\rightarrow$ 查詢 `EXPERT_REGISTRY.md`，匹配最適合該領域的專家原型或組合。
-4. **認知合成 (Cognitive Synthesis)** $\rightarrow$ 載入選定專家的「認知 DNA」 $\rightarrow$ 執行特定邏輯管線 $\rightarrow$ 輸出高純度分析報告。
+1. **意圖分析 (Intent Analysis)** → 偵測觸發詞（如「專家的看法」、「意見為何」）以激活 DED 模式。
+2. **領域映射 (Domain Mapping)** → 提取問題核心領域（例如：品牌行銷、銷售策略、化學產品市場）。
+3. **專家選配 (Expert Selection)** → 查詢 `EXPERT_REGISTRY.md`，匹配最適合該領域的專家原型或組合。
+4. **認知合成 (Cognitive Synthesis)** → 載入選定專家的「認知 DNA」 → 執行特定邏輯管線 → 輸出高純度分析報告。
 
 ## 3. 制度化管理
 - **能力圖譜**：所有可派遣專家必須在 `EXPERT_REGISTRY.md` 中定義。

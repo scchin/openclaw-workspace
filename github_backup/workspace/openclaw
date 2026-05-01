@@ -1,0 +1,33 @@
+#!/bin/bash
+# ==============================================================================
+# 🗝️ OpenClaw 萬能不朽引導器 (v3.0 - 桌面捷徑與自癒一體化)
+# ==============================================================================
+WORKSPACE=$(dirname "$(realpath "$0")")
+NEW_USER=$(whoami)
+CORE_LAUNCHER="$HOME/.agents/skills/openclaw-fortress-1.0.0/logic/start_gateway.sh"
+DESKTOP_SCRIPT="$HOME/Desktop/🚀啟動不朽網關.command"
+
+echo "🧬 [Immortal] 正在執行全自動系統自檢..."
+
+# 1. 建立桌面快捷啟動 (Double-click to Start)
+if [ ! -f "$DESKTOP_SCRIPT" ]; then
+    echo "#!/bin/bash" > "$DESKTOP_SCRIPT"
+    echo "cd $WORKSPACE && bash openclaw" >> "$DESKTOP_SCRIPT"
+    chmod +x "$DESKTOP_SCRIPT"
+    echo "✨ [OK] 桌面快捷圖示已建立：🚀啟動不朽網關"
+fi
+
+# 2. 註冊環境別名 (Global command 'openclaw')
+ZSHRC="$HOME/.zshrc"
+if ! grep -q "alias openclaw=" "$ZSHRC"; then
+    echo "alias openclaw='bash $WORKSPACE/openclaw'" >> "$ZSHRC"
+fi
+
+# 3. 執行路徑修復與全量啟動鏈
+# 此處會自動觸發：路徑修正、定時任務掛載、Guardian 保護、GURF 進化與網關啟動
+if [ -f "$CORE_LAUNCHER" ]; then
+    bash "$CORE_LAUNCHER"
+else
+    echo "🚨 [Error] 找不到核心引導器，請確認技能資料夾完整性。"
+    exit 1
+fi

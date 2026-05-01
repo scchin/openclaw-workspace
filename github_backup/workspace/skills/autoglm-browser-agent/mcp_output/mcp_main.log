@@ -1,0 +1,131 @@
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 07:15:54,021 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 07:15:54,333 -- <__main__.py/main 377> [MAIN] relay daemon not found on port 62031，尝试自动启动 relay daemon...
+[INFO] 2026-04-22 07:15:54,339 -- <__main__.py/_auto_start_relay 305> [MAIN] 🚀 Auto-started relay daemon: chrome=62030 mcp=62031 log=/Users/KS/.agents/skills/autoglm-browser-agent/mcp_output/relay.log
+[WARNING] 2026-04-22 07:15:56,342 -- <__main__.py/main 389> [MAIN] ⚠️  relay daemon auto-started but connect failed: [Errno 61] Connect call failed ('127.0.0.1', 62031)，fallback 到独立 WebSocketServer 模式
+[INFO] 2026-04-22 07:15:56,347 -- <__main__.py/main 412> [MAIN] ✅ WebSocket bound on port 62030
+[INFO] 2026-04-22 07:15:56,365 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 07:16:24,134 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 07:16:24,138 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 07:16:24,139 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 07:16:24,139 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 07:16:24,139 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 07:16:24,140 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 07:16:24,272 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 07:18:04,246 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 07:18:23,354 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 07:18:23,393 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 07:18:23,502 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 07:19:18,496 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 08:06:07,401 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 08:06:07,403 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 08:06:07,763 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 08:07:06,289 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 08:07:25,298 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 08:07:25,393 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 08:08:49,740 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 08:08:50,926 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 08:08:50,927 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 08:08:51,018 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 08:09:17,314 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 08:09:17,315 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 08:09:17,411 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 08:09:50,194 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 08:09:50,195 -- <__main__.py/main 473> [MAIN] 👋 Server stopped
+[INFO] 2026-04-22 08:10:16,492 -- <__main__.py/main 331> ============================================================
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 332> AutoGLM MCP Server -- subagent 模式
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 334> Subagent API Key: EMPTY
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 335> Subagent Base URL: EMPTY
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 336> ============================================================
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 337> Output Dir: /Users/KS/.agents/skills/autoglm-browser-agent/mcp_output
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 338> Ws Port: auto
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 339> Window Size: 1456x819 → 1456x819
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 340> Max Steps: 100
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 341> Manual Interact: False
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 342> Generate Data Mode: False
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 348> Start URL: https://www.bing.com
+[INFO] 2026-04-22 08:10:16,493 -- <__main__.py/main 351> ============================================================
+[INFO] 2026-04-22 08:10:16,494 -- <__main__.py/main 358> [MAIN] 📌 Preferred port from active_port: 62030
+[INFO] 2026-04-22 08:10:16,587 -- <__main__.py/main 374> [MAIN] 🔗 relay daemon detected on port 62031，使用 RelayClient 模式
+[INFO] 2026-04-22 08:11:01,461 -- <__main__.py/main 473> [MAIN] 👋 Server stopped

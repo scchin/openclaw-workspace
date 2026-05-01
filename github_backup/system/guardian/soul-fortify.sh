@@ -160,7 +160,7 @@ import json
 path = '$OPENCLAW_JSON'
 with open(path, 'r') as f: data = json.load(f)
 origins = data.get('gateway', {}).get('controlUi', {}).get('allowedOrigins', [])
-new_o = f'http://{NEW_IP}:18792'
+new_o = f'http://{NEW_IP}:18791'
 if new_o not in origins:
     origins.append(new_o); print(f'✅ 已將 {new_o} 加入白名單')
 with open(path, 'w') as f: json.dump(data, f, indent=2)
@@ -168,8 +168,21 @@ with open(path, 'w') as f: json.dump(data, f, indent=2)
     chflags uchg "$OPENCLAW_JSON"
 }
 
+# =============================================================================
+# 5. GURF Sovereign Alignment (不朽主權對齊)
+# =============================================================================
+gurf_alignment() {
+    echo "🧬 [GURF] 正在執行主權治理對齊與行為攔截巡檢..."
+    # 執行基因哨兵進行全量對齊 (自動從 DNA 恢復受損檔案)
+    python3 /Users/KS/.openclaw/workspace/system_gene_sentry.py --intensity STANDARD
+    
+    # 執行物理堡壘進行行為獵殺
+    python3 /Users/KS/.openclaw/lib/workspace_guardian.py
+}
+
 # 執行主選單
 IP=$(get_lan_ip)
 update_config "$IP"
 omni_sentinel
 purify_kernel
+gurf_alignment

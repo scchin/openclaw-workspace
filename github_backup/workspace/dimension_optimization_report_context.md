@@ -19,7 +19,7 @@
 | **Neural Garbage Collection** | 學習在推理過程中自動剔除對邏輯鏈不重要的 KV 對。 | 降低 Agent 在進行複雜多步推理時的內存壓力。 | 引入「遺忘得分」機制，定期清理低分 KV 塊。 |
 | **How Much Cache Does Reasoning Need?** | 研究 KV 壓縮率與推理能力之間的理論邊界。 | 根據任務複雜度動態調整緩存預算，避免過度壓縮。 | 建立任務-緩存需求映射表，實現動態緩存分配。 |
 | **MoE-nD** | 在每一層使用混合專家 (MoE) 路由來決定 KV 壓縮軸。 | 實現層級自適應壓縮，對關鍵層保留高精度。 | 將 MoE 路由機制整合進注意力機制層。 |
-| **Graph-Guided Adaptive Channel Elimination** | 基於激活圖分析物理刪除不重要的 KV 通道。 | 在不重新訓練的情況下，顯著降低物理內存佔用。 | 執行後訓練分析 $\rightarrow$ 識別冗餘通道 $\rightarrow$ 物理裁剪。 |
+| **Graph-Guided Adaptive Channel Elimination** | 基於激活圖分析物理刪除不重要的 KV 通道。 | 在不重新訓練的情況下，顯著降低物理內存佔用。 | 執行後訓練分析 → 識別冗餘通道 → 物理裁剪。 |
 | **Open-TQ-Metal** | 針對 Apple Silicon 優化的量化域融合注意力算子。 | 使 70B 模型能在 64GB Mac 上運行 128K 上下文。 | 實現 Metal 融合量化算子，直接在量化域計算 Attention。 |
 | **HieraSparse** | 分層半結構化稀疏 KV 注意力。 | 降低長文本下的計算量與內存開銷。 | 實現分層稀疏掩碼 (Hierarchical Sparse Mask)。 |
 | **Sequential KV Compression via Tries** | 使用概率語言字典樹 (Tries) 壓縮連續 KV 序列。 | 突破單向量壓縮極限，實現極高壓縮比。 | 將標準 KV 存儲替換為字典樹結構。 |
@@ -32,7 +32,7 @@
 | **ZoomR** | 多粒度 KV 檢索機制。 | 支持在不同解析度下檢索上下文，兼顧速度與精度。 | 實現多分辨率 KV 緩存存儲層。 |
 | **CodeComp** | 針對代碼 Agent 的結構化 KV 壓縮。 | 優化超大規模代碼庫分析時的內存佔用。 | 結合代碼 AST 結構進行 KV 剔除。 |
 | **MEMENTO** | 教會模型自主管理上下文分塊。 | 使 Agent 能像操作內存分頁一樣管理上下文。 | 訓練/提示模型發射「內存管理」特殊 Token。 |
-| **StructKV** | 保存結構骨架以支持 1M+ Token 推理。 | 在消費級硬件上實現百萬級窗口。 | 實現骨架保存採樣算法 $\rightarrow$ 物理還原。 |
+| **StructKV** | 保存結構骨架以支持 1M+ Token 推理。 | 在消費級硬件上實現百萬級窗口。 | 實現骨架保存採樣算法 → 物理還原。 |
 | **TriAttention** | 使用三角函數變換進行 KV 壓縮。 | 提高長推理鏈的壓縮效率與精度。 | 將線性投影替換為三角函數投影。 |
 | **Don't Waste Bits!** | 設備端 LLM 的自適應 KV 量化。 | 針對不同層級動態分配比特數，極大化內存利用率。 | 實施層級自適應比特分配算法。 |
 | **IsoQuant** | 硬件對齊的 SO(4) 等傾旋轉 KV 壓縮。 | 提升量化 KV 在硬件上的計算吞吐量。 | 部署 SO(4) 旋轉內核以加速量化推理。 |
@@ -45,7 +45,7 @@
 **目標**：讓 OpenClaw 在 Mac 上能流暢運行超長上下文的大模型 (如 Llama 3.1 70B)。
 - **核心技術**：`Open-TQ-Metal` + `Don't Waste Bits!`
 - **執行路徑**：
-    1. 引入 Metal 融合量化算子，減少量化 $\rightarrow$ 反量化的內存搬運。
+    1. 引入 Metal 融合量化算子，減少量化 → 反量化的內存搬運。
     2. 實施層級自適應量化 (Adaptive Quantization)，對關鍵層保留 4-bit，非關鍵層壓至 3-bit。
     3. 部署旋轉域平滑技術 (TurboQuant)，消除量化離群值。
 

@@ -1,3 +1,0 @@
-Content of /Users/KS/.openclaw/workspace/test_env_physical/config
-Version 1.0
-SecretKey: ABC123XYZ

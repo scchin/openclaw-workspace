@@ -10,9 +10,9 @@
 請參閱詳細指南文件：`/Users/KS/Desktop/MemPalace_v5_FineTune_Guide.md` (副本已存儲於本目錄)。
 
 ## 3. 效能審計結果
-- **召回率**：$\uparrow 216\%$
-- **噪音率**：$\downarrow 100\%$ (實現 0 噪音)
-- **Token 損耗**：$\downarrow 30\%-40\%$
+- **召回率**：\uparrow 216\%
+- **噪音率**：\downarrow 100\% (實現 0 噪音)
+- **Token 損耗**：\downarrow 30\%-40\%
 - **判定**：從「能力集成」跨越至「認知系統工程」。
 
 ---

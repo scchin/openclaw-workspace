@@ -31,7 +31,7 @@ OpenClaw 的短期記憶主要依賴於 LLM 的 Context Window。其運作邏輯
 
 ## 3. 結論
 OpenClaw 的短期記憶是一個「漏斗狀」結構：
-`全量配置文件` $\rightarrow$ `截斷後注入` $\rightarrow$ `對話流累積` $\rightarrow$ `Token 飽和` $\rightarrow$ `被動遺忘/主動歸檔`。
+`全量配置文件` → `截斷後注入` → `對話流累積` → `Token 飽和` → `被動遺忘/主動歸檔`。
 
 目前的優化方向應著重於：
 1. **動態切片讀取**：取代啟動時的全量注入。

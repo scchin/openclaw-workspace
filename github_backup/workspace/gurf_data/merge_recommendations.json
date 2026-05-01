@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-04-24T07:30:06.041301",
+  "total_tools_analyzed": 21740,
+  "top_merge_candidates": [
+    {
+      "sequence": [
+        "chat.history",
+        "chat.history"
+      ],
+      "occurrence": 608,
+      "suggestion": "偵測到重複調用鏈：chat.history -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "sessions.list",
+        "chat.history"
+      ],
+      "occurrence": 602,
+      "suggestion": "偵測到重複調用鏈：sessions.list -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "chat.history",
+        "chat.history",
+        "chat.history"
+      ],
+      "occurrence": 536,
+      "suggestion": "偵測到重複調用鏈：chat.history -> chat.history -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "chat.history",
+        "chat.history",
+        "chat.history",
+        "chat.history"
+      ],
+      "occurrence": 521,
+      "suggestion": "偵測到重複調用鏈：chat.history -> chat.history -> chat.history -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "chat.history",
+        "chat.history",
+        "chat.history",
+        "chat.history",
+        "chat.history"
+      ],
+      "occurrence": 508,
+      "suggestion": "偵測到重複調用鏈：chat.history -> chat.history -> chat.history -> chat.history -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "chat.history",
+        "sessions.list"
+      ],
+      "occurrence": 434,
+      "suggestion": "偵測到重複調用鏈：chat.history -> sessions.list。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "node.list",
+        "sessions.list",
+        "chat.history"
+      ],
+      "occurrence": 345,
+      "suggestion": "偵測到重複調用鏈：node.list -> sessions.list -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "sessions.list",
+        "chat.history",
+        "sessions.list"
+      ],
+      "occurrence": 319,
+      "suggestion": "偵測到重複調用鏈：sessions.list -> chat.history -> sessions.list。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "node.list",
+        "node.list",
+        "sessions.list",
+        "chat.history"
+      ],
+      "occurrence": 270,
+      "suggestion": "偵測到重複調用鏈：node.list -> node.list -> sessions.list -> chat.history。建議整合為單一複合工具。"
+    },
+    {
+      "sequence": [
+        "chat.history",
+        "node.list"
+      ],
+      "occurrence": 232,
+      "suggestion": "偵測到重複調用鏈：chat.history -> node.list。建議整合為單一複合工具。"
+    }
+  ]
+}

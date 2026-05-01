@@ -19,15 +19,15 @@ import asyncio
 import ssl
 import os
 
-TARGET_HOST = "127.0.0.1"
-TARGET_PORT = 18789          # injection_proxy（支援 WS + Auth + JS 注入）
+TARGET_HOST = "0.0.0.0"
+TARGET_PORT = 18789          # injection_proxy（物理清洗與強效攔截層）
 
 CERT_FILE = os.path.expanduser("~/.openclaw/guardian/lan_cert.pem")
 KEY_FILE  = os.path.expanduser("~/.openclaw/guardian/lan_key.pem")
 
 LAN_BINDINGS = [
+    ("127.0.0.1", 18792),
     ("192.168.196.11", 18792),
-    ("192.168.0.68",   18792),
 ]
 
 # ─── 工具函數 ─────────────────────────────────────────────────────────────────
@@ -257,7 +257,7 @@ async def main():
 
     print(f"🔒 OpenClaw LAN HTTPS Proxy v2.0 (Keep-Alive) 就緒")
     print(f"   TLS 終端 → {TARGET_HOST}:{TARGET_PORT} (injection_proxy)")
-    print(f"   本機存取（不受影響）：http://127.0.0.1:18792/")
+    print(f"   本機存取（不受影響）：http://127.0.0.1:18791/")
 
     async def run_server(s):
         async with s:

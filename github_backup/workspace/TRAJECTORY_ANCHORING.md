@@ -9,9 +9,9 @@
 
 | 層級 | 名稱 | 觸發條件 (Trigger) | 驗證機制 | 物理路徑 | 延遲 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| **L1** | **快速通道** | 低複雜度 $\text{AND}$ 高信心 ($\text{Entropy} < 0.2$) | $\text{Confidence Check}$ | $\text{Input} \rightarrow \text{Output}$ | 極低 |
-| **L2** | **標準軌跡** | 常規任務 $\text{OR}$ 中信心 ($\text{Entropy } 0.2\text{-}0.5$) | $\text{原子拆解} \rightarrow \text{RAG 物理核對}$ | $\text{Draft} \rightarrow \text{Verifier.py} \rightarrow \text{Output}$ | 中 |
-| **L3** | **深度審計** | 高風險領域 $\text{OR}$ 低信心 ($\text{Entropy} > 0.5$) | $\text{跨模型共識} \rightarrow \text{DED 簽核}$ | $\text{Draft} \rightarrow \text{Auditor.py} \rightarrow \text{Output}$ | 高 |
+| **L1** | **快速通道** | 低複雜度 \text{AND} 高信心 (\text{Entropy} < 0.2) | \text{Confidence Check} | \text{Input} → \text{Output} | 極低 |
+| **L2** | **標準軌跡** | 常規任務 \text{OR} 中信心 (\text{Entropy } 0.2\text{-}0.5) | \text{原子拆解} → \text{RAG 物理核對} | \text{Draft} → \text{Verifier.py} → \text{Output} | 中 |
+| **L3** | **深度審計** | 高風險領域 \text{OR} 低信心 (\text{Entropy} > 0.5) | \text{跨模型共識} → \text{DED 簽核} | \text{Draft} → \text{Auditor.py} → \text{Output} | 高 |
 
 ### 風險領域定義 (High-Risk Domains)
 - 涉及代碼執行 (Code Execution)
@@ -25,4 +25,4 @@
 1. **定義計畫**：生成 `ExecutionPlan` (JSON)。
 2. **物理鎖定**：寫入 `current_plan.json`。
 3. **軌跡執行**：每一步執行後，必須對比 `tool_output` 與 `expected_evidence`。
-4. **結案驗證**：所有步驟完成 $\rightarrow$ 檢查所有證據鏈 $\rightarrow$ 生成結案報告。
+4. **結案驗證**：所有步驟完成 → 檢查所有證據鏈 → 生成結案報告。

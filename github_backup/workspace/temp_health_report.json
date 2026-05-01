@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-04-22T08:03:54.211150",
+  "timestamp": "2026-05-01T13:39:44.659060",
   "intensity": "STANDARD",
   "overall_status": "PASS",
   "checks": [
@@ -22,7 +22,7 @@
       "name": "Immortal Registry Synchronization",
       "status": "PASS",
       "message": "External check complete",
-      "details": "\ud83e\uddec Initiating Immortal Registry Sync...\nFound 8 physical skills in workspace.\n\ud83d\udd13 Unlocking openclaw.json...\n\u2705 Sync complete. Added 0 skills to registry.\n\ud83d\udd12 Re-locking openclaw.json (Permanent Armor Active)...\n"
+      "details": "\ud83e\uddec Initiating Immortal Registry Sync v2.0...\n\ud83d\udee1\ufe0f Checking Official Skill Alignment...\nFound 62 physical skills in workspace.\n\ud83d\udd13 Unlocking openclaw.json...\n\u2705 Sync complete. Added 0 skills to registry.\n\ud83d\udd12 Re-locking openclaw.json (Permanent Armor Active)...\n"
     },
     {
       "id": "ctx_persona_sync",
@@ -39,18 +39,25 @@
       "details": ""
     },
     {
-      "id": "sys_process_sync",
-      "name": "System Process Synchronization",
+      "id": "disk_space_check",
+      "name": "Native Disk Space Monitor",
       "status": "PASS",
-      "message": "Module active",
-      "details": ""
+      "message": "Disk space: 489.22 GB free",
+      "details": "Total: 931.32 GB"
     },
     {
-      "id": "ext_disk_check",
-      "name": "External Disk Space Check",
+      "id": "process_status_check",
+      "name": "Core Process Vitality Check",
       "status": "PASS",
-      "message": "External check complete",
-      "details": "Filesystem        Size    Used   Avail Capacity iused ifree %iused  Mounted on\n/dev/disk5s5s1   931Gi    11Gi   346Gi     4%    453k  3.6G    0%   /\n"
+      "message": "OpenClaw Gateway is running",
+      "details": "-\t0\tai.openclaw.soul-backup\n29280\t0\tcom.openclaw.lan-https-proxy\n29281\t0\tai.openclaw.rate-limit-proxy\n29278\t0\tcom.openclaw.injection-proxy\n29263\t0\tcom.openclaw.immortal-watchdog\n-\t0\tai.openclaw.auditor\n-\t0\tai.openclaw.dashboard\n29261\t0\tai.openclaw.gateway\n-\t2\tai.openclaw.daily.optimizer\n29282\t0\tai.openclaw.guardian"
+    },
+    {
+      "id": "permission_check",
+      "name": "Workspace Permission Audit",
+      "status": "PASS",
+      "message": "Permissions OK",
+      "details": ""
     }
   ]
 }

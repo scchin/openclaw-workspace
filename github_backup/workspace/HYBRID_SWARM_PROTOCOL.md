@@ -13,7 +13,7 @@
 ### 第一階段：初始化 (Initialization)
 - **觸發條件**：主代理判定為多 Agent 任務。
 - **強制動作**：調用 `swarm_manager.py init <task_id>`。
-- **結果**：建立 Worktree $\rightarrow$ 創建信箱 $\rightarrow$ 登記狀態 $\rightarrow$ 輸出物理路徑給子代理。
+- **結果**：建立 Worktree → 創建信箱 → 登記狀態 → 輸出物理路徑給子代理。
 
 ### 第二階段：執行與同步 (Execution & Sync)
 - **子代理規範**：
@@ -21,7 +21,7 @@
   - 每完成一個里程碑，必須寫入結構化 JSON 消息至 `inboxes/`。
   - 完結後，必須調用 `swarm_manager.py update <agent> COMPLETED`。
 - **主代理規範**：
-  - 僅通過 `peek` 結構化信箱監控進度 $\rightarrow$ 降低 Token 消耗。
+  - 僅通過 `peek` 結構化信箱監控進度 → 降低 Token 消耗。
   - 嚴禁在子代理未提交結論前進行全量文件讀取。
 
 ### 第三階段：結案與合成 (Closure & Synthesis)

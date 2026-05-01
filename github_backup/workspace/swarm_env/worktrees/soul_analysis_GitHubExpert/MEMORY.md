@@ -77,10 +77,10 @@ mp taxonomy
 ## 📌 經驗教訓：技能創建的「不可見」陷阱 (2026-04-17)
 **問題**：手動在 `~/.openclaw/skills/` 創建技能，即使格式正確且配置啟用，仍無法在 UI 列表中顯示。
 **根本原因**：OpenClaw 掃描器對 `SKILL.md` 的 YAML frontmatter 有極其嚴苛的匹配要求（包括必須有 `---` 包圍、禁止非許可欄位如 `author`、目錄名與 `name` 必須完全一致且全小寫）。
-**唯一解決方案**：必須使用 `skill-creator` 的完整框架 $\rightarrow$ `init_skill.py` $\rightarrow$ `package_skill.py` (官方驗證) $\rightarrow$ 安裝。
+**唯一解決方案**：必須使用 `skill-creator` 的完整框架 → `init_skill.py` → `package_skill.py` (官方驗證) → 安裝。
 **結論**：禁止任何手動快捷路徑，必須走官方驗證流程。
 
 ## ⚠️ 行為底線修正 (2026-04-17)
 - **規範優先權**：絕對禁止自以為是地簡化流程。若有既定技能或 SOP，必須 100% 執行，禁止任何形式的「直覺操作」或「擅自優化」。
 - **任務完結制**：任務禁止中途停止。若發生中斷，必須透過 `pending_tasks.json` 與 Sentry 機制自動恢復並完成回報。
-- **結論**：正確性 $>$ 速度 $\rightarrow$ 完整性 $>$ 簡潔度。
+- **結論**：正確性 > 速度 → 完整性 > 簡潔度。

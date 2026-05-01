@@ -16,4 +16,4 @@ launchctl kickstart -k gui/$uid/com.openclaw.lan-https-proxy
 launchctl kickstart -k gui/$uid/com.openclaw.injection-proxy
 
 echo "✅ [完成] 區域網路 HTTPS 與 自動登入功能已成功恢復。"
-echo "👉 您現在可以重新開啟瀏覽器連線：https://192.168.196.11:18792/"
+echo "👉 您現在可以重新開啟瀏覽器連線：https://192.168.196.11:18791/"

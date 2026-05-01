@@ -9,7 +9,7 @@
 ## 📖 第一章：核心願景與設計哲學
 
 ### 1.1 為什麼需要 Soul Sync？
-OpenClaw 並非單純的軟件，而是一個包含**配置 $\rightarrow$ 記憶 $\rightarrow$ 技能 $\rightarrow$ 狀態**的複雜生態系統。傳統的單一文件備份無法處理：
+OpenClaw 並非單純的軟件，而是一個包含**配置 → 記憶 → 技能 → 狀態**的複雜生態系統。傳統的單一文件備份無法處理：
 - **路徑依賴**：絕對路徑在不同用戶名/電腦間會失效。
 - **記憶一致性**：向量數據庫 (ChromaDB) 在運行時複製會導致索引損毀。
 - **金鑰跳回**：macOS 的 `.plist` 啟動項會覆寫 `.env` 中的 API Key。
@@ -18,7 +18,7 @@ OpenClaw 並非單純的軟件，而是一個包含**配置 $\rightarrow$ 記憶
 ### 1.2 設計原則
 - **原子化 (Atomicity)**：還原過程要麼完全成功，要麼完全不執行，絕不留下「半成品」狀態。
 - **脫敏優先 (Security First)**：所有上傳至雲端的數據必須經過物理級脫敏，絕不攜帶明文 API Key。
-- **零門檻交互 (Zero-Friction)**：使用者只需自然語言對話 $\rightarrow$ 技能自動處理授權、路徑校準與分發。
+- **零門檻交互 (Zero-Friction)**：使用者只需自然語言對話 → 技能自動處理授權、路徑校準與分發。
 - **背景執行 (Backgrounding)**：針對耗時任務採用非阻塞模式，確保系統在同步時依然可用。
 
 ---
@@ -41,16 +41,16 @@ OpenClaw 並非單純的軟件，而是一個包含**配置 $\rightarrow$ 記憶
 
 ### 2.2 核心引擎詳解
 - **`Packer Engine` (打包引擎)**：
-    - 實作 **「分級備份」** $\rightarrow$ `Core` (輕量) vs `Full` (重量)。
-    - 實作 **「智能分卷」** $\rightarrow$ 將大文件自動切分為 $\le 50\text{MB}$ 塊，適配 GitHub 限制。
-    - 實作 **「遞歸過濾」** $\rightarrow$ 自動排除 `logs/` 與 `cache/` 以降低體積。
+    - 實作 **「分級備份」** → `Core` (輕量) vs `Full` (重量)。
+    - 實作 **「智能分卷」** → 將大文件自動切分為 \le 50\text{MB} 塊，適配 GitHub 限制。
+    - 實作 **「遞歸過濾」** → 自動排除 `logs/` 與 `cache/` 以降低體積。
 - **`Restore Engine` (還原引擎)**：
-    - 實作 **「緩衝還原」** $\rightarrow$ 解壓至臨時目錄 $\rightarrow$ 驗證 $\rightarrow$ 覆蓋。
-    - 實作 **「四層同步激活」** $\rightarrow$ 同步更新 `.plist` $\rightarrow$ `.env` $\rightarrow$ `auth-profiles` $\rightarrow$ `models.json` $\rightarrow$ `uchg` 物理鎖定。
+    - 實作 **「緩衝還原」** → 解壓至臨時目錄 → 驗證 → 覆蓋。
+    - 實作 **「四層同步激活」** → 同步更新 `.plist` → `.env` → `auth-profiles` → `models.json` → `uchg` 物理鎖定。
 - **`PathResolver` (路徑校準器)**：
-    - 實作 **「全量字符串替換」** $\rightarrow$ 遞歸掃描所有配置文件 $\rightarrow$ 將 `/Users/舊用戶/` $\rightarrow$ `/Users/新用戶/` 物理轉換。
+    - 實作 **「全量字符串替換」** → 遞歸掃描所有配置文件 → 將 `/Users/舊用戶/` → `/Users/新用戶/` 物理轉換。
 - **`SyncHandler` (同步處理器)**：
-    - 實作 **「GitHub API 交互」** $\rightarrow$ 處理分卷上傳、版本識別與自動拉取。
+    - 實作 **「GitHub API 交互」** → 處理分卷上傳、版本識別與自動拉取。
 
 ---
 
@@ -64,7 +64,7 @@ OpenClaw 並非單純的軟件，而是一個包含**配置 $\rightarrow$ 記憶
 
 ### 3.2 秘密恢復流程 (Secret Recovery)
 還原後執行 **「缺口掃描」**：
-- 識別所有 `YOUR_TOKEN_HERE` $\rightarrow$ 主動詢問使用者提供正確 Key $\rightarrow$ 寫回四層鎖定路徑 $\rightarrow$ 激活功能。
+- 識別所有 `YOUR_TOKEN_HERE` → 主動詢問使用者提供正確 Key → 寫回四層鎖定路徑 → 激活功能。
 
 ---
 
@@ -74,11 +74,11 @@ OpenClaw 並非單純的軟件，而是一個包含**配置 $\rightarrow$ 記憶
 
 | 測試場景 | 測試方法 | 結果 | 驗證結論 |
 | :--- | :--- | :--- | :--- |
-| **本地分卷還原** | $50\text{MB} \times 2$ $\rightarrow$ 分卷合併 $\rightarrow$ MD5 校驗 | 🟢 Pass | 分卷序號排序與合併邏輯 100% 正確 |
-| **路徑污染還原** | 模擬用戶名 `KS` $\rightarrow$ `MockUser` $\rightarrow$ `sed` 校準 | 🟢 Pass | 所有絕對路徑正確轉化，系統正常啟動 |
-| **分卷缺失保護** | 故意刪除 `part2.tar.gz` $\rightarrow$ 執行還原 | 🟢 Pass | 觸發 `IntegrityError` 攔截，防止損毀還原 |
-| **遞歸備份陷阱** | 將備份目錄設在工作區內 $\rightarrow$ 執行備份 | 🟢 Pass | 成功識別並跳過 `backups/` 目錄，無體積爆炸 |
-| **秘密洩漏掃描** | 打包後對壓縮包執行 `grep "AIza"` (Google Key) | 🟢 Pass | 搜尋結果為 0 $\rightarrow$ 脫敏機制完全生效 |
+| **本地分卷還原** | 50\text{MB} \times 2 → 分卷合併 → MD5 校驗 | 🟢 Pass | 分卷序號排序與合併邏輯 100% 正確 |
+| **路徑污染還原** | 模擬用戶名 `KS` → `MockUser` → `sed` 校準 | 🟢 Pass | 所有絕對路徑正確轉化，系統正常啟動 |
+| **分卷缺失保護** | 故意刪除 `part2.tar.gz` → 執行還原 | 🟢 Pass | 觸發 `IntegrityError` 攔截，防止損毀還原 |
+| **遞歸備份陷阱** | 將備份目錄設在工作區內 → 執行備份 | 🟢 Pass | 成功識別並跳過 `backups/` 目錄，無體積爆炸 |
+| **秘密洩漏掃描** | 打包後對壓縮包執行 `grep "AIza"` (Google Key) | 🟢 Pass | 搜尋結果為 0 → 脫敏機制完全生效 |
 
 ---
 
@@ -87,14 +87,14 @@ OpenClaw 並非單純的軟件，而是一個包含**配置 $\rightarrow$ 記憶
 ### 5.1 交互邏輯
 本技能採用 **「智能引導」** 模式，使用者無需記憶命令，只需自然語言溝通。
 
-- **啟動識別**：啟動時自動掃描系統 $\rightarrow$ 判定【新電腦/舊電腦】 $\rightarrow$ 檢查【GitHub 授權狀態】 $\rightarrow$ 盤點【可用備份日期】。
-- **備份流程**：`對話` $\rightarrow$ `選擇模式(Core/Full)` $\rightarrow$ `選擇位置(本地/雲端)` $\rightarrow$ `查看預估大小與時間` $\rightarrow$ `確認執行`。
-- **還原流程**：`對話` $\rightarrow$ `選擇備份版本` $\rightarrow$ `自動下載/校準/分發` $\rightarrow$ `補完 API Key` $\rightarrow$ `重啟激活`。
+- **啟動識別**：啟動時自動掃描系統 → 判定【新電腦/舊電腦】 → 檢查【GitHub 授權狀態】 → 盤點【可用備份日期】。
+- **備份流程**：`對話` → `選擇模式(Core/Full)` → `選擇位置(本地/雲端)` → `查看預估大小與時間` → `確認執行`。
+- **還原流程**：`對話` → `選擇備份版本` → `自動下載/校準/分發` → `補完 API Key` → `重啟激活`。
 
 ### 5.2 執行模式：背景同步 (Background Execution)
 由於全量備份與還原涉及大量數據搬運，本技能默認採取 **「背景執行模式」**：
 1.  **非阻塞啟動**：指令下達後，任務立即進入背景運行，使用者可繼續使用 OpenClaw。
-2.  **實時進度報告**：系統會定期更新 `transient/process.md` $\rightarrow$ 使用者可隨時詢問「備份進度如何？」。
+2.  **實時進度報告**：系統會定期更新 `transient/process.md` → 使用者可隨時詢問「備份進度如何？」。
 3.  **完結通知**：任務結束後，技能將主動發送通知，總結本次同步的體積、時間與結果。
 
 ---

@@ -11,7 +11,7 @@
 
 ### ⚡ 第一階段：快速突破 (Quick-Win)
 **目標**：立即消除感知延遲，突破 Mac 硬件內存瓶頸。
-- **核心組件**：`Prefix Caching` $\rightarrow$ `Semantic Router` $\rightarrow$ `Open-TQ-Metal`
+- **核心組件**：`Prefix Caching` → `Semantic Router` → `Open-TQ-Metal`
 - **實作路徑**：
     1. **Prefix Caching**：針對 System Prompt 與常用技能定義建立全局 Hash 索引，實現重複前綴 0 毫秒 Prefill。
     2. **Semantic Router**：部署本地輕量級嵌入模型，將簡單指令 (如：查詢、問候) 路由至 8B 模型，複雜邏輯路由至 70B+ 模型。
@@ -20,16 +20,16 @@
 
 ### 🛠️ 第二階段：結構升級 (Structural Upgrade)
 **目標**：將 AI 行為從「概率跳轉」轉化為「確定性狀態轉移」。
-- **核心組件**：`Gene-State Machine` $\rightarrow$ `Parallel Tooling` $\rightarrow$ `Self-Speculative Decoding`
+- **核心組件**：`Gene-State Machine` → `Parallel Tooling` → `Self-Speculative Decoding`
 - **實作路徑**：
-    1. **Gene-State Machine**：將 `system_gene_sentry.py` 從簡單的狀態檢查升級為 FSM (有限狀態機) 監控，定義 `Planning` $\rightarrow$ `Executing` $\rightarrow$ `Reviewing` $\rightarrow$ `Correcting` 的確定性路徑。
-    2. **Parallel Tooling**：開發 `ParallelCall` 原語，支持一次性發出多個不相干的工具請求 $\rightarrow$ 結果聚合 $\rightarrow$ 狀態更新。
+    1. **Gene-State Machine**：將 `system_gene_sentry.py` 從簡單的狀態檢查升級為 FSM (有限狀態機) 監控，定義 `Planning` → `Executing` → `Reviewing` → `Correcting` 的確定性路徑。
+    2. **Parallel Tooling**：開發 `ParallelCall` 原語，支持一次性發出多個不相干的工具請求 → 結果聚合 → 狀態更新。
     3. **Self-Speculative Decoding**：利用 4-bit 量化副本作為 Draft Model 預測 Token，由 FP16 原型一次性驗證，提升生成速度 2-3 倍。
 - **預期增益**：任務執行成功率大幅提升，複雜多步任務的總耗時降低 50% 以上。
 
 ### 🚀 第三階段：性能飛躍 (Architectural Evolution)
 **目標**：邁向百萬級 Token 的工業級 AI 系統。
-- **核心組件**：`EPD 分離架構` $\rightarrow$ `StructKV` $\rightarrow$ `邊緣-雲端協同投機`
+- **核心組件**：`EPD 分離架構` → `StructKV` → `邊緣-雲端協同投機`
 - **實作路徑**：
     1. **EPD 分離架構**：將 Prefill (計算密集) 與 Decode (內存密集) 物理分離，消除大請求對其他 Session 的阻塞。
     2. **StructKV**：實現結構骨架保存算法，僅保留關鍵語義 Token，在消費級硬件上支持 1M+ Token 分析。
@@ -42,19 +42,19 @@
 
 | 協同組合 | 物理邏輯 | 最終效果 |
 | :--- | :--- | :--- |
-| **Router + StateFlow** | 根據當前狀態節點的複雜度 $\rightarrow$ 動態選擇模型 | 精度與速度的極致平衡 |
-| **PrefixCache + StructKV** | 先有物理級的前綴快取 $\rightarrow$ 再支持超長骨架還原 | 百萬級窗口的低延遲訪問 |
-| **ParallelTool + NeuralGC** | 並行採集海量數據 $\rightarrow$ 實時剔除冗餘 KV 對 | 防止高併發下的內存崩潰 |
+| **Router + StateFlow** | 根據當前狀態節點的複雜度 → 動態選擇模型 | 精度與速度的極致平衡 |
+| **PrefixCache + StructKV** | 先有物理級的前綴快取 → 再支持超長骨架還原 | 百萬級窗口的低延遲訪問 |
+| **ParallelTool + NeuralGC** | 並行採集海量數據 → 實時剔除冗餘 KV 對 | 防止高併發下的內存崩潰 |
 
 ---
 
 ## 3. 驗證指標 (Verification Metrics)
 
 為了確保提案不淪為「理論」，我設定以下物理指標：
-- **TTFT (首字延遲)**：目標 $\le 200\text{ms}$ (針對重複前綴)。
-- **TBT (每 Token 時間)**：目標 $\le 30\text{ms/token}$ (開啟投機解碼後)。
-- **Context Limit**：目標 $\ge 1\text{M Tokens}$ (在 64GB 內存環境)。
-- **Task Success Rate**：目標 $\ge 99\%$ (針對長路徑 l-shot 任務)。
+- **TTFT (首字延遲)**：目標 \le 200\text{ms} (針對重複前綴)。
+- **TBT (每 Token 時間)**：目標 \le 30\text{ms/token} (開啟投機解碼後)。
+- **Context Limit**：目標 \ge 1\text{M Tokens} (在 64GB 內存環境)。
+- **Task Success Rate**：目標 \ge 99\% (針對長路徑 l-shot 任務)。
 
 ## 4. 結案聲明
 本提案已通過三位專家之數據驗證與總主持人之物理可行性核對。建議立即啟動**「第一階段：快速突破」**，預計在 2 週內完成初步部署並取得可量化之性能提升。

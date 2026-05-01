@@ -80,15 +80,15 @@ pkill -9 -f injection_proxy
 pkill -9 -f lan_https_proxy
 
 # 2. 核心召回
-launchctl kickstart -kp gui/$(id -u)/ai.openclaw.gateway
+launchctl kickstart -kp gui/(id -u)/ai.openclaw.gateway
 sleep 3
 
 # 3. 注入層召回
-launchctl kickstart -kp gui/$(id -u)/com.openclaw.injection-proxy
+launchctl kickstart -kp gui/(id -u)/com.openclaw.injection-proxy
 sleep 2
 
 # 4. 區網層召回 (最外層)
-launchctl kickstart -kp gui/$(id -u)/com.openclaw.lan-https-proxy
+launchctl kickstart -kp gui/(id -u)/com.openclaw.lan-https-proxy
 ```
 
 ---

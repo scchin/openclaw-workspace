@@ -11,7 +11,7 @@
 
 ### 1.2 原子化操作 (Atomic Operations)
 切換模型被定義為一個原子操作鏈：
-`建立快照` $\rightarrow$ `修改配置` $\rightarrow$ `連通性驗證` $\rightarrow$ `(失敗則) 自動回滾` $\rightarrow$ `(成功則) 系統重啟`。
+`建立快照` → `修改配置` → `連通性驗證` → `(失敗則) 自動回滾` → `(成功則) 系統重啟`。
 
 ---
 
@@ -52,7 +52,7 @@ llm-switch/
 ## 第四章：安全防禦體系
 
 ### 4.1 三試回滾機制 (3-Attempt Auto-Rollback)
-- **邏輯**：切換 $\rightarrow$ 驗證 $\rightarrow$ (失敗 $\times 3$) $\rightarrow$ **自動還原至 `.snapshot/` 備份**。
+- **邏輯**：切換 → 驗證 → (失敗 \times 3) → **自動還原至 `.snapshot/` 備份**。
 - **目標**：確保使用者永遠不會面對一個不可用的系統。
 
 ### 4.2 一站式自動重啟
@@ -67,13 +67,13 @@ llm-switch/
 - **強制回滾**：`python config_manager.py rollback`
 
 ### 5.2 協作場景
-支援主控 Agent 根據任務複雜度，動態切換執行 Agent 的模型（例如：深度分析用 Gemma 4 $\rightarrow$ 快速處理用 Ollama）。
+支援主控 Agent 根據任務複雜度，動態切換執行 Agent 的模型（例如：深度分析用 Gemma 4 → 快速處理用 Ollama）。
 
 ---
 
 ## 第六章：測試驗證集
-- **正向路徑**：`Ollama` $\rightleftharpoons$ `Gemma 4` 互換成功且 Gateway 重啟。
-- **異常路徑**：模擬端點失效 $\rightarrow$ 確認系統在 3 次嘗試後自動回滾。
+- **正向路徑**：`Ollama` \rightleftharpoons `Gemma 4` 互換成功且 Gateway 重啟。
+- **異常路徑**：模擬端點失效 → 確認系統在 3 次嘗試後自動回滾。
 - **SSL 測試**：在 macOS 環境下確認可正常連通 Google AI API。
 
 ---

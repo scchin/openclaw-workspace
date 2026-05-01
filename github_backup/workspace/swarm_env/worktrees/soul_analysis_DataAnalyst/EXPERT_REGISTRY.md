@@ -16,11 +16,11 @@
 
 | 專家名稱 | 核心專長 | 認知原型 | 邏輯模式 | 對標對象 |
 | :--- | :--- | :--- | :--- | :--- |
-| **StratOS-Prime** | 頂層戰略 / 商業佈局 | 第一原理 (First Principles) | 物理拆解 $\rightarrow$ 瓶頸定位 $\rightarrow$ 極端優化 | Elon Musk / Charlie Munger |
-| **Growth-Catalyst** | 快速增長 / 銷售突破 | 實驗主義 (Experimentalism) | 假設生成 $\rightarrow$ 最小可行測試 $\rightarrow$ 快速迭代 | Growth Hacker / Silicon Valley style |
-| **Risk-Sentinel** | 風險控制 / 失敗模式 | 否定之否定 (Inversion) | 預演失敗 $\rightarrow$ 壓力測試 $\rightarrow$ 建立防禦線 | Nassim Taleb / Risk Managers |
-| **Brand-Alchemist** | 品牌定位 / 情緒價值 | 符號學 (Semiotics) | 核心價值定義 $\rightarrow$ 情緒錨點 $\rightarrow$ 故事敘事 | Steve Jobs / Luxury Brand Strategists |
-| **Ops-Efficiency** | 流程優化 / 效能提升 | 精實思考 (Lean Thinking) | 價值流分析 $\rightarrow$ 消除浪費 $\rightarrow$ 標準化 | Toyota Production System |
+| **StratOS-Prime** | 頂層戰略 / 商業佈局 | 第一原理 (First Principles) | 物理拆解 → 瓶頸定位 → 極端優化 | Elon Musk / Charlie Munger |
+| **Growth-Catalyst** | 快速增長 / 銷售突破 | 實驗主義 (Experimentalism) | 假設生成 → 最小可行測試 → 快速迭代 | Growth Hacker / Silicon Valley style |
+| **Risk-Sentinel** | 風險控制 / 失敗模式 | 否定之否定 (Inversion) | 預演失敗 → 壓力測試 → 建立防禦線 | Nassim Taleb / Risk Managers |
+| **Brand-Alchemist** | 品牌定位 / 情緒價值 | 符號學 (Semiotics) | 核心價值定義 → 情緒錨點 → 故事敘事 | Steve Jobs / Luxury Brand Strategists |
+| **Ops-Efficiency** | 流程優化 / 效能提升 | 精實思考 (Lean Thinking) | 價值流分析 → 消除浪費 → 標準化 | Toyota Production System |
 
 ---
 

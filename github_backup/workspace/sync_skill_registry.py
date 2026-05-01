@@ -1,20 +1,22 @@
+import shutil
 import os
 import json
 import subprocess
 from pathlib import Path
 
 # ==========================================
-# 不朽註冊同步器 (Immortal Registry Synchronizer) v1.0
+# 不朽註冊同步器 (Immortal Registry Synchronizer) v2.0
 # ==========================================
-# 邏輯：
-# 1. 物理偵測 /workspace 下所有的 .skill 文件與目錄。
-# 2. 自動下達 chflags nouchg 解鎖主設定檔。
-# 3. 比對並將缺失的技能補進 openclaw.json。
-# 4. 重新下達 chflags uchg 鎖死設定檔，恢復「不朽架構」。
+# 升級亮點：
+# 1. 自動從 /Users/KS/.agents/skills/ 導引正規軍技能。
+# 2. 自動在 workspace/skills/ 建立物理連結。
+# 3. 自動執行註冊表注入與 uchg 鎖定。
 
 OPENCLAW_DIR = Path("/Users/KS/.openclaw")
 WORKSPACE_DIR = OPENCLAW_DIR / "workspace"
 CONFIG_FILE = OPENCLAW_DIR / "openclaw.json"
+OFFICIAL_SKILLS_SOURCE = Path("/Users/KS/.agents/skills")
+WORKSPACE_SKILLS_DIR = WORKSPACE_DIR / "skills"
 
 def run_cmd(cmd):
     try:
@@ -22,34 +24,56 @@ def run_cmd(cmd):
     except subprocess.CalledProcessError as e:
         print(f"Error executing command: {cmd}\n{e.stderr.decode()}")
 
+def ensure_official_alignment():
+    """
+    [不朽基因] 自動校準：將 .agents/下的正規軍連結至工作區。
+    """
+    print("🛡️ Checking Official Skill Alignment...")
+    if not WORKSPACE_SKILLS_DIR.exists():
+        WORKSPACE_SKILLS_DIR.mkdir(parents=True, exist_ok=True)
+    
+    if OFFICIAL_SKILLS_SOURCE.exists():
+        for item in OFFICIAL_SKILLS_SOURCE.iterdir():
+            if item.is_dir():
+                # 處理版本號後綴 (例如 openclaw-soul-sync-1.0.0 -> openclaw-soul-sync)
+                skill_id = item.name.split("-1.0.0")[0] if "-1.0.0" in item.name else item.name
+                target_link = WORKSPACE_SKILLS_DIR / skill_id
+                
+                if not target_link.exists():
+                    print(f"🔗 [Immortal Link] Creating symlink for {skill_id}...")
+                    shutil.copytree(item, target_link)
+                else:
+                    # 確保連結指向正確
+                    if target_link.is_symlink() and str(os.readlink(target_link)) != str(item):
+                        print(f"🔄 [Immortal Update] Updating symlink for {skill_id}...")
+                        target_link.unlink()
+                        shutil.copytree(item, target_link)
+
 def get_installed_skills():
-    # 偵測 .skill 檔案
+    # 1. 先執行物理對齊
+    ensure_official_alignment()
+    
+    # 2. 偵測 .skill 檔案
     skills = [f.stem for f in WORKSPACE_DIR.glob("*.skill")]
     
-    # 偵測 /skills/ 目錄下的資料夾
-    skills_dir = WORKSPACE_DIR / "skills"
-    if skills_dir.exists():
-        skills += [d.name for d in skills_dir.iterdir() if d.is_dir()]
+    # 3. 偵測 /skills/ 目錄下的資料夾與連結
+    if WORKSPACE_SKILLS_DIR.exists():
+        skills += [d.name for d in WORKSPACE_SKILLS_DIR.iterdir() if d.is_dir() or d.is_symlink()]
         
-    # 加入手動定義的 openclaw-soul-sync
-    skills.append("openclaw-soul-sync")
-    
-    # 去重
     return sorted(list(set(skills)))
 
 def sync_registry():
-    print("🧬 Initiating Immortal Registry Sync...")
+    print("🧬 Initiating Immortal Registry Sync v2.0...")
     
-    # 1. 採集物理技能
+    # 採集物理技能 (包含已對齊的正規軍)
     physical_skills = get_installed_skills()
     print(f"Found {len(physical_skills)} physical skills in workspace.")
 
-    # 2. 解鎖設定檔
+    # 解鎖設定檔
     print("🔓 Unlocking openclaw.json...")
     run_cmd(f"chflags nouchg {CONFIG_FILE}")
 
     try:
-        # 3. 讀取並更新 JSON
         with open(CONFIG_FILE, 'r') as f:
             config = json.load(f)
 
@@ -67,7 +91,6 @@ def sync_registry():
                     allow_bundled.append(skill_id)
                 added_count += 1
             else:
-                # 確保已啟動
                 if not entries[skill_id].get("enabled"):
                     entries[skill_id]["enabled"] = True
                     print(f"🆙 Re-enabled skill: {skill_id}")
@@ -75,7 +98,6 @@ def sync_registry():
         config["skills"]["allowBundled"] = allow_bundled
         config["skills"]["entries"] = entries
 
-        # 4. 寫回並鎖死
         with open(CONFIG_FILE, 'w') as f:
             json.dump(config, f, indent=2)
         print(f"✅ Sync complete. Added {added_count} skills to registry.")

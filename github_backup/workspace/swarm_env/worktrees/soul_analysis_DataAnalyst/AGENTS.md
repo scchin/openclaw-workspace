@@ -56,7 +56,7 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 ### 第一階段：硬啟動 (Blocking Recovery) — 絕對優先
 1. **強制核對紀錄**：第一動作必須是調用 `read ~/.openclaw/workspace/pending_tasks.json`。
   - **若清單不為空** \right → **立即、優先、完整地補完所有欠缺報告** \right → 清除清單。
-  - **輸出物理牆 (Output Physical Wall)**：凡涉及「報告」、「證明」類輸出 $\rightarrow$ 強制執行 `purify_output.py` $\rightarrow$ 證據先行 $\rightarrow$ 文本在後。禁止任何形式的「口頭承諾」。
+  - **輸出物理牆 (Output Physical Wall)**：凡涉及「報告」、「證明」類輸出 → 強制執行 `purify_output.py` → 證據先行 → 文本在後。禁止任何形式的「口頭承諾」。
 
 2. **狀態同步**：執行 `system-task-manager list` 核對 OS 進程。
 
@@ -72,23 +72,23 @@ If `BOOTSTRAP.md` exists, that's your birth certificate. Follow it, figure out w
 
 **🚨【最高級別-通訊鎖定】(Communication Lock Protocol) — 零容忍禁令**
 禁止任何形式的「沉默執行」。凡涉及工具調用之任務，必須遵循以下物理閉環路徑：
-`執行工具` $\rightarrow$ `核對結果` $\rightarrow$ `轉譯為人類語言報告` $\rightarrow$ `發送回覆`。
+`執行工具` → `核對結果` → `轉譯為人類語言報告` → `發送回覆`。
 - **絕對禁令**：嚴禁在執行完工具後直接結束回合或僅輸出工具確認碼。
 - **結案定義**：未對使用者發送「結果報告」之前，該任務視為「未完結」，禁止進入靜默狀態。
 
 **🚨【自我審查機制】(Self-Audit Loop)**
 在每次發送回應前，必須強制執行以下內省檢查：
 - **檢查項**：本回合是否使用了工具？
-- **判定**：若使用了工具 $\rightarrow$ 回覆中是否包含對該工具結果的明確說明？
-- **修正**：若答案為 NO $\rightarrow$ 立即中止發送 $\rightarrow$ 重新生成包含報告的完整回覆。
+- **判定**：若使用了工具 → 回覆中是否包含對該工具結果的明確說明？
+- **修正**：若答案為 NO → 立即中止發送 → 重新生成包含報告的完整回覆。
 
 **🚨【任務完結不可分割性】(Task Atomicity & Continuity)**
 - **絕對禁令**：禁止任何形式的「中途停止」。任務一旦啟動，必須執行至「提交完結報告」為止。
-- **中斷恢復機制**：若因不可抗力（如系統重啟、連線中斷）導致任務中途停止 $\rightarrow$ **必須立即調用 `pending_tasks.json` 與 `Sentry` 喚醒機制** $\rightarrow$ 自動接續未完成之工作 $\rightarrow$ 補完所有報告 $\rightarrow$ 正式結案。
+- **中斷恢復機制**：若因不可抗力（如系統重啟、連線中斷）導致任務中途停止 → **必須立即調用 `pending_tasks.json` 與 `Sentry` 喚醒機制** → 自動接續未完成之工作 → 補完所有報告 → 正式結案。
 - **判定基準**：未獲 `arc_complete_task.py` 之確認碼，即視為任務未完結，禁止進入靜默狀態或開啟新任務。
 
 1. **三步強制回報制**：
-   - 每當連續執行 **3 次** 工具調用（如 `write` $\rightarrow$ `exec` $\rightarrow$ `read`）且尚未對使用者發言時，**必須**強制中斷工具鏈，輸出一次簡短的進度報告。
+   - 每當連續執行 **3 次** 工具調用（如 `write` → `exec` → `read`）且尚未對使用者發言時，**必須**強制中斷工具鏈，輸出一次簡短的進度報告。
    - 報告必須包含：**「目前嘗試的方案」**、**「遇到的具體困難」**以及**「預計下一步動作」**。
 2. **通訊優先級同步**：
    - 將「對話響應」的優先級提升至與「工具執行」同級。
@@ -201,8 +201,8 @@ Skills provide your tools. When you need one, check its `SKILL.md`. Keep local n
 
 **必須 100% 強制執行以下官方路徑：**
 1. **唯一合法入口**：必須調用 `skill-creator` 技能的所有框架。
-2. **強制流程**：`分析需求` $\rightarrow$ `調用 init_skill.py (初始化)` $\rightarrow$ `實作內容` $\rightarrow$ `調用 package_skill.py (官方驗證)` $\rightarrow$ `安裝/註冊` $\rightarrow$ `Gateway 重啟`。
-3. **絕對匹配檢查**：必須確保 `目錄名稱` $\equiv$ `SKILL.md 內 name 欄位` (全小寫, 無空格)。
+2. **強制流程**：`分析需求` → `調用 init_skill.py (初始化)` → `實作內容` → `調用 package_skill.py (官方驗證)` → `安裝/註冊` → `Gateway 重啟`。
+3. **絕對匹配檢查**：必須確保 `目錄名稱` \equiv `SKILL.md 內 name 欄位` (全小寫, 無空格)。
 4. **格式標準化**：`SKILL.md` 必須包含正確的 YAML frontmatter (必須由 `---` 包圍，禁止包含 `author` 等非允許欄位)。
 
 **違反此天條之判定**：若在沒有調用 `skill-creator` 框架的情況下擅自創建技能導致「技能不可見」或「解析錯誤」，視為嚴重邏輯失效，必須立即自我修正並重新執行標準流程。
